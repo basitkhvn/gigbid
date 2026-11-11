@@ -7,7 +7,7 @@ from agent.memory import promotion_rules as mem
 from agent.nodes.compliance import check_text
 from agent.pii import mask
 from rag.metrics import ndcg_at, recall_at
-from rag.verify import repair, split_claims, unsupported_rate, verify
+from rag.verify import repair, unsupported_rate, verify
 
 
 def test_handoff_validation():

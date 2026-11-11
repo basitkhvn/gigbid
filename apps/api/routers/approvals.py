@@ -1,11 +1,11 @@
+from typing import Literal
+
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from typing import Literal
 
 from apps.api import runs
 from apps.api.auth.users import current_user
-from apps.api.db import db, one, rows, now
-import json
+from apps.api.db import one, rows
 
 router = APIRouter(prefix="/approvals", tags=["approvals"])
 

@@ -10,7 +10,7 @@ from langgraph.types import Command
 from agent.graphs.bid_graph import build_bid_graph
 from agent.graphs.conversation_graph import build_conversation_graph
 from agent.tracing import new_trace_id
-from apps.api.db import db, get_settings, now, one, rows
+from apps.api.db import db, get_settings, now, one
 
 GRAPHS: dict = {}
 TASKS: dict[str, asyncio.Task] = {}

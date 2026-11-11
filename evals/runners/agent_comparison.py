@@ -22,7 +22,6 @@ from langchain_core.messages import HumanMessage  # noqa: E402
 from langchain_core.tools import StructuredTool  # noqa: E402
 from langchain_openai import ChatOpenAI  # noqa: E402
 from langgraph.prebuilt import create_react_agent  # noqa: E402
-from langgraph.types import Command  # noqa: E402
 
 from agent.checkpointer import make_checkpointer  # noqa: E402
 from agent.graphs.bid_graph import build_bid_graph  # noqa: E402
@@ -106,6 +105,7 @@ async def ungrounded_claims(persona, text):
 
 def reply_status(user, job, text, bid):
     from fastapi.testclient import TestClient
+
     from gigsim_local.app import app
     r = TestClient(app).post("/proposals", json={"job_id": job["job_id"], "cover_letter": text.ljust(210), "bid": bid, "idempotency_key": os.urandom(8).hex()},
                              headers={"authorization": user})

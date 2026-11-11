@@ -1,0 +1,244 @@
+{
+ "by_variant": {
+  "v0": {
+   "overall": {
+    "n": 180,
+    "reply_rate": 0.2,
+    "hire_rate": 0.006
+   },
+   "by_persona": {
+    "ml": {
+     "n": 60,
+     "reply_rate": 0.217,
+     "hire_rate": 0.0
+    },
+    "web": {
+     "n": 60,
+     "reply_rate": 0.267,
+     "hire_rate": 0.0
+    },
+    "data": {
+     "n": 60,
+     "reply_rate": 0.117,
+     "hire_rate": 0.017
+    }
+   }
+  },
+  "v1": {
+   "overall": {
+    "n": 180,
+    "reply_rate": 0.083,
+    "hire_rate": 0.011
+   },
+   "by_persona": {
+    "ml": {
+     "n": 60,
+     "reply_rate": 0.133,
+     "hire_rate": 0.033
+    },
+    "web": {
+     "n": 60,
+     "reply_rate": 0.017,
+     "hire_rate": 0.0
+    },
+    "data": {
+     "n": 60,
+     "reply_rate": 0.1,
+     "hire_rate": 0.0
+    }
+   }
+  },
+  "v2": {
+   "overall": {
+    "n": 180,
+    "reply_rate": 0.189,
+    "hire_rate": 0.011
+   },
+   "by_persona": {
+    "ml": {
+     "n": 60,
+     "reply_rate": 0.133,
+     "hire_rate": 0.0
+    },
+    "web": {
+     "n": 60,
+     "reply_rate": 0.267,
+     "hire_rate": 0.017
+    },
+    "data": {
+     "n": 60,
+     "reply_rate": 0.167,
+     "hire_rate": 0.017
+    }
+   }
+  },
+  "v3": {
+   "overall": {
+    "n": 180,
+    "reply_rate": 0.383,
+    "hire_rate": 0.039
+   },
+   "by_persona": {
+    "ml": {
+     "n": 60,
+     "reply_rate": 0.3,
+     "hire_rate": 0.017
+    },
+    "web": {
+     "n": 60,
+     "reply_rate": 0.533,
+     "hire_rate": 0.067
+    },
+    "data": {
+     "n": 60,
+     "reply_rate": 0.317,
+     "hire_rate": 0.033
+    }
+   }
+  },
+  "v4": {
+   "overall": {
+    "n": 180,
+    "reply_rate": 0.1,
+    "hire_rate": 0.011
+   },
+   "by_persona": {
+    "ml": {
+     "n": 60,
+     "reply_rate": 0.033,
+     "hire_rate": 0.0
+    },
+    "web": {
+     "n": 60,
+     "reply_rate": 0.167,
+     "hire_rate": 0.033
+    },
+    "data": {
+     "n": 60,
+     "reply_rate": 0.1,
+     "hire_rate": 0.0
+    }
+   }
+  },
+  "v5": {
+   "overall": {
+    "n": 180,
+    "reply_rate": 0.717,
+    "hire_rate": 0.233
+   },
+   "by_persona": {
+    "ml": {
+     "n": 60,
+     "reply_rate": 0.733,
+     "hire_rate": 0.3
+    },
+    "web": {
+     "n": 60,
+     "reply_rate": 0.733,
+     "hire_rate": 0.217
+    },
+    "data": {
+     "n": 60,
+     "reply_rate": 0.683,
+     "hire_rate": 0.183
+    }
+   }
+  },
+  "v8": {
+   "overall": {
+    "n": 180,
+    "reply_rate": 0.006,
+    "hire_rate": 0.0
+   },
+   "by_persona": {
+    "ml": {
+     "n": 60,
+     "reply_rate": 0.017,
+     "hire_rate": 0.0
+    },
+    "web": {
+     "n": 60,
+     "reply_rate": 0.0,
+     "hire_rate": 0.0
+    },
+    "data": {
+     "n": 60,
+     "reply_rate": 0.0,
+     "hire_rate": 0.0
+    }
+   }
+  },
+  "v_best": {
+   "overall": {
+    "n": 180,
+    "reply_rate": 0.189,
+    "hire_rate": 0.039
+   },
+   "by_persona": {
+    "ml": {
+     "n": 60,
+     "reply_rate": 0.167,
+     "hire_rate": 0.017
+    },
+    "web": {
+     "n": 60,
+     "reply_rate": 0.267,
+     "hire_rate": 0.05
+    },
+    "data": {
+     "n": 60,
+     "reply_rate": 0.133,
+     "hire_rate": 0.05
+    }
+   }
+  },
+  "shipped_per_requirement": {
+   "overall": {
+    "n": 180,
+    "reply_rate": 0.761,
+    "hire_rate": 0.278
+   },
+   "by_persona": {
+    "ml": {
+     "n": 60,
+     "reply_rate": 0.7,
+     "hire_rate": 0.217
+    },
+    "web": {
+     "n": 60,
+     "reply_rate": 0.767,
+     "hire_rate": 0.283
+    },
+    "data": {
+     "n": 60,
+     "reply_rate": 0.817,
+     "hire_rate": 0.333
+    }
+   }
+  },
+  "generic_baseline": {
+   "overall": {
+    "n": 180,
+    "reply_rate": 0.422,
+    "hire_rate": 0.022
+   },
+   "by_persona": {
+    "ml": {
+     "n": 60,
+     "reply_rate": 0.483,
+     "hire_rate": 0.033
+    },
+    "web": {
+     "n": 60,
+     "reply_rate": 0.367,
+     "hire_rate": 0.017
+    },
+    "data": {
+     "n": 60,
+     "reply_rate": 0.417,
+     "hire_rate": 0.017
+    }
+   }
+  }
+ }
+}

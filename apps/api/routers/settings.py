@@ -1,6 +1,5 @@
-import json
 
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
 from agent.mcp_client import get_hub

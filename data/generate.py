@@ -187,7 +187,6 @@ def make_job(pid: str, profile: dict, rng: random.Random, jid: str, kind: str) -
     if kind == "good":
         reqs = rng.sample(sorted(own_skills), r(rng, 2, 5))
     elif kind == "weak":  # mostly skills the persona has no evidence for
-        outside = [s for s in pool if s not in own_skills] or [x for x in pool][:3]
         other_pid = rng.choice([p for p in SKILLS if p != pid])
         foreign = list(SKILLS[other_pid])
         reqs = rng.sample(foreign, 3) + rng.sample(sorted(own_skills), 1)

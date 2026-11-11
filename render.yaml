@@ -1,0 +1,16 @@
+# Render blueprint: one Docker web service. Set secrets in the Render dashboard (never in git):
+#   DEEPSEEK_API_KEY, APP_SECRET_KEY, REVIEWER_PASSWORD (and optionally REVIEWER_EMAIL / REVIEWER_PERSONA)
+services:
+  - type: web
+    name: gigbid
+    runtime: docker
+    dockerfilePath: infra/docker/single.Dockerfile
+    healthCheckPath: /health
+    plan: starter            # embeddings + reranker need > 512 MB RAM
+    disk: {name: state, mountPath: /state, sizeGB: 1}
+    envVars:
+      - {key: MODEL_PROFILE, value: open}
+      - {key: GIGSIM_INPROCESS, value: "1"}
+      - {key: DEEPSEEK_API_KEY, sync: false}
+      - {key: APP_SECRET_KEY, generateValue: true}
+      - {key: REVIEWER_PASSWORD, sync: false}

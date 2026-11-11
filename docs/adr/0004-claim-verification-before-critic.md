@@ -1,0 +1,2 @@
+# ADR 4: Verify claims before the Critic sees the draft
+Unsupported claims are removed deterministically (term grounding against the cited evidence, semantic fallback for implied skills) so the Critic spends its loops on style/personalisation, not truthfulness. Measured: unsupported claims/proposal 1.88 -> 0.08 (flash). **Trade-off:** removing a sentence can leave a shorter letter; the Critic may then request a revision (mean 0.67 loops).

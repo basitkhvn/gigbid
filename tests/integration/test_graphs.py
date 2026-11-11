@@ -1,15 +1,13 @@
 """Graph runs against the GigSim stand-in (offline model profile)."""
-import json
-from pathlib import Path
 
 import pytest
 from langgraph.types import Command
 
 from agent.checkpointer import make_checkpointer
 from agent.graphs.bid_graph import build_bid_graph
-from agent.mcp_client import ToolHub, get_hub
-from gigsim_local.app import register_jobs
+from agent.mcp_client import get_hub
 from evals.common import dev
+from gigsim_local.app import register_jobs
 
 PROF = {"rate": 55, "floor": 35}
 

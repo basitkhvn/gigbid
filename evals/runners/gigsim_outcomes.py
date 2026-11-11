@@ -21,7 +21,6 @@ from scipy import stats  # noqa: E402
 
 from evals.common import PERSONAS, dev, write  # noqa: E402
 from gigsim_local.app import app, register_jobs  # noqa: E402
-from rag.corpus import get_corpus  # noqa: E402
 from rag.requirements import extract  # noqa: E402
 from rag.retriever import retrieve  # noqa: E402
 

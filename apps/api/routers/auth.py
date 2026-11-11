@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field
 
 from apps.api.auth import users
 from apps.api.auth.tokens import save_token
-from apps.api.db import db, get_settings, one
+from apps.api.db import get_settings, one
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 

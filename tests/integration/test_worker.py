@@ -1,5 +1,5 @@
-from apps.api.db import db, now
 from apps.api.auth.users import create_user
+from apps.api.db import db, now
 from worker.scout import scout_due
 
 

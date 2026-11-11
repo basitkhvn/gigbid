@@ -1,0 +1,13 @@
+name: eval
+on: [pull_request]
+jobs:
+  smoke-eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv venv --python 3.11 && uv pip install -e ".[dev]"
+      # 30-job LLM-free smoke eval: fails if bid/skip F1, scam recall, Recall@5 drop or unsupported claims rise past evals/thresholds.json
+      - run: PYTHONPATH=. MODEL_PROFILE=offline .venv/bin/python -m evals.runners.smoke_eval
+      - uses: actions/upload-artifact@v4
+        with: {name: smoke-eval, path: evals/results/smoke_eval.json}

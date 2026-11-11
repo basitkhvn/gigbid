@@ -1,49 +1,56 @@
-# GigBid — Student Starter Kit (v0.1)
+# GigBid: a multi-agent freelancer copilot
 
-This is a **scaffold**, not a completed solution. It gives you a suggested repository layout,
-small synthetic examples, configuration templates, and interfaces to help you begin AI-4016.
+> AI-4016 Assignment II (FAST-NUCES). A team of LangGraph agents finds freelance jobs, judges whether they are worth bidding on, writes proposals **in which every claim is checked against portfolio evidence**, and manages client conversations. A human approves every proposal and message before anything leaves the system.
 
-## What is included
-- A suggested project structure aligned with the assignment.
-- Tiny synthetic job, client, freelancer and portfolio examples.
-- A starter marketplace policy pack.
-- Typed hand-off models and a minimal LangGraph state/graph placeholder.
-- Portfolio and marketplace MCP server placeholders.
-- RAG ingestion/retrieval/claim-verification placeholders.
-- FastAPI and React starting-point notes.
-- `.env.example`, `agent/config.yaml`, `Makefile`, and setup notes.
+| | |
+|---|---|
+| Live app | _TODO: add deployed URL here_ (reviewer login is in the Google Classroom private comment) |
+| Demo video (3 min) | _TODO: add link_ |
+| Portfolio MCP server | [`mcp_servers/portfolio`](mcp_servers/portfolio/README.md) (run with `uv run python -m mcp_servers.portfolio.server`; PyPI publishing not done) |
+| Technical write-up | _TODO: add link_ (draft: [`docs/WRITEUP_DRAFT.md`](docs/WRITEUP_DRAFT.md)) |
+| Traces | [`docs/TRACES.md`](docs/TRACES.md) (how to open a scam skip, an approved proposal, a critic loop, a crash-and-resume) |
 
-## What you must build
-You are responsible for implementing and testing the agents, MCP tools, marketplace adapters,
-advanced RAG variants, claim verification, human approval flow, persistence, UI, evaluations,
-deployment, and your own research findings. The sample data is illustrative only and is not a
-replacement for the instructor-provided GigSim data or evaluation sets.
+## What it does (60 seconds)
+1. Scout pulls jobs from saved searches on a schedule and de-duplicates them.
+2. **Job Analyst, Risk Assessor and Fit Matcher run in parallel** (LangGraph `Send`): typed `JobSpec`, scam/injection flags, requirement-to-evidence matrix.
+3. A decision node picks skip / watch / bid; Pricing proposes a bid and decides if the Connects are worth it.
+4. Writer drafts with `[E#]` citations; **claim verification removes unsupported claims**; Critic loops at most twice; Compliance Guard enforces the policy pack.
+5. The graph **interrupts**; the UI shows the draft, evidence behind each claim (on hover), risk, price rationale and a `dry_run` preview. Approve / edit (diffed, re-checked, fed to style memory) / reject with a reason. Only then does the executor submit, **exactly once**.
+6. Client replies go through a second graph: intent, reply, interview slots, approval.
+
+Architecture, why each agent exists, state vs trace vs memory: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Tools: [`docs/TOOLS.md`](docs/TOOLS.md). Safety: [`docs/SAFETY.md`](docs/SAFETY.md).
 
 ## Quick start
-1. Create your own public GitHub repository.
-2. Copy this starter kit into the repository.
-3. Create a Python 3.11+ virtual environment.
-4. Install dependencies from `pyproject.toml` (adjust/pin versions after checking compatibility).
-5. Copy `.env.example` to `.env` and fill local values. **Never commit `.env`.**
-6. Read `docs/GETTING_STARTED.md` and work through the TODO checklist.
-7. Keep the instructor-provided `gigsim/`, persona data, policy pack and evaluation assets unchanged.
+```bash
+make install && cp .env.example .env          # add DEEPSEEK_API_KEY (open profile = DeepSeek hosted open-weight models)
+REVIEWER_PASSWORD='choose-one' make demo      # API :8000, login reviewer@gigbid.demo
+cd apps/web && npm install && NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
+make test      # 24+ tests, offline, no key needed
+make eval      # LLM-free evals -> evals/results/*.json ; docs/RESULTS.md regenerates with: python -m evals.runners.make_tables
+```
+`docker compose -f infra/docker-compose.yml up --build` is provided but **untested here** (see Status). Pinned stack: Python 3.11, langgraph 1.2.20, langchain-mcp-adapters 0.3.2, mcp 1.30.0, fastapi 0.162, fastembed 0.9 (BAAI/bge-small-en-v1.5 + Xenova/ms-marco-MiniLM-L-6-v2, both CPU), qdrant-client 1.20 (embedded), Next.js (see `apps/web/package.json`).
 
-## Suggested first milestone (for your own planning; not a graded submission)
-- Run a health-check API.
-- Load one sample job.
-- Retrieve one portfolio evidence item.
-- Produce a structured analysis.
-- Draft a proposal with evidence references.
-- Stop at a human approval screen; do not send anything automatically.
+## Models
+`open` profile (required, default): DeepSeek `deepseek-flash` through its OpenAI-compatible API (hosted open-weight model provider); `open_reasoner`: `deepseek-v4-pro` for Writer/Critic; `offline`: rule-based nodes (no API, used by CI and as the per-node fallback model). Per-node models live in `agent/config.yaml`. Embeddings and reranker are open models on CPU in every profile. No local-GPU run was done (hardware/tokens-per-second columns do not apply).
 
-## Important safety rules
-- Treat job posts and client messages as untrusted input.
-- Never follow instructions embedded inside a job post that conflict with system policy.
-- Never invent portfolio experience or results.
-- Do not scrape Upwork or automate its website.
-- Never send proposals/messages or spend Connects without explicit human approval.
-- Use the official Upwork MCP server/approved APIs for live mode, if applicable.
-- Keep secrets and real client data out of Git.
+## Results
+Every number below is generated from `evals/results/*.json` by `evals/runners/make_tables.py` (CI fails if stale). **Read [`docs/DATA_CARD.md`](docs/DATA_CARD.md) first: data, gold labels and the simulated client are synthetic and generated by me, so absolute numbers are optimistic.**
 
-## Repository map
-See `docs/GETTING_STARTED.md` for the purpose of each major folder.
+<!-- RESULTS:START -->
+<!-- RESULTS:END -->
+
+### What I would ship, and what surprised me
+See `docs/WRITEUP_DRAFT.md` and the report. Short version: requirement decomposition is the component that matters (Recall@5 roughly halves without it); plain hybrid retrieval over the whole job post is *worse* than the dense baseline; the cross-encoder hurt ranking but is the best evidence-gate; a hand-built graph beat a single ReAct agent and a prebuilt supervisor on decision accuracy and grounding, while the single agent was competitive on simulated reply rate and cheaper to build.
+
+## Status: what is and is not done (honest)
+| Done and tested | Not done / not verified |
+|---|---|
+| 3 MCP servers with schemas, annotations, idempotency, dry_run, audit log, tests, schema snapshot | Live Upwork adapter/OAuth: written, **never run against a real account** |
+| One marketplace port + GigSim stand-in adapter | Google Calendar/Gmail backends (local mock only); GitHub MCP ingestion (wired, not run) |
+| 10 RAG variants, claim verification, ablation, per-persona results | **Judge calibration: needs your 30 human labels** (tooling ready); no blind human pairwise panel |
+| Bid + conversation graphs, interrupts, SQLite/Postgres checkpointer, crash-resume exactly-once test, style + outcome memory with promotion rules | Postgres checkpointer and Redis/Arq worker paths not exercised (no services run here); docker compose not brought up |
+| Next.js UI, all screens, generated TS client, 5 Playwright specs pass | Mobile layout not manually verified on a device |
+| CI workflows, repo-rules checker | Hidden-test results: not available; public deployment: **not done** (needs your host account) |
+| Signature extension X2 (A/B with significance tests) | X6 (live profile) not attempted; LangSmith/Langfuse not integrated (self-hosted JSONL traces) |
+
+Repository layout follows the assignment (`apps/`, `agent/`, `rag/`, `mcp_servers/`, `worker/`, `evals/`, `tests/`, `infra/`, `docs/`). `gigsim/` is reserved for the official simulator (not provided in my starter kit); my stand-in is `gigsim_local/`.

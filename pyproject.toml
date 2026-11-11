@@ -20,7 +20,12 @@ dependencies = [
 dev = ["pytest", "pytest-asyncio", "ruff", "mypy"]
 
 [tool.ruff]
-line-length = 100
+line-length = 140
+extend-exclude = ["apps/web", "gigsim"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501", "E701", "E702", "E731", "E402", "E741"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

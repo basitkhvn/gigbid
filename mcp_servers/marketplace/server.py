@@ -116,8 +116,8 @@ def create_server(adapter=None, store: Store | None = None, rate_per_min: int | 
             url = os.environ.get("GIGSIM_BASE_URL", cfg["marketplace"]["gigsim_url"])
             adapter = GigSimAdapter("inprocess" if os.environ.get("GIGSIM_INPROCESS", "1") == "1" else url)
         else:
-            from mcp_servers.marketplace.adapters.upwork_live import UpworkLiveAdapter
             from apps.api.auth.tokens import get_token
+            from mcp_servers.marketplace.adapters.upwork_live import UpworkLiveAdapter
             adapter = UpworkLiveAdapter(get_token)
     store = store or Store(STATE_DIR / "marketplace.sqlite")
     limiter = RateLimiter(rate_per_min or int(os.environ.get("MARKETPLACE_RATE_PER_MIN", cfg["marketplace"]["max_requests_per_minute"] * 3)))

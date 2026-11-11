@@ -10,7 +10,6 @@ import json
 import time
 import uuid
 from contextlib import contextmanager
-from pathlib import Path
 
 from agent.config import ROOT
 from agent.pii import mask_obj

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import re
 
-from agent.config import load_config
 from agent.guard import wrap_untrusted
 from agent.handoffs import Critique
 from agent.llm import acomplete_json, prompt

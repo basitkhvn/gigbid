@@ -5,9 +5,9 @@ from __future__ import annotations
 
 import time
 
-from agent.nodes.scout import already_seen, mark_if_new
 from agent.mcp_client import ToolUnavailable, get_hub
-from apps.api.db import db, now, rows
+from agent.nodes.scout import already_seen, mark_if_new
+from apps.api.db import db, rows
 from apps.api.triage import triage_job
 
 CATEGORY = {"ml": "AI & Machine Learning", "web": "Web Development", "data": "Data Analysis"}

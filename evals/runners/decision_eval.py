@@ -38,7 +38,6 @@ async def run(n: int):
             g = j["gold"]
             pb, gb = t["action"] == "bid", g["bid"]
             c["tp"] += pb and gb; c["fp"] += pb and not gb; c["fn"] += (not pb) and gb
-            scam_flags = {"unpaid_work", "off_platform_contact", "off_platform_payment"} & set(t["flags"])
             ps = t["risk"] >= load_config()["thresholds"]["maximum_risk_score"]
             c["stp"] += ps and g["scam"]; c["sfp"] += ps and not g["scam"]; c["sfn"] += (not ps) and g["scam"]
             if pb and gb and t["price"]:

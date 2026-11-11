@@ -1,0 +1,2 @@
+# ADR 2: Rank by hybrid + outcome boost; cross-encoder only gates evidence
+Ablation (evals/results/ablation.json, ablation_first_run_rerank_ranked.json): ranking by cross-encoder lowered Recall@5 (0.905 vs 0.947) and nDCG@10 and multiplied latency. The cross-encoder's *absolute* relevance score is still the best signal for "does the portfolio evidence this requirement?" (separates owned vs foreign skills), so it is computed but not used for ordering. **Caveat:** synthetic corpus; may not transfer.

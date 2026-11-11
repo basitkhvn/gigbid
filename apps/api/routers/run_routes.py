@@ -7,7 +7,7 @@ from sse_starlette.sse import EventSourceResponse
 from agent.tracing import read_trace, summarize
 from apps.api import runs
 from apps.api.auth.users import current_user
-from apps.api.db import db, one, rows
+from apps.api.db import one, rows
 
 router = APIRouter(prefix="/runs", tags=["runs"])
 

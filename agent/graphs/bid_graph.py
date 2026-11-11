@@ -7,10 +7,10 @@ import difflib
 import hashlib
 
 from langgraph.graph import END, START, StateGraph
-from langgraph.types import Command, Send, interrupt
+from langgraph.types import Send, interrupt
 
 from agent.config import load_config
-from agent.mcp_client import ToolUnavailable, get_hub
+from agent.mcp_client import get_hub
 from agent.memory import promotion_rules as mem
 from agent.nodes.analyst import analyst
 from agent.nodes.common import node
@@ -79,7 +79,6 @@ def after_compliance(state: BidState):
 async def prepare_approval(state: BidState):
     """Builds everything the human needs to decide, incl. the dry_run preview of what will be sent and its cost."""
     draft, q = state["draft"], state["price_quote"]
-    ev = {e["id"]: e for e in state.get("evidence", [])}
     key = idem_key(state, "draft")
     preview = await get_hub().call("executor", "create_proposal_draft", {"inp": {
         "user_id": state["user_id"], "job_id": state["job_id"], "cover_letter": draft["cover_letter"] or "x" * 20,

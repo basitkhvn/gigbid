@@ -1,13 +1,11 @@
 """GigBid API. Typed contract: `make client` generates apps/web/src/lib/api from /openapi.json."""
 from __future__ import annotations
 
-import json
 import os
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from agent.checkpointer import make_checkpointer
@@ -23,9 +21,19 @@ from apps.api.routers import analytics, approvals, auth, jobs, memory, messages,
 async def lifespan(app: FastAPI):
     db()
     seed_reviewer()
+    async def warm():  # embed/index persona corpora in the background so the first request is fast
+        import asyncio
+
+        from rag.corpus import get_corpus
+        for p in ("ml", "web", "data"):
+            await asyncio.to_thread(lambda p=p: get_corpus(p).plain)
+
+    import asyncio
+    warm_task = asyncio.create_task(warm())
     async with make_checkpointer() as cp:
         runs.graphs(cp)
         yield
+    warm_task.cancel()
 
 
 app = FastAPI(title="GigBid API", version="0.1.0", lifespan=lifespan)
@@ -66,6 +74,19 @@ async def chaos(server: str, state: str, user: dict = Depends(current_user)):
     return hub.status()
 
 
+class SPAStatic(StaticFiles):
+    """Static export serving with a fallback for dynamic routes (/jobs/<id>, /studio/<id>, /runs/<id>) -> the prerendered `_` page."""
+
+    async def get_response(self, path, scope):
+        try:
+            return await super().get_response(path, scope)
+        except Exception:  # noqa: BLE001
+            parts = path.strip("/").split("/")
+            if len(parts) >= 2 and parts[0] in ("jobs", "studio", "runs"):
+                return await super().get_response(f"{parts[0]}/_/index.html", scope)
+            raise
+
+
 _web = os.environ.get("WEB_DIST", "apps/web/out")
 if os.path.isdir(_web):
-    app.mount("/", StaticFiles(directory=_web, html=True), name="web")
+    app.mount("/", SPAStatic(directory=_web, html=True), name="web")

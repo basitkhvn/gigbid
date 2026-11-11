@@ -3,12 +3,12 @@ from __future__ import annotations
 
 import json
 
+from agent.graphs.bid_graph import decide
 from agent.llm import no_llm
+from agent.nodes.analyst import analyst
 from agent.nodes.fit_matcher import fit_matcher
 from agent.nodes.pricing import pricing
 from agent.nodes.risk_assessor import risk_assessor
-from agent.nodes.analyst import analyst
-from agent.graphs.bid_graph import decide
 from agent.tracing import new_trace_id
 from apps.api.db import db, get_settings, now, one
 

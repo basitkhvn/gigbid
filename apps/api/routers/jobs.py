@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from agent.mcp_client import ToolUnavailable, get_hub
 from apps.api import runs
 from apps.api.auth.users import current_user
-from apps.api.db import one, rows
+from apps.api.db import one
 from apps.api.triage import triage_job
 
 router = APIRouter(prefix="/jobs", tags=["jobs"])
