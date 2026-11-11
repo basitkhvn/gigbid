@@ -17,7 +17,12 @@ def retrieve(persona: str, job: dict, k: int | None = None, variant: str | None 
 
 def search_text(persona: str, text: str, k: int = 5, filters: dict | None = None) -> list[dict]:
     """Free-text requirement search used by the Portfolio MCP server (v_best on a pseudo-job)."""
-    ev = retrieve(persona, {"title": text, "description": f"experience with {text}"}, k=max(k * 3, 10) if filters else k)
-    for key, val in (filters or {}).items():
+    filters = dict(filters or {})
+    types = filters.pop("types", None)
+    opts = {"types": types} if types and load_config()["rag"]["variant"] == "v_best" else {}
+    ev = retrieve(persona, {"title": text, "description": f"experience with {text}"}, k=max(k * 3, 10) if filters else k, **opts)
+    if types and not opts:
+        ev = [e for e in ev if e["type"] in types]
+    for key, val in filters.items():
         ev = [e for e in ev if e.get(key) == val]
     return ev[:k]

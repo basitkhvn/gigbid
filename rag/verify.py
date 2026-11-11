@@ -33,6 +33,12 @@ def _norm(t: str) -> str:
     return re.sub(r"\s+", " ", t.lower())
 
 
+def _semantic(term: str, text: str) -> bool:
+    from agent.config import load_config
+    from rag.index.stores import rerank
+    return rerank(term, [text])[0] >= load_config()["thresholds"]["fit_support_relevance"]
+
+
 def verify(draft: str, evidence: list[dict]) -> list[dict]:
     from rag.requirements import vocab
     v = vocab()
@@ -49,7 +55,11 @@ def verify(draft: str, evidence: list[dict]) -> list[dict]:
         src = _norm(" ".join(e["text"] + " " + " ".join(e.get("skills", [])) for e in cited)) if cited else ""
         # a term is grounded if it appears in cited evidence (or, for implied-skill evidence, a synonym phrase does)
         def grounded(term: str) -> bool:
-            return _norm(term) in src
+            if _norm(term) in src:
+                return True
+            if not src or term in nums:  # numbers/years must match lexically; skills may match semantically (implied skills)
+                return False
+            return _semantic(term, " ".join(e["text"] for e in cited))
         unsup = [t for t in skills + nums if not grounded(t)]
         n_terms = len(skills) + len(nums)
         if n_terms == 0:  # experience verb with no checkable term: require a citation

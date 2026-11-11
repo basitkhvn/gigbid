@@ -24,7 +24,7 @@ def to_evidence(corpus: Corpus, scored: list[tuple[dict, float]], k: int, how: s
         out.append({"id": c["id"], "type": c["type"], "project": c.get("project"), "title": c.get("title"),
                     "source": c["id"], "date": c.get("date"), "outcome": c.get("outcome"), "industry": c.get("industry"),
                     "skills": c.get("skills", []), "score": round(float(s), 5), "text": corpus.by_id[c["id"]]["text"],
-                    "via": how})
+                    "via": how, "relevance": None})
     return out
 
 

@@ -6,8 +6,8 @@ from rag.retriever import search_text
 
 def search_evidence(persona: str, requirement: str, k: int = 5, filters: dict | None = None) -> list[dict]:
     ev = search_text(persona, requirement, k, filters)
-    return [{k_: e[k_] for k_ in ("id", "type", "source", "date", "outcome", "project", "title", "industry", "skills", "score")}
-            | {"snippet": e["text"][:300]} for e in ev]
+    return [{k_: e[k_] for k_ in ("id", "type", "source", "date", "outcome", "project", "title", "industry", "skills", "score", "relevance")}
+            | {"snippet": e["text"][:700]} for e in ev]
 
 
 def get_case_study(persona: str, id_: str) -> dict:

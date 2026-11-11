@@ -111,20 +111,25 @@ def v8_corrective(c: Corpus, job, k=5, min_rerank=-4.0, **_):
     return run_corrective(c, job, k, min_rerank)
 
 
-def v_best(c: Corpus, job, k=5, **_):
+def v_best(c: Corpus, job, k=5, types=None, **_):
     """Decomposition + hybrid + outcome-aware boost + cross-encoder rerank (final pipeline; see README for the ablation)."""
     reqs = extract(job)
     pool: dict[str, tuple[dict, float]] = {}
     for rq in reqs:
-        for ch, s in _hybrid(c, c.plain, rq, 15):
+        for ch, s in _hybrid(c, c.plain, rq, 60 if types else 15):
+            if types and ch["type"] not in types:
+                continue
             if ch["chunk_id"] not in pool or s > pool[ch["chunk_id"]][1]:
                 pool[ch["chunk_id"]] = (ch, s)
     cand = to_evidence(c, list(pool.values()), 25, "best")
     scores = [0.0] * len(cand)
+    raw = [-99.0] * len(cand)
     for rq in reqs:
-        rs = minmax(rerank(rq, [e["text"] for e in cand]))
-        for i, s in enumerate(rs):
+        rr = rerank(rq, [e["text"] for e in cand])
+        for i, s in enumerate(minmax(rr)):
             scores[i] += s
-    for e, s in zip(cand, scores):
+            raw[i] = max(raw[i], float(rr[i]))
+    for e, s, rw in zip(cand, scores, raw):
         e["score"] = round(float(s) * (1 + 0.3 * _prior(c, e)), 5)
+        e["relevance"] = round(rw, 3)
     return sorted(cand, key=lambda e: -e["score"])[:k]

@@ -43,6 +43,16 @@ def _load() -> None:
 _load()
 
 
+def register_jobs(jobs: list[dict]) -> None:
+    """Test/eval helper: add jobs (e.g. the dev set, minus gold labels) to the simulator's catalogue."""
+    for j in jobs:
+        JOBS[j["job_id"]] = {k: v for k, v in j.items() if k != "gold"}
+        if j.get("client_id") and j["client_id"] not in CLIENTS:
+            CLIENTS[j["client_id"]] = {"client_id": j["client_id"], "name": j["client_id"], "country": "US", "total_spent": 1000,
+                                        "hire_rate": 0.4, "avg_rating": 4.5, "payment_verified": True, "reviews_given": 5,
+                                        "_hidden": {"dislikes_generic": True, "budget_ceiling_factor": 1.1}}
+
+
 def policy() -> dict:
     p = SEED / "policy.json"
     return json.loads(p.read_text()) if p.exists() else {}
