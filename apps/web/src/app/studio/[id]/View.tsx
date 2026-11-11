@@ -12,7 +12,11 @@ export default function Studio() {
   const ready = useAuthGuard(); const { id: raw } = useParams<{ id: string }>(); const id = decodeURIComponent(raw);
   const { data, error, loading, reload } = useApi<any>(ready ? `/proposals/${encodeURIComponent(id)}` : null);
   const [text, setText] = useState(""); const [orig, setOrig] = useState("");
-  useEffect(() => { if (data?.draft && !orig) { setText(data.draft.cover_letter); setOrig(data.draft.cover_letter); } }, [data, orig]);
+  // keep the editor in sync with the server draft (e.g. after an approved edit was sanitised), but never clobber unsaved typing while pending
+  const serverText: string | undefined = data?.draft?.cover_letter;
+  useEffect(() => {
+    if (serverText !== undefined && serverText !== orig && (text === orig || !data?.pending)) { setText(serverText); setOrig(serverText); }
+  }, [serverText, orig, text, data?.pending]);
   usePoll(() => { if (data && !data.pending && data.run.status === "running") reload(); }, 1500);
   if (!ready) return null;
   if (loading && !data) return <Loading />;
@@ -49,7 +53,7 @@ export default function Studio() {
             <ul className="space-y-1 text-xs">{(data.draft?.claims ?? []).filter((c: any) => c.verdict !== "not_a_claim").map((c: any, i: number) => (
               <li key={i}><Badge tone={c.verdict === "supported" ? "green" : "red"}>{c.verdict}</Badge> {c.text}</li>))}</ul>
           </Card>
-          {data.pending && <Card title="Decision"><ApprovalPanel runId={id} original={orig} text={text} onDone={() => { setOrig(""); setTimeout(reload, 800); }} /></Card>}
+          {data.pending && <Card title="Decision"><ApprovalPanel runId={id} original={orig} text={text} onDone={() => { setTimeout(reload, 800); }} /></Card>}
         </div>
         <div className="space-y-4">
           <Card title="Critic">{critique ? <><p className="text-sm">{critique.ok ? "No serious issues." : critique.issues.join("; ")}</p><p className="text-xs text-zinc-500">score {critique.score} · {(data.critiques ?? []).length} pass(es)</p></> : <p className="text-sm text-zinc-500">—</p>}</Card>

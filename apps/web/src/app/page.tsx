@@ -9,7 +9,7 @@ import { actionTone, Badge, btnGhost, btnPrimary, Card, Empty, ErrorState, input
 export default function Inbox() {
   const ready = useAuthGuard(); const router = useRouter();
   const [action, setAction] = useState(""); const [minFit, setMinFit] = useState(0);
-  const { data, error, loading, reload } = useApi<any>(ready ? `/jobs?limit=12&action=${action}&min_fit=${minFit}` : null);
+  const { data, error, loading, reload } = useApi<any>(ready ? `/jobs?limit=6&action=${action}&min_fit=${minFit}` : null);
   const [busy, setBusy] = useState("");
   if (!ready) return null;
   const draft = async (id: string) => { setBusy(id); try { const r = await api(`/jobs/${id}/draft`, { body: {} }); router.push(`/runs/${encodeURIComponent(r.run_id)}`); } catch (e: any) { alert(e.message); } finally { setBusy(""); } };
