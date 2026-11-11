@@ -35,6 +35,6 @@ async def triage_job(user: dict, job: dict, force: bool = False) -> dict:
                "fit_report": st["fit_report"], "price": None}
         if st["decision"]["action"] == "bid":
             st.update(await pricing(st))
-            out["price"] = st["price_quote"]
+            out["price"] = st.get("price_quote")
     db().execute("INSERT OR REPLACE INTO triage VALUES (?,?,?,?)", (user["id"], job["job_id"], json.dumps(out), now()))
     return out

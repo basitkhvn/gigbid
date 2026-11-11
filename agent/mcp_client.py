@@ -60,6 +60,8 @@ class ToolHub:
         self.disabled: set[str] = set()
         self.health: dict[str, dict] = {}
         self._servers: dict[str, Any] = {}
+        self._sessions: dict = {}
+        self._holders: dict = {}
 
     # ---- in-memory servers
     def _server(self, name: str):
@@ -83,19 +85,38 @@ class ToolHub:
             client = MultiServerMCPClient({server: {"url": url, "transport": "streamable_http", "headers": headers}})
             tools = {t.name: t for t in await client.get_tools()}
             return await tools[tool].ainvoke(args)
-        from mcp.shared.memory import create_connected_server_and_client_session as conn
-        async with conn(self._server(server)._mcp_server) as s:
-            r = await s.call_tool(tool, args)
-            if r.isError:
-                raise RuntimeError(r.content[0].text if r.content else "tool error")
-            if r.structuredContent is not None:
-                sc = r.structuredContent
-                return sc.get("result", sc) if isinstance(sc, dict) and list(sc) == ["result"] else sc
-            txt = r.content[0].text if r.content else ""
-            try:
-                return json.loads(txt)
-            except Exception:  # noqa: BLE001
-                return txt
+        s = await self._session(server)
+        r = await s.call_tool(tool, args)
+        if r.isError:
+            raise RuntimeError(r.content[0].text if r.content else "tool error")
+        if r.structuredContent is not None:
+            sc = r.structuredContent
+            return sc.get("result", sc) if isinstance(sc, dict) and list(sc) == ["result"] else sc
+        txt = r.content[0].text if r.content else ""
+        try:
+            return json.loads(txt)
+        except Exception:  # noqa: BLE001
+            return txt
+
+    async def _session(self, server: str):
+        """One long-lived in-memory MCP client session per server per event loop (opening one per call burned CPU)."""
+        loop = asyncio.get_running_loop()
+        key = (server, id(loop))
+        if key not in self._sessions:
+            ready: asyncio.Future = loop.create_future()
+
+            async def holder():
+                from mcp.shared.memory import create_connected_server_and_client_session as conn
+                try:
+                    async with conn(self._server(server)._mcp_server) as sess:
+                        ready.set_result(sess)
+                        await asyncio.Event().wait()
+                except Exception as e:  # noqa: BLE001
+                    if not ready.done():
+                        ready.set_exception(e)
+            self._holders[key] = loop.create_task(holder())
+            self._sessions[key] = await ready
+        return self._sessions[key]
 
     async def call(self, agent: str, tool: str, args: dict | None = None, trace_id: str = "") -> Any:
         if tool not in ALLOWLIST.get(agent, set()):

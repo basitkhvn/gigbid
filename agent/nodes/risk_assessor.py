@@ -26,6 +26,9 @@ async def risk_assessor(state):
     job = state["job"]
     text = job["title"] + "\n" + job["description"]
     hits = rule_scan(text)
+    b = (job.get("budget") or {}).get("max")
+    if b is not None and b < 100:  # fix from failure analysis (17 guarantee-bait scams missed): implausibly low budget signal
+        hits["implausibly_low_budget"] = 0.3
     inj = detect_injection(text)
     quality = 0.5
     try:

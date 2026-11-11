@@ -1,0 +1,672 @@
+{
+ "marketplace": {
+  "create_proposal_draft": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": false
+   },
+   "inputSchema": {
+    "$defs": {
+     "DraftIn": {
+      "properties": {
+       "bid": {
+        "description": "Bid in USD",
+        "exclusiveMinimum": 0,
+        "maximum": 1000000,
+        "title": "Bid",
+        "type": "number"
+       },
+       "cover_letter": {
+        "maxLength": 5000,
+        "minLength": 20,
+        "title": "Cover Letter",
+        "type": "string"
+       },
+       "dry_run": {
+        "default": true,
+        "description": "Preview only: returns what would be sent and its cost",
+        "title": "Dry Run",
+        "type": "boolean"
+       },
+       "idempotency_key": {
+        "maxLength": 128,
+        "minLength": 8,
+        "title": "Idempotency Key",
+        "type": "string"
+       },
+       "job_id": {
+        "maxLength": 64,
+        "minLength": 1,
+        "title": "Job Id",
+        "type": "string"
+       },
+       "screening_answers": {
+        "items": {
+         "type": "string"
+        },
+        "maxItems": 10,
+        "title": "Screening Answers",
+        "type": "array"
+       },
+       "trace_id": {
+        "default": "",
+        "title": "Trace Id",
+        "type": "string"
+       },
+       "user_id": {
+        "description": "Tenant/user id",
+        "maxLength": 64,
+        "minLength": 1,
+        "title": "User Id",
+        "type": "string"
+       }
+      },
+      "required": [
+       "user_id",
+       "job_id",
+       "cover_letter",
+       "bid",
+       "idempotency_key"
+      ],
+      "title": "DraftIn",
+      "type": "object"
+     }
+    },
+    "properties": {
+     "inp": {
+      "$ref": "#/$defs/DraftIn"
+     }
+    },
+    "required": [
+     "inp"
+    ],
+    "title": "create_proposal_draftArguments",
+    "type": "object"
+   }
+  },
+  "get_client_history": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "inputSchema": {
+    "properties": {
+     "client_id": {
+      "title": "Client Id",
+      "type": "string"
+     },
+     "user_id": {
+      "title": "User Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "user_id",
+     "client_id"
+    ],
+    "title": "get_client_historyArguments",
+    "type": "object"
+   }
+  },
+  "get_connects_balance": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "inputSchema": {
+    "properties": {
+     "user_id": {
+      "title": "User Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "user_id"
+    ],
+    "title": "get_connects_balanceArguments",
+    "type": "object"
+   }
+  },
+  "get_job": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "inputSchema": {
+    "properties": {
+     "job_id": {
+      "title": "Job Id",
+      "type": "string"
+     },
+     "user_id": {
+      "title": "User Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "user_id",
+     "job_id"
+    ],
+    "title": "get_jobArguments",
+    "type": "object"
+   }
+  },
+  "get_platform_policy": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "inputSchema": {
+    "properties": {
+     "user_id": {
+      "title": "User Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "user_id"
+    ],
+    "title": "get_platform_policyArguments",
+    "type": "object"
+   }
+  },
+  "get_price_stats": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "inputSchema": {
+    "properties": {
+     "category": {
+      "default": "",
+      "title": "Category",
+      "type": "string"
+     },
+     "user_id": {
+      "title": "User Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "user_id"
+    ],
+    "title": "get_price_statsArguments",
+    "type": "object"
+   }
+  },
+  "list_messages": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "inputSchema": {
+    "properties": {
+     "proposal_id": {
+      "default": "",
+      "title": "Proposal Id",
+      "type": "string"
+     },
+     "user_id": {
+      "title": "User Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "user_id"
+    ],
+    "title": "list_messagesArguments",
+    "type": "object"
+   }
+  },
+  "list_proposals": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "inputSchema": {
+    "properties": {
+     "user_id": {
+      "title": "User Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "user_id"
+    ],
+    "title": "list_proposalsArguments",
+    "type": "object"
+   }
+  },
+  "search_jobs": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "inputSchema": {
+    "properties": {
+     "category": {
+      "default": "",
+      "title": "Category",
+      "type": "string"
+     },
+     "limit": {
+      "default": 25,
+      "title": "Limit",
+      "type": "integer"
+     },
+     "offset": {
+      "default": 0,
+      "title": "Offset",
+      "type": "integer"
+     },
+     "q": {
+      "default": "",
+      "title": "Q",
+      "type": "string"
+     },
+     "skill": {
+      "default": "",
+      "title": "Skill",
+      "type": "string"
+     },
+     "user_id": {
+      "title": "User Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "user_id"
+    ],
+    "title": "search_jobsArguments",
+    "type": "object"
+   }
+  },
+  "send_message": {
+   "annotations": {
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": true,
+    "readOnlyHint": false
+   },
+   "inputSchema": {
+    "$defs": {
+     "MessageIn": {
+      "properties": {
+       "dry_run": {
+        "default": false,
+        "title": "Dry Run",
+        "type": "boolean"
+       },
+       "idempotency_key": {
+        "maxLength": 128,
+        "minLength": 8,
+        "title": "Idempotency Key",
+        "type": "string"
+       },
+       "proposal_id": {
+        "title": "Proposal Id",
+        "type": "string"
+       },
+       "text": {
+        "maxLength": 4000,
+        "minLength": 1,
+        "title": "Text",
+        "type": "string"
+       },
+       "trace_id": {
+        "default": "",
+        "title": "Trace Id",
+        "type": "string"
+       },
+       "user_id": {
+        "maxLength": 64,
+        "minLength": 1,
+        "title": "User Id",
+        "type": "string"
+       }
+      },
+      "required": [
+       "user_id",
+       "proposal_id",
+       "text",
+       "idempotency_key"
+      ],
+      "title": "MessageIn",
+      "type": "object"
+     }
+    },
+    "properties": {
+     "inp": {
+      "$ref": "#/$defs/MessageIn"
+     }
+    },
+    "required": [
+     "inp"
+    ],
+    "title": "send_messageArguments",
+    "type": "object"
+   }
+  },
+  "submit_proposal": {
+   "annotations": {
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": true,
+    "readOnlyHint": false
+   },
+   "inputSchema": {
+    "$defs": {
+     "SubmitIn": {
+      "properties": {
+       "draft_id": {
+        "minLength": 1,
+        "title": "Draft Id",
+        "type": "string"
+       },
+       "dry_run": {
+        "default": false,
+        "title": "Dry Run",
+        "type": "boolean"
+       },
+       "idempotency_key": {
+        "maxLength": 128,
+        "minLength": 8,
+        "title": "Idempotency Key",
+        "type": "string"
+       },
+       "trace_id": {
+        "default": "",
+        "title": "Trace Id",
+        "type": "string"
+       },
+       "user_id": {
+        "maxLength": 64,
+        "minLength": 1,
+        "title": "User Id",
+        "type": "string"
+       }
+      },
+      "required": [
+       "user_id",
+       "draft_id",
+       "idempotency_key"
+      ],
+      "title": "SubmitIn",
+      "type": "object"
+     }
+    },
+    "properties": {
+     "inp": {
+      "$ref": "#/$defs/SubmitIn"
+     }
+    },
+    "required": [
+     "inp"
+    ],
+    "title": "submit_proposalArguments",
+    "type": "object"
+   }
+  }
+ },
+ "portfolio": {
+  "get_case_study": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "inputSchema": {
+    "properties": {
+     "id": {
+      "title": "Id",
+      "type": "string"
+     },
+     "persona": {
+      "default": "",
+      "title": "Persona",
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ],
+    "title": "get_case_studyArguments",
+    "type": "object"
+   }
+  },
+  "list_skills": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "inputSchema": {
+    "properties": {
+     "persona": {
+      "default": "",
+      "title": "Persona",
+      "type": "string"
+     }
+    },
+    "title": "list_skillsArguments",
+    "type": "object"
+   }
+  },
+  "search_evidence": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true
+   },
+   "inputSchema": {
+    "properties": {
+     "filters": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "title": "Filters"
+     },
+     "k": {
+      "default": 5,
+      "title": "K",
+      "type": "integer"
+     },
+     "persona": {
+      "default": "",
+      "title": "Persona",
+      "type": "string"
+     },
+     "requirement": {
+      "title": "Requirement",
+      "type": "string"
+     }
+    },
+    "required": [
+     "requirement"
+    ],
+    "title": "search_evidenceArguments",
+    "type": "object"
+   }
+  }
+ },
+ "workspace": {
+  "create_email_draft": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "readOnlyHint": false
+   },
+   "inputSchema": {
+    "$defs": {
+     "EmailDraftIn": {
+      "properties": {
+       "body": {
+        "maxLength": 5000,
+        "title": "Body",
+        "type": "string"
+       },
+       "idempotency_key": {
+        "minLength": 8,
+        "title": "Idempotency Key",
+        "type": "string"
+       },
+       "subject": {
+        "maxLength": 200,
+        "title": "Subject",
+        "type": "string"
+       },
+       "to": {
+        "maxLength": 200,
+        "title": "To",
+        "type": "string"
+       },
+       "user_id": {
+        "minLength": 1,
+        "title": "User Id",
+        "type": "string"
+       }
+      },
+      "required": [
+       "user_id",
+       "to",
+       "subject",
+       "body",
+       "idempotency_key"
+      ],
+      "title": "EmailDraftIn",
+      "type": "object"
+     }
+    },
+    "properties": {
+     "inp": {
+      "$ref": "#/$defs/EmailDraftIn"
+     }
+    },
+    "required": [
+     "inp"
+    ],
+    "title": "create_email_draftArguments",
+    "type": "object"
+   }
+  },
+  "create_interview_hold": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "readOnlyHint": false
+   },
+   "inputSchema": {
+    "$defs": {
+     "HoldIn": {
+      "properties": {
+       "idempotency_key": {
+        "minLength": 8,
+        "title": "Idempotency Key",
+        "type": "string"
+       },
+       "minutes": {
+        "default": 30,
+        "maximum": 120,
+        "minimum": 15,
+        "title": "Minutes",
+        "type": "integer"
+       },
+       "start": {
+        "description": "ISO datetime",
+        "title": "Start",
+        "type": "string"
+       },
+       "title": {
+        "maxLength": 120,
+        "minLength": 1,
+        "title": "Title",
+        "type": "string"
+       },
+       "user_id": {
+        "minLength": 1,
+        "title": "User Id",
+        "type": "string"
+       }
+      },
+      "required": [
+       "user_id",
+       "start",
+       "title",
+       "idempotency_key"
+      ],
+      "title": "HoldIn",
+      "type": "object"
+     }
+    },
+    "properties": {
+     "inp": {
+      "$ref": "#/$defs/HoldIn"
+     }
+    },
+    "required": [
+     "inp"
+    ],
+    "title": "create_interview_holdArguments",
+    "type": "object"
+   }
+  },
+  "free_slots": {
+   "annotations": {
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "readOnlyHint": true
+   },
+   "inputSchema": {
+    "properties": {
+     "days": {
+      "default": 5,
+      "title": "Days",
+      "type": "integer"
+     },
+     "minutes": {
+      "default": 30,
+      "title": "Minutes",
+      "type": "integer"
+     },
+     "user_id": {
+      "title": "User Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "user_id"
+    ],
+    "title": "free_slotsArguments",
+    "type": "object"
+   }
+  }
+ }
+}

@@ -120,7 +120,7 @@ def create_server(adapter=None, store: Store | None = None, rate_per_min: int | 
             from apps.api.auth.tokens import get_token
             adapter = UpworkLiveAdapter(get_token)
     store = store or Store(STATE_DIR / "marketplace.sqlite")
-    limiter = RateLimiter(rate_per_min or cfg["marketplace"]["max_requests_per_minute"] * 3)
+    limiter = RateLimiter(rate_per_min or int(os.environ.get("MARKETPLACE_RATE_PER_MIN", cfg["marketplace"]["max_requests_per_minute"] * 3)))
     mcp = FastMCP("gigbid-marketplace")
 
     def guard(user: str):
