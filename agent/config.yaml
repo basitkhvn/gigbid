@@ -54,9 +54,9 @@ thresholds:
   autonomy_skip_below_fit: 0.30
 # Platform rules read by Pricing + Compliance (the 'policy update' change request edits ONLY this block)
 platform_rules:
-  max_cover_letter_chars: 3000
-  min_cover_letter_chars: 0
-  connects_multiplier: 1.0
+  max_cover_letter_chars: 1500
+  min_cover_letter_chars: 200
+  connects_multiplier: 1.5
   weekly_connects_budget_default: 120
   banned_phrases: ["guarantee", "100%", "passionate", "dear sir"]
   contact_patterns: ["@", "whatsapp", "telegram", "skype", "http://", "https://", "\\+\\d{6,}"]
