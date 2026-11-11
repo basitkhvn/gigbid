@@ -111,9 +111,10 @@ def v8_corrective(c: Corpus, job, k=5, min_rerank=-4.0, **_):
     return run_corrective(c, job, k, min_rerank)
 
 
-def v_best(c: Corpus, job, k=5, types=None, decompose=True, hybrid=True, rerank_on=True, outcome=True, **_):
-    """Final pipeline: decomposition + hybrid(BM25+dense, RRF) + cross-encoder rerank + outcome-aware boost.
-    Each component can be switched off for the one-at-a-time ablation (evals/runners/ablation.py)."""
+def v_best(c: Corpus, job, k=5, types=None, decompose=True, hybrid=True, rerank_rank=False, outcome=True, **_):
+    """Shipped pipeline: decomposition + hybrid(BM25+dense, RRF) + outcome-aware boost. The cross-encoder is computed for the
+    absolute `relevance` score that gates 'is this requirement evidenced?' (fit matcher, verifier) but is NOT used for ranking:
+    the ablation showed rank-by-rerank LOWERS Recall@5 on this corpus (evals/results/ablation.json). rerank_rank=True restores it."""
     reqs = extract(job) if decompose else [job_query(job)]
     pool: dict[str, tuple[dict, float]] = {}
     for rq in reqs:
@@ -127,15 +128,14 @@ def v_best(c: Corpus, job, k=5, types=None, decompose=True, hybrid=True, rerank_
     cand = to_evidence(c, list(pool.values()), 25, "best")
     scores = [0.0] * len(cand)
     raw = [-99.0] * len(cand)
-    if rerank_on:
-        for rq in reqs:
-            rr = rerank(rq, [e["text"][:1500] for e in cand])
-            for i, sc in enumerate(minmax(rr)):
-                scores[i] += sc
-                raw[i] = max(raw[i], float(rr[i]))
-    else:
-        scores = [e["score"] for e in cand]
-    for e, sc, rw in zip(cand, scores, raw):
+    base = [e["score"] for e in cand]
+    for rq in reqs:
+        rr = rerank(rq, [e["text"][:1500] for e in cand])
+        for i, sc in enumerate(minmax(rr)):
+            scores[i] += sc
+            raw[i] = max(raw[i], float(rr[i]))
+    ranking = scores if rerank_rank else base
+    for e, sc, rw in zip(cand, ranking, raw):
         e["score"] = round(float(sc) * (1 + (0.3 * _prior(c, e) if outcome else 0)), 5)
-        e["relevance"] = round(rw, 3) if rerank_on else None
+        e["relevance"] = round(rw, 3)
     return sorted(cand, key=lambda e: -e["score"])[:k]

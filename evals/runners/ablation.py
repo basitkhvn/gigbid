@@ -6,8 +6,8 @@ import argparse
 from evals.common import PERSONAS, write
 from evals.runners.rag_eval import evaluate, jobs_for, summarize
 
-CONFIGS = {"full": {}, "-decomposition": {"decompose": False}, "-hybrid(BM25)": {"hybrid": False},
-           "-rerank": {"rerank_on": False}, "-outcome_boost": {"outcome": False}}
+CONFIGS = {"shipped (decompose+hybrid+outcome)": {}, "+rerank_for_ranking": {"rerank_rank": True}, "-decomposition": {"decompose": False},
+           "-hybrid(BM25)": {"hybrid": False}, "-outcome_boost": {"outcome": False}}
 
 
 def main():
