@@ -1,3 +1,33 @@
-# TODO: Define web, API, worker, MCP servers, GigSim, Postgres, Redis,
-# vector store and local model service as appropriate.
-services: {}
+# docker compose -f infra/docker-compose.yml up --build   (from repo root).  Secrets only from environment / .env (never committed).
+x-py: &py
+  build: {context: .., dockerfile: infra/docker/python.Dockerfile}
+  env_file: [../.env]
+  environment: &env
+    DATABASE_URL: postgresql://gigbid:gigbid@postgres:5432/gigbid
+    REDIS_URL: redis://redis:6379/0
+    MCP_TRANSPORT: http
+    MCP_MARKETPLACE_URL: http://mcp-marketplace:8082/mcp
+    MCP_PORTFOLIO_URL: http://mcp-portfolio:8083/mcp
+    MCP_WORKSPACE_URL: http://mcp-workspace:8084/mcp
+    MCP_MARKETPLACE_TOKEN: ${MARKETPLACE_MCP_TOKEN:-dev-mcp-token}
+    MARKETPLACE_MCP_TOKEN: ${MARKETPLACE_MCP_TOKEN:-dev-mcp-token}
+    GIGSIM_INPROCESS: "0"
+    GIGSIM_BASE_URL: http://gigsim:8081
+    GIGBID_STATE_DIR: /state
+    MODEL_PROFILE: ${MODEL_PROFILE:-open}
+  volumes: [state:/state]
+services:
+  postgres: {image: "postgres:16", environment: {POSTGRES_USER: gigbid, POSTGRES_PASSWORD: gigbid, POSTGRES_DB: gigbid}, volumes: [pg:/var/lib/postgresql/data]}
+  redis: {image: "redis:7"}
+  gigsim: {<<: *py, command: ["uvicorn", "gigsim_local.app:app", "--host", "0.0.0.0", "--port", "8081"]}
+  mcp-marketplace: {<<: *py, command: ["python", "-m", "mcp_servers.marketplace.server", "--http"], depends_on: [gigsim]}
+  mcp-portfolio: {<<: *py, command: ["python", "-m", "mcp_servers.portfolio.server", "--http"]}
+  mcp-workspace: {<<: *py, command: ["python", "-m", "mcp_servers.workspace.server", "--http"]}
+  api: {<<: *py, ports: ["8000:8000"], depends_on: [postgres, redis, mcp-marketplace, mcp-portfolio, mcp-workspace]}
+  worker: {<<: *py, command: ["arq", "worker.worker.WorkerSettings"], depends_on: [postgres, redis, api]}
+  web: {build: {context: .., dockerfile: infra/docker/web.Dockerfile}, ports: ["3000:80"], depends_on: [api]}
+  ollama:
+    image: ollama/ollama
+    profiles: [local]
+    volumes: [ollama:/root/.ollama]
+volumes: {state: {}, pg: {}, ollama: {}}

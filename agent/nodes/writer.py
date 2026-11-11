@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from agent.guard import sanitize, wrap_untrusted
 from agent.handoffs import ProposalDraft
-from agent.llm import complete, prompt
+from agent.llm import acomplete, prompt
 from agent.nodes.common import node
 
 
@@ -36,7 +36,7 @@ async def writer(state):
     user = (f"{wrap_untrusted(job['title'] + chr(10) + sanitize(job['description']))}\n\nEVIDENCE:\n{numbered(evidence)}\n\n"
             f"Requirements without evidence (do NOT claim): {state['fit_report']['missing_skills']}\n" +
             (f"REVISION INSTRUCTIONS from critic: {instr}\nPrevious draft: {state.get('draft', {}).get('cover_letter', '')}" if instr else ""))
-    res = complete("writer", system, user)
+    res = await acomplete("writer", system, user)
     text = res.text.strip() if res else template_letter(state, evidence, instr)
     answers = []
     d = ProposalDraft(job_id=job["job_id"], cover_letter=text, screening_answers=answers,

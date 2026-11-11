@@ -4,7 +4,7 @@ import re
 
 from agent.guard import detect_injection, wrap_untrusted
 from agent.handoffs import ConversationReply
-from agent.llm import complete_json, prompt
+from agent.llm import acomplete_json, prompt
 from agent.mcp_client import get_hub
 from agent.nodes.common import node
 
@@ -35,7 +35,7 @@ async def liaison_draft(state):
     ev = []
     if intent in ("question", "negotiation"):
         ev = await get_hub().call("client_liaison", "search_evidence", {"requirement": text[:200], "k": 2, "persona": state["persona"]})
-    llm = complete_json("client_liaison", prompt("client_liaison"),
+    llm = await acomplete_json("client_liaison", prompt("client_liaison"),
                         f"{wrap_untrusted(text, 'client_message')}\nEVIDENCE: {[e['snippet'] for e in ev]}\nSLOTS: {slots}")
     if llm and llm.get("reply") and intent != "scam_signal":
         intent = llm.get("intent") if llm.get("intent") in ("question", "negotiation", "interview_request", "scam_signal") else intent

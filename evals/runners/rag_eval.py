@@ -15,16 +15,22 @@ VARIANTS = ["v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v_best"]
 
 
 def evaluate(variant: str, persona: str, jobs: list[dict], **opts):
-    rows = []
-    for j in jobs:
+    if variant == "v7":  # HyDE makes one LLM call per job: run them concurrently
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(8) as ex:
+            return list(ex.map(lambda j: _one(variant, persona, j, opts), jobs))
+    return [_one(variant, persona, j, opts) for j in jobs]
+
+
+def _one(variant, persona, j, opts):
+    if True:
         g = j["gold"]["relevant_projects"]
         t = time.time()
         ev = retrieve(persona, j, k=10, variant=variant, **opts)
         lat = time.time() - t
         r = project_ranking(ev)
-        rows.append({"job": j["job_id"], "n_req": len(j["required_skills"]), "recall5": recall_at(r, g), "mrr": mrr(r, g),
-                     "ndcg10": ndcg_at(r, g), "lat": lat})
-    return rows
+        return {"job": j["job_id"], "n_req": len(j["required_skills"]), "recall5": recall_at(r, g), "mrr": mrr(r, g),
+                "ndcg10": ndcg_at(r, g), "lat": lat}
 
 
 def summarize(rows):

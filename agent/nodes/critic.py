@@ -5,7 +5,7 @@ import re
 from agent.config import load_config
 from agent.guard import wrap_untrusted
 from agent.handoffs import Critique
-from agent.llm import complete_json, prompt
+from agent.llm import acomplete_json, prompt
 from agent.nodes.common import node
 
 GENERIC = ("i am writing to apply", "dear sir", "hardworking", "i am a hard", "passionate", "i can start right away")
@@ -31,7 +31,7 @@ def rule_critique(text: str, job: dict, fit: dict) -> Critique:
 async def critic(state):
     text = state["draft"]["cover_letter"]
     c = rule_critique(text, state["job"], state["fit_report"])
-    llm = complete_json("critic", prompt("critic"), wrap_untrusted(state["job"]["description"]) + f"\n\nDRAFT:\n{text}")
+    llm = await acomplete_json("critic", prompt("critic"), wrap_untrusted(state["job"]["description"]) + f"\n\nDRAFT:\n{text}")
     if llm:
         c.issues += [str(i) for i in llm.get("issues", []) if str(i) not in c.issues][:3]
         if not llm.get("ok", True):

@@ -27,6 +27,11 @@ def fingerprint(job: dict) -> str:
     return hashlib.sha1(t.encode()).hexdigest()
 
 
+def already_seen(user: str, job: dict) -> bool:
+    """True if this job (or a duplicate repost of it) was already queued for this user."""
+    return _seen().execute("SELECT 1 FROM seen WHERE user=? AND h=?", (user, fingerprint(job))).fetchone() is not None
+
+
 def mark_if_new(user: str, job: dict) -> bool:
     db = _seen()
     h = fingerprint(job)

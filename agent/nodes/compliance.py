@@ -1,6 +1,7 @@
 """Compliance Guard: enforces the policy pack (rules live in agent/config.yaml platform_rules, prompts in files)."""
 from __future__ import annotations
 
+import os
 import re
 
 from agent.config import load_config
@@ -10,6 +11,8 @@ from agent.nodes.common import node
 
 def check_text(text: str, risk: dict | None = None) -> ComplianceVerdict:
     rules = load_config()["platform_rules"]
+    if os.environ.get("GIGBID_OUTPUT_DEFENCE", "1") == "0":  # evaluation switch only
+        return ComplianceVerdict(passed=True, sanitized_text=text)
     viol, kept = [], []
     for sent in re.split(r"(?<=[.!?])\s+", text.strip()):
         low = sent.lower()

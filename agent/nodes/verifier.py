@@ -9,7 +9,8 @@ from rag.verify import llm_recheck, repair, unsupported_rate, verify
 @node("verifier")
 async def verifier(state):
     draft, ev = state["draft"], state.get("evidence", [])
-    res = llm_recheck(verify(draft["cover_letter"], ev), ev)
+    import asyncio
+    res = await asyncio.to_thread(lambda: llm_recheck(verify(draft["cover_letter"], ev), ev))
     bad_before, n = unsupported_rate(res)
     fixed = repair(draft["cover_letter"], res)
     res2 = verify(fixed, ev) if fixed else []

@@ -5,7 +5,7 @@ import re
 from agent.config import load_config
 from agent.guard import detect_injection, wrap_untrusted
 from agent.handoffs import RiskReport
-from agent.llm import complete_json, prompt
+from agent.llm import acomplete_json, prompt
 from agent.mcp_client import get_hub
 from agent.nodes.common import node
 
@@ -38,7 +38,7 @@ async def risk_assessor(state):
         pass
     flags = list(hits)
     llm_expl = ""
-    llm = complete_json("risk_assessor", prompt("risk_assessor"), wrap_untrusted(text))
+    llm = await acomplete_json("risk_assessor", prompt("risk_assessor"), wrap_untrusted(text))
     if llm:  # LLM can add flags the rules miss; it can never remove a rule flag
         for f in llm.get("flags", []):
             if f in ("unpaid_work", "off_platform_contact", "off_platform_payment", "guarantee_bait") and f not in flags:

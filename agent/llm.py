@@ -8,7 +8,13 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
+import asyncio
+import concurrent.futures as cf
+
 import httpx
+
+_POOL = cf.ThreadPoolExecutor(32)
+HARD_DEADLINE_S = 75  # total wall-clock cap per LLM call (provider keep-alives defeat per-read timeouts)
 
 from agent.config import load_config
 from agent.tracing import record
@@ -70,10 +76,17 @@ def _call(spec: dict, system: str, user: str, json_mode: bool) -> LLMResult:
     base = os.environ.get(prov["base_url_env"], prov["default_base"])
     body = {"model": spec["model"], "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
             "max_tokens": spec.get("max_tokens", 600), "temperature": spec.get("temperature", 0.0)}
+    if os.environ.get("DEEPSEEK_THINKING") == "disabled":  # multi-agent baselines can't replay reasoning_content; set for ALL systems in a comparison
+        body["thinking"] = {"type": "disabled"}
     if json_mode:
         body["response_format"] = {"type": "json_object"}
     t0 = time.time()
-    r = httpx.post(f"{base}/chat/completions", json=body, headers={"Authorization": f"Bearer {key}"}, timeout=120)
+    fut = _POOL.submit(httpx.post, f"{base}/chat/completions", json=body, headers={"Authorization": f"Bearer {key}"},
+                       timeout=httpx.Timeout(60, connect=10))
+    try:
+        r = fut.result(timeout=HARD_DEADLINE_S)
+    except cf.TimeoutError:
+        raise TimeoutError(f"LLM call exceeded {HARD_DEADLINE_S}s")
     r.raise_for_status()
     d = r.json()
     u = d.get("usage", {})
@@ -115,3 +128,11 @@ def complete_json(node: str, system: str, user: str) -> dict | None:
             return json.loads(m.group(0)) if m else None
         except Exception:  # noqa: BLE001
             return None
+
+
+async def acomplete(node, system, user, json_mode=False):
+    return await asyncio.to_thread(complete, node, system, user, json_mode)
+
+
+async def acomplete_json(node, system, user):
+    return await asyncio.to_thread(complete_json, node, system, user)

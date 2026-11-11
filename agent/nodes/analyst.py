@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from agent.guard import sanitize, wrap_untrusted
 from agent.handoffs import JobSpec
-from agent.llm import complete_json, prompt
+from agent.llm import acomplete_json, prompt
 from agent.nodes.common import node
 from rag.requirements import extract
 
@@ -12,7 +12,7 @@ async def analyst(state):
     job = state["job"]
     clean = sanitize(job["description"])
     spec = None
-    out = complete_json("analyst", prompt("analyst"), wrap_untrusted(job["title"] + "\n" + clean))
+    out = await acomplete_json("analyst", prompt("analyst"), wrap_untrusted(job["title"] + "\n" + clean))
     if out:
         try:
             spec = JobSpec(job_id=job["job_id"], title=job["title"], category=job.get("category", ""),

@@ -89,4 +89,10 @@ def create_server() -> FastMCP:
 
 
 if __name__ == "__main__":
-    create_server().run()
+    import sys
+    srv = create_server()
+    if "--http" in sys.argv:  # Streamable HTTP for docker compose / remote hosts
+        srv.settings.host, srv.settings.port = "0.0.0.0", int(os.environ.get("PORT", 8084))
+        srv.run(transport="streamable-http")
+    else:
+        srv.run()
