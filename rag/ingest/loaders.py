@@ -4,6 +4,7 @@ industry and (for proposals) outcome."""
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 from agent.config import ROOT
@@ -11,10 +12,16 @@ from agent.config import ROOT
 PERSONA_DIR = ROOT / "data/personas"
 
 
+def user_items_path(persona: str) -> Path:
+    d = Path(os.environ.get("GIGBID_STATE_DIR", ROOT / "data/processed")) / "user_items"
+    d.mkdir(parents=True, exist_ok=True)
+    return d / f"{persona}.jsonl"
+
+
 def load_items(persona: str) -> list[dict]:
     p = PERSONA_DIR / persona / "items.jsonl"
     items = [json.loads(line) for line in p.read_text().splitlines() if line]
-    extra = PERSONA_DIR / persona / "user_items.jsonl"  # items the user added via the UI
+    extra = user_items_path(persona)  # items users added via the UI (kept out of the repo)
     if extra.exists():
         items += [json.loads(line) for line in extra.read_text().splitlines() if line]
     return items
@@ -43,7 +50,7 @@ async def load_github_readme(hub, persona: str, owner: str, repo: str) -> dict:
 def add_user_item(persona: str, item: dict) -> None:
     """Incremental re-index entry point: append, then callers re-index only this item."""
     item = {**item, "persona": persona}
-    with (PERSONA_DIR / persona / "user_items.jsonl").open("a") as f:
+    with user_items_path(persona).open("a") as f:
         f.write(json.dumps(item) + "\n")
 
 
