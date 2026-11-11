@@ -1,0 +1,489 @@
+{
+ "name": "Sara Malik",
+ "title": "Data Analyst",
+ "floor": 25,
+ "rate": 40,
+ "persona": "data",
+ "skills": [
+  "SQL",
+  "dbt",
+  "Tableau",
+  "Power BI",
+  "pandas",
+  "Snowflake",
+  "Airflow",
+  "Excel",
+  "BigQuery",
+  "Looker",
+  "A/B testing",
+  "statistics",
+  "ETL",
+  "Python",
+  "data cleaning",
+  "forecasting"
+ ],
+ "projects": [
+  {
+   "project_id": "data-proj-00",
+   "title": "Healthcare pricing analysis",
+   "industry": "healthcare",
+   "skills": [
+    "pandas",
+    "Python",
+    "ETL",
+    "dbt",
+    "Airflow"
+   ],
+   "date": "2023-10-15",
+   "result": "31% improvement in the client's key metric",
+   "implied": [],
+   "explicit": [
+    "pandas",
+    "Python",
+    "ETL",
+    "dbt",
+    "Airflow"
+   ]
+  },
+  {
+   "project_id": "data-proj-01",
+   "title": "Logistics warehouse migration",
+   "industry": "logistics",
+   "skills": [
+    "dbt",
+    "ETL",
+    "Excel"
+   ],
+   "date": "2024-09-15",
+   "result": "31% improvement in the client's key metric",
+   "implied": [
+    "dbt",
+    "Excel"
+   ],
+   "explicit": [
+    "ETL"
+   ]
+  },
+  {
+   "project_id": "data-proj-02",
+   "title": "Fintech sales dashboard",
+   "industry": "fintech",
+   "skills": [
+    "Snowflake",
+    "BigQuery",
+    "A/B testing"
+   ],
+   "date": "2025-08-15",
+   "result": "14% improvement in the client's key metric",
+   "implied": [
+    "Snowflake"
+   ],
+   "explicit": [
+    "BigQuery",
+    "A/B testing"
+   ]
+  },
+  {
+   "project_id": "data-proj-03",
+   "title": "Education warehouse migration",
+   "industry": "education",
+   "skills": [
+    "data cleaning",
+    "BigQuery",
+    "ETL",
+    "dbt",
+    "Snowflake"
+   ],
+   "date": "2026-02-15",
+   "result": "38% improvement in the client's key metric",
+   "implied": [
+    "data cleaning",
+    "Snowflake"
+   ],
+   "explicit": [
+    "BigQuery",
+    "ETL",
+    "dbt"
+   ]
+  },
+  {
+   "project_id": "data-proj-04",
+   "title": "Energy KPI reporting suite",
+   "industry": "energy",
+   "skills": [
+    "Airflow",
+    "Tableau",
+    "Excel",
+    "dbt",
+    "statistics"
+   ],
+   "date": "2026-06-15",
+   "result": "19% improvement in the client's key metric",
+   "implied": [
+    "Tableau"
+   ],
+   "explicit": [
+    "Airflow",
+    "Excel",
+    "dbt",
+    "statistics"
+   ]
+  },
+  {
+   "project_id": "data-proj-05",
+   "title": "Education survey analysis",
+   "industry": "education",
+   "skills": [
+    "statistics",
+    "Python",
+    "pandas"
+   ],
+   "date": "2022-03-15",
+   "result": "37% improvement in the client's key metric",
+   "implied": [
+    "pandas"
+   ],
+   "explicit": [
+    "statistics",
+    "Python"
+   ]
+  },
+  {
+   "project_id": "data-proj-06",
+   "title": "Media supply-chain analysis",
+   "industry": "media",
+   "skills": [
+    "data cleaning",
+    "BigQuery",
+    "Airflow"
+   ],
+   "date": "2026-12-15",
+   "result": "39% improvement in the client's key metric",
+   "implied": [
+    "data cleaning"
+   ],
+   "explicit": [
+    "BigQuery",
+    "Airflow"
+   ]
+  },
+  {
+   "project_id": "data-proj-07",
+   "title": "Travel finance close model",
+   "industry": "travel",
+   "skills": [
+    "forecasting",
+    "SQL",
+    "Python"
+   ],
+   "date": "2024-11-15",
+   "result": "41% improvement in the client's key metric",
+   "implied": [],
+   "explicit": [
+    "forecasting",
+    "SQL",
+    "Python"
+   ]
+  },
+  {
+   "project_id": "data-proj-08",
+   "title": "Healthcare supply-chain analysis",
+   "industry": "healthcare",
+   "skills": [
+    "SQL",
+    "pandas",
+    "Power BI",
+    "Python",
+    "Tableau"
+   ],
+   "date": "2026-09-15",
+   "result": "43% improvement in the client's key metric",
+   "implied": [
+    "SQL",
+    "Python"
+   ],
+   "explicit": [
+    "pandas",
+    "Power BI",
+    "Tableau"
+   ]
+  },
+  {
+   "project_id": "data-proj-09",
+   "title": "Retail warehouse migration",
+   "industry": "retail",
+   "skills": [
+    "Power BI",
+    "forecasting",
+    "statistics",
+    "BigQuery",
+    "Airflow"
+   ],
+   "date": "2024-02-15",
+   "result": "20% improvement in the client's key metric",
+   "implied": [
+    "Airflow"
+   ],
+   "explicit": [
+    "Power BI",
+    "forecasting",
+    "statistics",
+    "BigQuery"
+   ]
+  },
+  {
+   "project_id": "data-proj-10",
+   "title": "Real Estate warehouse migration",
+   "industry": "real estate",
+   "skills": [
+    "Looker",
+    "Excel",
+    "BigQuery",
+    "statistics"
+   ],
+   "date": "2025-06-15",
+   "result": "22% improvement in the client's key metric",
+   "implied": [
+    "Looker",
+    "BigQuery",
+    "statistics"
+   ],
+   "explicit": [
+    "Excel"
+   ]
+  },
+  {
+   "project_id": "data-proj-11",
+   "title": "Real Estate sales dashboard",
+   "industry": "real estate",
+   "skills": [
+    "Python",
+    "A/B testing",
+    "Looker",
+    "statistics"
+   ],
+   "date": "2021-07-15",
+   "result": "36% improvement in the client's key metric",
+   "implied": [
+    "Python",
+    "A/B testing",
+    "Looker",
+    "statistics"
+   ],
+   "explicit": []
+  },
+  {
+   "project_id": "data-proj-12",
+   "title": "Travel sales dashboard",
+   "industry": "travel",
+   "skills": [
+    "statistics",
+    "forecasting",
+    "Power BI",
+    "Airflow"
+   ],
+   "date": "2022-06-15",
+   "result": "43% improvement in the client's key metric",
+   "implied": [
+    "statistics",
+    "Airflow"
+   ],
+   "explicit": [
+    "forecasting",
+    "Power BI"
+   ]
+  },
+  {
+   "project_id": "data-proj-13",
+   "title": "Healthcare customer segmentation study",
+   "industry": "healthcare",
+   "skills": [
+    "statistics",
+    "A/B testing",
+    "Excel"
+   ],
+   "date": "2026-09-15",
+   "result": "42% improvement in the client's key metric",
+   "implied": [
+    "A/B testing"
+   ],
+   "explicit": [
+    "statistics",
+    "Excel"
+   ]
+  },
+  {
+   "project_id": "data-proj-14",
+   "title": "Retail KPI reporting suite",
+   "industry": "retail",
+   "skills": [
+    "SQL",
+    "Snowflake",
+    "ETL",
+    "dbt",
+    "forecasting"
+   ],
+   "date": "2023-03-15",
+   "result": "24% improvement in the client's key metric",
+   "implied": [
+    "SQL",
+    "Snowflake",
+    "dbt"
+   ],
+   "explicit": [
+    "ETL",
+    "forecasting"
+   ]
+  },
+  {
+   "project_id": "data-proj-15",
+   "title": "Healthcare pricing analysis",
+   "industry": "healthcare",
+   "skills": [
+    "statistics",
+    "dbt",
+    "BigQuery",
+    "Power BI"
+   ],
+   "date": "2024-08-15",
+   "result": "12% improvement in the client's key metric",
+   "implied": [
+    "BigQuery"
+   ],
+   "explicit": [
+    "statistics",
+    "dbt",
+    "Power BI"
+   ]
+  },
+  {
+   "project_id": "data-proj-16",
+   "title": "Media customer segmentation study",
+   "industry": "media",
+   "skills": [
+    "Tableau",
+    "data cleaning",
+    "Python",
+    "A/B testing",
+    "SQL"
+   ],
+   "date": "2022-09-15",
+   "result": "41% improvement in the client's key metric",
+   "implied": [
+    "A/B testing",
+    "SQL"
+   ],
+   "explicit": [
+    "Tableau",
+    "data cleaning",
+    "Python"
+   ]
+  },
+  {
+   "project_id": "data-proj-17",
+   "title": "Healthcare pricing analysis",
+   "industry": "healthcare",
+   "skills": [
+    "pandas",
+    "forecasting",
+    "Excel",
+    "statistics"
+   ],
+   "date": "2024-10-15",
+   "result": "11% improvement in the client's key metric",
+   "implied": [
+    "Excel"
+   ],
+   "explicit": [
+    "pandas",
+    "forecasting",
+    "statistics"
+   ]
+  },
+  {
+   "project_id": "data-proj-18",
+   "title": "Fintech customer segmentation study",
+   "industry": "fintech",
+   "skills": [
+    "dbt",
+    "Power BI",
+    "SQL",
+    "Excel",
+    "Tableau"
+   ],
+   "date": "2025-10-15",
+   "result": "43% improvement in the client's key metric",
+   "implied": [],
+   "explicit": [
+    "dbt",
+    "Power BI",
+    "SQL",
+    "Excel",
+    "Tableau"
+   ]
+  },
+  {
+   "project_id": "data-proj-19",
+   "title": "Healthcare survey analysis",
+   "industry": "healthcare",
+   "skills": [
+    "SQL",
+    "dbt",
+    "Airflow",
+    "ETL",
+    "data cleaning"
+   ],
+   "date": "2026-01-15",
+   "result": "40% improvement in the client's key metric",
+   "implied": [
+    "SQL",
+    "dbt",
+    "data cleaning"
+   ],
+   "explicit": [
+    "Airflow",
+    "ETL"
+   ]
+  },
+  {
+   "project_id": "data-proj-20",
+   "title": "Manufacturing KPI reporting suite",
+   "industry": "manufacturing",
+   "skills": [
+    "Power BI",
+    "data cleaning",
+    "Airflow",
+    "Looker"
+   ],
+   "date": "2021-08-15",
+   "result": "36% improvement in the client's key metric",
+   "implied": [
+    "data cleaning"
+   ],
+   "explicit": [
+    "Power BI",
+    "Airflow",
+    "Looker"
+   ]
+  },
+  {
+   "project_id": "data-proj-21",
+   "title": "Logistics pricing analysis",
+   "industry": "logistics",
+   "skills": [
+    "statistics",
+    "Excel",
+    "data cleaning"
+   ],
+   "date": "2021-06-15",
+   "result": "29% improvement in the client's key metric",
+   "implied": [
+    "statistics"
+   ],
+   "explicit": [
+    "Excel",
+    "data cleaning"
+   ]
+  }
+ ]
+}

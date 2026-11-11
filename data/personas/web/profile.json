@@ -1,0 +1,475 @@
+{
+ "name": "Daniyal Shah",
+ "title": "Full-stack Web Developer",
+ "floor": 30,
+ "rate": 48,
+ "persona": "web",
+ "skills": [
+  "React",
+  "Next.js",
+  "TypeScript",
+  "Node.js",
+  "PostgreSQL",
+  "Stripe",
+  "Tailwind",
+  "GraphQL",
+  "Redis",
+  "Docker",
+  "AWS",
+  "Django",
+  "Celery",
+  "Playwright",
+  "OAuth",
+  "WebSockets"
+ ],
+ "projects": [
+  {
+   "project_id": "web-proj-00",
+   "title": "Energy marketplace storefront",
+   "industry": "energy",
+   "skills": [
+    "OAuth",
+    "PostgreSQL",
+    "Redis"
+   ],
+   "date": "2026-06-15",
+   "result": "35% improvement in the client's key metric",
+   "implied": [
+    "PostgreSQL"
+   ],
+   "explicit": [
+    "OAuth",
+    "Redis"
+   ]
+  },
+  {
+   "project_id": "web-proj-01",
+   "title": "Education marketplace storefront",
+   "industry": "education",
+   "skills": [
+    "Stripe",
+    "TypeScript",
+    "Redis",
+    "React",
+    "AWS"
+   ],
+   "date": "2021-09-15",
+   "result": "30% improvement in the client's key metric",
+   "implied": [
+    "Stripe",
+    "Redis",
+    "AWS"
+   ],
+   "explicit": [
+    "TypeScript",
+    "React"
+   ]
+  },
+  {
+   "project_id": "web-proj-02",
+   "title": "Healthcare marketplace storefront",
+   "industry": "healthcare",
+   "skills": [
+    "Node.js",
+    "PostgreSQL",
+    "WebSockets",
+    "Django"
+   ],
+   "date": "2024-07-15",
+   "result": "25% improvement in the client's key metric",
+   "implied": [
+    "Node.js",
+    "PostgreSQL",
+    "Django"
+   ],
+   "explicit": [
+    "WebSockets"
+   ]
+  },
+  {
+   "project_id": "web-proj-03",
+   "title": "Healthcare CRM",
+   "industry": "healthcare",
+   "skills": [
+    "PostgreSQL",
+    "Redis",
+    "WebSockets"
+   ],
+   "date": "2023-09-15",
+   "result": "11% improvement in the client's key metric",
+   "implied": [
+    "WebSockets"
+   ],
+   "explicit": [
+    "PostgreSQL",
+    "Redis"
+   ]
+  },
+  {
+   "project_id": "web-proj-04",
+   "title": "Fintech learning portal",
+   "industry": "fintech",
+   "skills": [
+    "TypeScript",
+    "Django",
+    "OAuth",
+    "Redis"
+   ],
+   "date": "2024-11-15",
+   "result": "20% improvement in the client's key metric",
+   "implied": [
+    "Django",
+    "OAuth",
+    "Redis"
+   ],
+   "explicit": [
+    "TypeScript"
+   ]
+  },
+  {
+   "project_id": "web-proj-05",
+   "title": "Fintech order-tracking app",
+   "industry": "fintech",
+   "skills": [
+    "Tailwind",
+    "WebSockets",
+    "Redis",
+    "Django",
+    "Node.js"
+   ],
+   "date": "2024-05-15",
+   "result": "12% improvement in the client's key metric",
+   "implied": [
+    "Tailwind",
+    "Django",
+    "Node.js"
+   ],
+   "explicit": [
+    "WebSockets",
+    "Redis"
+   ]
+  },
+  {
+   "project_id": "web-proj-06",
+   "title": "Retail inventory tracker",
+   "industry": "retail",
+   "skills": [
+    "Celery",
+    "Playwright",
+    "Redis",
+    "GraphQL",
+    "Stripe"
+   ],
+   "date": "2025-02-15",
+   "result": "45% improvement in the client's key metric",
+   "implied": [
+    "Stripe"
+   ],
+   "explicit": [
+    "Celery",
+    "Playwright",
+    "Redis",
+    "GraphQL"
+   ]
+  },
+  {
+   "project_id": "web-proj-07",
+   "title": "Media subscription SaaS",
+   "industry": "media",
+   "skills": [
+    "React",
+    "Docker",
+    "Celery",
+    "GraphQL",
+    "Stripe"
+   ],
+   "date": "2026-03-15",
+   "result": "21% improvement in the client's key metric",
+   "implied": [],
+   "explicit": [
+    "React",
+    "Docker",
+    "Celery",
+    "GraphQL",
+    "Stripe"
+   ]
+  },
+  {
+   "project_id": "web-proj-08",
+   "title": "Education admin dashboard",
+   "industry": "education",
+   "skills": [
+    "Django",
+    "AWS",
+    "OAuth",
+    "Docker",
+    "Next.js"
+   ],
+   "date": "2021-04-15",
+   "result": "17% improvement in the client's key metric",
+   "implied": [
+    "OAuth",
+    "Next.js"
+   ],
+   "explicit": [
+    "Django",
+    "AWS",
+    "Docker"
+   ]
+  },
+  {
+   "project_id": "web-proj-09",
+   "title": "Real Estate client portal",
+   "industry": "real estate",
+   "skills": [
+    "Stripe",
+    "Tailwind",
+    "Docker",
+    "Celery",
+    "WebSockets"
+   ],
+   "date": "2024-10-15",
+   "result": "34% improvement in the client's key metric",
+   "implied": [
+    "Docker"
+   ],
+   "explicit": [
+    "Stripe",
+    "Tailwind",
+    "Celery",
+    "WebSockets"
+   ]
+  },
+  {
+   "project_id": "web-proj-10",
+   "title": "Retail order-tracking app",
+   "industry": "retail",
+   "skills": [
+    "Celery",
+    "React",
+    "TypeScript",
+    "Stripe",
+    "Django"
+   ],
+   "date": "2026-11-15",
+   "result": "44% improvement in the client's key metric",
+   "implied": [
+    "Celery",
+    "TypeScript"
+   ],
+   "explicit": [
+    "React",
+    "Stripe",
+    "Django"
+   ]
+  },
+  {
+   "project_id": "web-proj-11",
+   "title": "Real Estate appointment scheduler",
+   "industry": "real estate",
+   "skills": [
+    "Celery",
+    "AWS",
+    "GraphQL"
+   ],
+   "date": "2021-09-15",
+   "result": "30% improvement in the client's key metric",
+   "implied": [
+    "Celery",
+    "GraphQL"
+   ],
+   "explicit": [
+    "AWS"
+   ]
+  },
+  {
+   "project_id": "web-proj-12",
+   "title": "Logistics booking platform",
+   "industry": "logistics",
+   "skills": [
+    "Stripe",
+    "Next.js",
+    "OAuth",
+    "GraphQL",
+    "Django"
+   ],
+   "date": "2023-01-15",
+   "result": "34% improvement in the client's key metric",
+   "implied": [
+    "Stripe",
+    "GraphQL",
+    "Django"
+   ],
+   "explicit": [
+    "Next.js",
+    "OAuth"
+   ]
+  },
+  {
+   "project_id": "web-proj-13",
+   "title": "Manufacturing client portal",
+   "industry": "manufacturing",
+   "skills": [
+    "PostgreSQL",
+    "Node.js",
+    "GraphQL",
+    "OAuth"
+   ],
+   "date": "2021-09-15",
+   "result": "24% improvement in the client's key metric",
+   "implied": [
+    "Node.js",
+    "OAuth"
+   ],
+   "explicit": [
+    "PostgreSQL",
+    "GraphQL"
+   ]
+  },
+  {
+   "project_id": "web-proj-14",
+   "title": "Fintech admin dashboard",
+   "industry": "fintech",
+   "skills": [
+    "Redis",
+    "Playwright",
+    "Docker",
+    "Tailwind"
+   ],
+   "date": "2024-12-15",
+   "result": "31% improvement in the client's key metric",
+   "implied": [
+    "Redis",
+    "Playwright"
+   ],
+   "explicit": [
+    "Docker",
+    "Tailwind"
+   ]
+  },
+  {
+   "project_id": "web-proj-15",
+   "title": "Logistics inventory tracker",
+   "industry": "logistics",
+   "skills": [
+    "OAuth",
+    "WebSockets",
+    "Tailwind",
+    "Node.js"
+   ],
+   "date": "2026-09-15",
+   "result": "36% improvement in the client's key metric",
+   "implied": [
+    "WebSockets"
+   ],
+   "explicit": [
+    "OAuth",
+    "Tailwind",
+    "Node.js"
+   ]
+  },
+  {
+   "project_id": "web-proj-16",
+   "title": "Logistics subscription SaaS",
+   "industry": "logistics",
+   "skills": [
+    "TypeScript",
+    "Next.js",
+    "Playwright"
+   ],
+   "date": "2026-01-15",
+   "result": "20% improvement in the client's key metric",
+   "implied": [],
+   "explicit": [
+    "TypeScript",
+    "Next.js",
+    "Playwright"
+   ]
+  },
+  {
+   "project_id": "web-proj-17",
+   "title": "Travel admin dashboard",
+   "industry": "travel",
+   "skills": [
+    "PostgreSQL",
+    "Stripe",
+    "Celery",
+    "Django"
+   ],
+   "date": "2021-01-15",
+   "result": "12% improvement in the client's key metric",
+   "implied": [
+    "PostgreSQL",
+    "Stripe"
+   ],
+   "explicit": [
+    "Celery",
+    "Django"
+   ]
+  },
+  {
+   "project_id": "web-proj-18",
+   "title": "Travel marketplace storefront",
+   "industry": "travel",
+   "skills": [
+    "Stripe",
+    "TypeScript",
+    "OAuth",
+    "Docker",
+    "Redis"
+   ],
+   "date": "2026-03-15",
+   "result": "32% improvement in the client's key metric",
+   "implied": [
+    "TypeScript",
+    "Redis"
+   ],
+   "explicit": [
+    "Stripe",
+    "OAuth",
+    "Docker"
+   ]
+  },
+  {
+   "project_id": "web-proj-19",
+   "title": "Real Estate client portal",
+   "industry": "real estate",
+   "skills": [
+    "Node.js",
+    "WebSockets",
+    "TypeScript",
+    "React",
+    "Docker"
+   ],
+   "date": "2024-06-15",
+   "result": "30% improvement in the client's key metric",
+   "implied": [
+    "Node.js",
+    "TypeScript",
+    "React"
+   ],
+   "explicit": [
+    "WebSockets",
+    "Docker"
+   ]
+  },
+  {
+   "project_id": "web-proj-20",
+   "title": "Retail booking platform",
+   "industry": "retail",
+   "skills": [
+    "PostgreSQL",
+    "React",
+    "Django"
+   ],
+   "date": "2023-11-15",
+   "result": "31% improvement in the client's key metric",
+   "implied": [],
+   "explicit": [
+    "PostgreSQL",
+    "React",
+    "Django"
+   ]
+  }
+ ]
+}

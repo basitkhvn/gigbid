@@ -1,0 +1,400 @@
+{
+ "name": "Amina Rahim",
+ "title": "AI/ML Engineer",
+ "floor": 35,
+ "rate": 55,
+ "persona": "ml",
+ "skills": [
+  "PyTorch",
+  "scikit-learn",
+  "RAG",
+  "LangChain",
+  "FastAPI",
+  "Hugging Face",
+  "MLflow",
+  "Docker",
+  "NLP",
+  "computer vision",
+  "XGBoost",
+  "Pinecone",
+  "LoRA fine-tuning",
+  "Airflow",
+  "AWS SageMaker",
+  "time series forecasting"
+ ],
+ "projects": [
+  {
+   "project_id": "ml-proj-00",
+   "title": "Travel churn predictor",
+   "industry": "travel",
+   "skills": [
+    "Hugging Face",
+    "FastAPI",
+    "computer vision",
+    "MLflow",
+    "XGBoost"
+   ],
+   "date": "2025-01-15",
+   "result": "14% improvement in the client's key metric",
+   "implied": [
+    "FastAPI",
+    "MLflow",
+    "XGBoost"
+   ],
+   "explicit": [
+    "Hugging Face",
+    "computer vision"
+   ]
+  },
+  {
+   "project_id": "ml-proj-01",
+   "title": "Fintech voice-intent classifier",
+   "industry": "fintech",
+   "skills": [
+    "computer vision",
+    "time series forecasting",
+    "XGBoost",
+    "RAG"
+   ],
+   "date": "2022-10-15",
+   "result": "27% improvement in the client's key metric",
+   "implied": [],
+   "explicit": [
+    "computer vision",
+    "time series forecasting",
+    "XGBoost",
+    "RAG"
+   ]
+  },
+  {
+   "project_id": "ml-proj-02",
+   "title": "Fintech recommendation engine",
+   "industry": "fintech",
+   "skills": [
+    "XGBoost",
+    "LoRA fine-tuning",
+    "MLflow",
+    "NLP"
+   ],
+   "date": "2022-12-15",
+   "result": "17% improvement in the client's key metric",
+   "implied": [
+    "XGBoost",
+    "NLP"
+   ],
+   "explicit": [
+    "LoRA fine-tuning",
+    "MLflow"
+   ]
+  },
+  {
+   "project_id": "ml-proj-03",
+   "title": "Media price optimiser",
+   "industry": "media",
+   "skills": [
+    "RAG",
+    "MLflow",
+    "NLP",
+    "XGBoost",
+    "FastAPI"
+   ],
+   "date": "2021-01-15",
+   "result": "9% improvement in the client's key metric",
+   "implied": [
+    "NLP",
+    "XGBoost"
+   ],
+   "explicit": [
+    "RAG",
+    "MLflow",
+    "FastAPI"
+   ]
+  },
+  {
+   "project_id": "ml-proj-04",
+   "title": "Fintech price optimiser",
+   "industry": "fintech",
+   "skills": [
+    "Airflow",
+    "Pinecone",
+    "Docker"
+   ],
+   "date": "2021-05-15",
+   "result": "24% improvement in the client's key metric",
+   "implied": [
+    "Airflow",
+    "Pinecone"
+   ],
+   "explicit": [
+    "Docker"
+   ]
+  },
+  {
+   "project_id": "ml-proj-05",
+   "title": "Real Estate demand forecaster",
+   "industry": "real estate",
+   "skills": [
+    "Docker",
+    "NLP",
+    "RAG",
+    "computer vision",
+    "AWS SageMaker"
+   ],
+   "date": "2025-06-15",
+   "result": "19% improvement in the client's key metric",
+   "implied": [
+    "Docker",
+    "computer vision"
+   ],
+   "explicit": [
+    "NLP",
+    "RAG",
+    "AWS SageMaker"
+   ]
+  },
+  {
+   "project_id": "ml-proj-06",
+   "title": "Travel document Q&A assistant",
+   "industry": "travel",
+   "skills": [
+    "time series forecasting",
+    "FastAPI",
+    "PyTorch",
+    "MLflow",
+    "AWS SageMaker"
+   ],
+   "date": "2026-03-15",
+   "result": "13% improvement in the client's key metric",
+   "implied": [
+    "time series forecasting",
+    "PyTorch"
+   ],
+   "explicit": [
+    "FastAPI",
+    "MLflow",
+    "AWS SageMaker"
+   ]
+  },
+  {
+   "project_id": "ml-proj-07",
+   "title": "Energy voice-intent classifier",
+   "industry": "energy",
+   "skills": [
+    "time series forecasting",
+    "AWS SageMaker",
+    "LoRA fine-tuning"
+   ],
+   "date": "2021-10-15",
+   "result": "43% improvement in the client's key metric",
+   "implied": [
+    "AWS SageMaker",
+    "LoRA fine-tuning"
+   ],
+   "explicit": [
+    "time series forecasting"
+   ]
+  },
+  {
+   "project_id": "ml-proj-08",
+   "title": "Manufacturing recommendation engine",
+   "industry": "manufacturing",
+   "skills": [
+    "Hugging Face",
+    "scikit-learn",
+    "RAG",
+    "XGBoost"
+   ],
+   "date": "2021-02-15",
+   "result": "35% improvement in the client's key metric",
+   "implied": [
+    "Hugging Face",
+    "RAG"
+   ],
+   "explicit": [
+    "scikit-learn",
+    "XGBoost"
+   ]
+  },
+  {
+   "project_id": "ml-proj-09",
+   "title": "Education voice-intent classifier",
+   "industry": "education",
+   "skills": [
+    "Airflow",
+    "NLP",
+    "LangChain"
+   ],
+   "date": "2025-01-15",
+   "result": "9% improvement in the client's key metric",
+   "implied": [],
+   "explicit": [
+    "Airflow",
+    "NLP",
+    "LangChain"
+   ]
+  },
+  {
+   "project_id": "ml-proj-10",
+   "title": "Media fraud scorer",
+   "industry": "media",
+   "skills": [
+    "Docker",
+    "Airflow",
+    "NLP"
+   ],
+   "date": "2022-04-15",
+   "result": "32% improvement in the client's key metric",
+   "implied": [
+    "Airflow"
+   ],
+   "explicit": [
+    "Docker",
+    "NLP"
+   ]
+  },
+  {
+   "project_id": "ml-proj-11",
+   "title": "Energy demand forecaster",
+   "industry": "energy",
+   "skills": [
+    "Hugging Face",
+    "computer vision",
+    "AWS SageMaker",
+    "scikit-learn",
+    "RAG"
+   ],
+   "date": "2022-03-15",
+   "result": "28% improvement in the client's key metric",
+   "implied": [
+    "computer vision",
+    "scikit-learn",
+    "RAG"
+   ],
+   "explicit": [
+    "Hugging Face",
+    "AWS SageMaker"
+   ]
+  },
+  {
+   "project_id": "ml-proj-12",
+   "title": "Real Estate document Q&A assistant",
+   "industry": "real estate",
+   "skills": [
+    "time series forecasting",
+    "MLflow",
+    "Pinecone"
+   ],
+   "date": "2023-05-15",
+   "result": "43% improvement in the client's key metric",
+   "implied": [],
+   "explicit": [
+    "time series forecasting",
+    "MLflow",
+    "Pinecone"
+   ]
+  },
+  {
+   "project_id": "ml-proj-13",
+   "title": "Real Estate recommendation engine",
+   "industry": "real estate",
+   "skills": [
+    "XGBoost",
+    "Airflow",
+    "MLflow"
+   ],
+   "date": "2023-08-15",
+   "result": "41% improvement in the client's key metric",
+   "implied": [
+    "MLflow"
+   ],
+   "explicit": [
+    "XGBoost",
+    "Airflow"
+   ]
+  },
+  {
+   "project_id": "ml-proj-14",
+   "title": "Travel demand forecaster",
+   "industry": "travel",
+   "skills": [
+    "XGBoost",
+    "FastAPI",
+    "LoRA fine-tuning"
+   ],
+   "date": "2021-05-15",
+   "result": "18% improvement in the client's key metric",
+   "implied": [
+    "LoRA fine-tuning"
+   ],
+   "explicit": [
+    "XGBoost",
+    "FastAPI"
+   ]
+  },
+  {
+   "project_id": "ml-proj-15",
+   "title": "Energy voice-intent classifier",
+   "industry": "energy",
+   "skills": [
+    "XGBoost",
+    "Airflow",
+    "LangChain"
+   ],
+   "date": "2021-10-15",
+   "result": "15% improvement in the client's key metric",
+   "implied": [
+    "Airflow"
+   ],
+   "explicit": [
+    "XGBoost",
+    "LangChain"
+   ]
+  },
+  {
+   "project_id": "ml-proj-16",
+   "title": "Education churn predictor",
+   "industry": "education",
+   "skills": [
+    "AWS SageMaker",
+    "Docker",
+    "NLP",
+    "Airflow",
+    "scikit-learn"
+   ],
+   "date": "2022-09-15",
+   "result": "44% improvement in the client's key metric",
+   "implied": [
+    "AWS SageMaker",
+    "NLP",
+    "Airflow",
+    "scikit-learn"
+   ],
+   "explicit": [
+    "Docker"
+   ]
+  },
+  {
+   "project_id": "ml-proj-17",
+   "title": "Media contract summariser",
+   "industry": "media",
+   "skills": [
+    "time series forecasting",
+    "Pinecone",
+    "scikit-learn",
+    "AWS SageMaker",
+    "LoRA fine-tuning"
+   ],
+   "date": "2025-01-15",
+   "result": "15% improvement in the client's key metric",
+   "implied": [
+    "time series forecasting",
+    "scikit-learn"
+   ],
+   "explicit": [
+    "Pinecone",
+    "AWS SageMaker",
+    "LoRA fine-tuning"
+   ]
+  }
+ ]
+}
