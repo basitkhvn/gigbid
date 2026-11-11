@@ -35,6 +35,22 @@ class LLMResult:
     fallback: bool = False
 
 
+import contextvars
+from contextlib import contextmanager
+
+_no_llm: contextvars.ContextVar[bool] = contextvars.ContextVar("no_llm", default=False)
+
+
+@contextmanager
+def no_llm():
+    """Run rule-based paths only (cheap triage for the inbox / scheduled scouting)."""
+    tok = _no_llm.set(True)
+    try:
+        yield
+    finally:
+        _no_llm.reset(tok)
+
+
 def node_model(node: str) -> dict:
     cfg = load_config()["models"]
     prof = cfg["profiles"][cfg["profile"]]
@@ -42,7 +58,7 @@ def node_model(node: str) -> dict:
 
 
 def is_offline(node: str) -> bool:
-    return node_model(node)["provider"] == "offline"
+    return node_model(node)["provider"] == "offline" or _no_llm.get()
 
 
 def _call(spec: dict, system: str, user: str, json_mode: bool) -> LLMResult:
@@ -71,7 +87,7 @@ def complete(node: str, system: str, user: str, json_mode: bool = False) -> LLMR
     """Returns None when the node is configured offline (caller uses its rule-based path).
     On primary failure retries once, then returns None (fallback to rule-based = C7 fallback)."""
     spec = node_model(node)
-    if spec["provider"] == "offline":
+    if spec["provider"] == "offline" or _no_llm.get():
         return None
     last = None
     for attempt in range(2):
