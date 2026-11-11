@@ -1,0 +1,14 @@
+{
+  "name": "gigbid-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "STATIC_EXPORT=1 next build",
+    "gen:api": "cd ../.. && .venv/bin/python -m apps.api.export_openapi && cd apps/web && openapi-typescript openapi.json -o src/lib/api/schema.d.ts",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {"next": "15.5.29", "react": "19.1.0", "react-dom": "19.1.0"},
+  "devDependencies": {"@playwright/test": "1.65.0", "@types/node": "22.10.0", "@types/react": "19.1.0", "@types/react-dom": "19.1.0",
+    "autoprefixer": "10.4.20", "openapi-typescript": "7.13.0", "postcss": "8.4.49", "tailwindcss": "3.4.19", "typescript": "5.7.2"}
+}

@@ -12,3 +12,8 @@ build/
 data/processed/
 evals/results/*
 !evals/results/.gitkeep
+apps/web/out/
+apps/web/playwright-report/
+apps/web/test-results/
+apps/web/next-env.d.ts
+apps/web/tsconfig.tsbuildinfo

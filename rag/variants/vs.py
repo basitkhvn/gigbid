@@ -111,25 +111,31 @@ def v8_corrective(c: Corpus, job, k=5, min_rerank=-4.0, **_):
     return run_corrective(c, job, k, min_rerank)
 
 
-def v_best(c: Corpus, job, k=5, types=None, **_):
-    """Decomposition + hybrid + outcome-aware boost + cross-encoder rerank (final pipeline; see README for the ablation)."""
-    reqs = extract(job)
+def v_best(c: Corpus, job, k=5, types=None, decompose=True, hybrid=True, rerank_on=True, outcome=True, **_):
+    """Final pipeline: decomposition + hybrid(BM25+dense, RRF) + cross-encoder rerank + outcome-aware boost.
+    Each component can be switched off for the one-at-a-time ablation (evals/runners/ablation.py)."""
+    reqs = extract(job) if decompose else [job_query(job)]
     pool: dict[str, tuple[dict, float]] = {}
     for rq in reqs:
-        for ch, s in _hybrid(c, c.plain, rq, 60 if types else 15):
+        n = 60 if types else 15
+        cands = _hybrid(c, c.plain, rq, n) if hybrid else _dense_scored(c.plain, rq, n)
+        for ch, sc in cands:
             if types and ch["type"] not in types:
                 continue
-            if ch["chunk_id"] not in pool or s > pool[ch["chunk_id"]][1]:
-                pool[ch["chunk_id"]] = (ch, s)
+            if ch["chunk_id"] not in pool or sc > pool[ch["chunk_id"]][1]:
+                pool[ch["chunk_id"]] = (ch, sc)
     cand = to_evidence(c, list(pool.values()), 25, "best")
     scores = [0.0] * len(cand)
     raw = [-99.0] * len(cand)
-    for rq in reqs:
-        rr = rerank(rq, [e["text"] for e in cand])
-        for i, s in enumerate(minmax(rr)):
-            scores[i] += s
-            raw[i] = max(raw[i], float(rr[i]))
-    for e, s, rw in zip(cand, scores, raw):
-        e["score"] = round(float(s) * (1 + 0.3 * _prior(c, e)), 5)
-        e["relevance"] = round(rw, 3)
+    if rerank_on:
+        for rq in reqs:
+            rr = rerank(rq, [e["text"][:1500] for e in cand])
+            for i, sc in enumerate(minmax(rr)):
+                scores[i] += sc
+                raw[i] = max(raw[i], float(rr[i]))
+    else:
+        scores = [e["score"] for e in cand]
+    for e, sc, rw in zip(cand, scores, raw):
+        e["score"] = round(float(sc) * (1 + (0.3 * _prior(c, e) if outcome else 0)), 5)
+        e["relevance"] = round(rw, 3) if rerank_on else None
     return sorted(cand, key=lambda e: -e["score"])[:k]
