@@ -1,26 +1,61 @@
+# All models, budgets, thresholds and RULES live here, never in code (change-request friendly).
 marketplace:
-  mode: gigsim
+  mode: gigsim            # gigsim | upwork_live
+  gigsim_url: http://localhost:8081
   max_requests_per_minute: 20
-
+mcp:
+  transport: inmemory     # inmemory (single process / tests / free host) | http (docker compose)
+  timeout_s: 30
+  retries: 3
 models:
   profile: open
-  nodes:
-    scout: qwen3-4b
-    analyst: qwen3-4b
-    risk_assessor: qwen3-4b
-    fit_matcher: qwen3-4b
-    pricing: qwen3-4b
-    writer: configure-your-model
-    critic: configure-your-model
-    client_liaison: configure-your-model
-  embeddings: nomic-embed-text
-  reranker: bge-reranker-v2-m3
-
+  providers:
+    deepseek: {base_url_env: DEEPSEEK_BASE_URL, key_env: DEEPSEEK_API_KEY, default_base: "https://api.deepseek.com"}
+    offline: {}
+  # price per 1M tokens (USD) for cost accounting. PLACEHOLDERS: verify against provider pricing page before citing cost numbers
+  prices: {deepseek-flash: {in: 0.27, out: 1.10}, deepseek-v4-pro: {in: 0.55, out: 2.19}, offline: {in: 0, out: 0}}
+  profiles:
+    open:                      # open-weight models only (DeepSeek via hosted API)
+      default: {provider: deepseek, model: deepseek-flash}
+      nodes:
+        scout: {provider: offline, model: offline}      # cheap/frequent node, no LLM needed
+        risk_assessor: {provider: deepseek, model: deepseek-flash, max_tokens: 400}
+        analyst: {provider: deepseek, model: deepseek-flash, max_tokens: 600}
+        writer: {provider: deepseek, model: deepseek-flash, max_tokens: 900, temperature: 0.4}
+        critic: {provider: deepseek, model: deepseek-flash, max_tokens: 400}
+        client_liaison: {provider: deepseek, model: deepseek-flash, max_tokens: 500}
+      fallback: {provider: offline, model: offline}     # used when the primary model fails (C7)
+    open_reasoner:             # second open configuration for the model comparison
+      default: {provider: deepseek, model: deepseek-flash}
+      nodes:
+        writer: {provider: deepseek, model: deepseek-v4-pro, max_tokens: 2000}
+        critic: {provider: deepseek, model: deepseek-v4-pro, max_tokens: 2000}
+      fallback: {provider: offline, model: offline}
+    offline:                   # no API; rule-based nodes. Used for CI and degraded mode.
+      default: {provider: offline, model: offline}
+      nodes: {}
+      fallback: {provider: offline, model: offline}
+    paid: {default: {provider: deepseek, model: deepseek-flash}, nodes: {}, fallback: {provider: offline, model: offline}}
+  embeddings: BAAI/bge-small-en-v1.5      # open, CPU
+  reranker: Xenova/ms-marco-MiniLM-L-6-v2 # open cross-encoder, CPU
+rag:
+  variant: v_best          # chosen by evals/results/rag_results.json, see README
+  k: 5
 budgets:
   max_graph_steps: 30
   max_revisions: 2
   max_tokens_per_job: 12000
-
+  p95_latency_s_per_job: 60
+  usd_per_proposal: 0.02
 thresholds:
   minimum_fit_score: 0.60
   maximum_risk_score: 0.70
+  autonomy_skip_below_fit: 0.30
+# Platform rules read by Pricing + Compliance (the 'policy update' change request edits ONLY this block)
+platform_rules:
+  max_cover_letter_chars: 3000
+  min_cover_letter_chars: 0
+  connects_multiplier: 1.0
+  weekly_connects_budget_default: 120
+  banned_phrases: ["guarantee", "100%", "passionate", "dear sir"]
+  contact_patterns: ["@", "whatsapp", "telegram", "skype", "http://", "https://", "+\\d{6,}"]

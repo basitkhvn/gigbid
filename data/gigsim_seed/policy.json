@@ -1,0 +1,9 @@
+{
+  "version": "2026-10-27",
+  "connects_multiplier": 1.0,
+  "min_cover_letter_chars": 0,
+  "max_cover_letter_chars": 3000,
+  "boosted_proposal_extra_connects": 0,
+  "daily_proposal_limit": 50,
+  "note": "baseline platform policy. The 2 Nov change request edits this file and agent/config.yaml only."
+}
