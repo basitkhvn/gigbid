@@ -33,9 +33,9 @@ def load_pdf(path: Path, persona: str) -> dict:
             "skills": [], "project": None, "industry": None, "date": None}
 
 
-def load_github_readme(hub, persona: str, owner: str, repo: str) -> dict:
+async def load_github_readme(hub, persona: str, owner: str, repo: str) -> dict:
     """Ingest a repo README through the third-party GitHub MCP server (never direct HTTP)."""
-    res = hub.call_sync("ingest", "github_get_file_contents", {"owner": owner, "repo": repo, "path": "README.md"})
+    res = await hub.call("ingest", "github_get_file_contents", {"owner": owner, "repo": repo, "path": "README.md"})
     return {"id": f"{persona}-gh-{repo}", "persona": persona, "type": "readme", "title": repo, "text": str(res),
             "skills": [], "project": repo, "industry": None, "date": None}
 
