@@ -171,48 +171,48 @@
   "v_best": {
    "overall": {
     "n": 180,
-    "reply_rate": 0.189,
-    "hire_rate": 0.039
+    "reply_rate": 0.011,
+    "hire_rate": 0.0
    },
    "by_persona": {
     "ml": {
      "n": 60,
-     "reply_rate": 0.167,
-     "hire_rate": 0.017
+     "reply_rate": 0.0,
+     "hire_rate": 0.0
     },
     "web": {
      "n": 60,
-     "reply_rate": 0.267,
-     "hire_rate": 0.05
+     "reply_rate": 0.0,
+     "hire_rate": 0.0
     },
     "data": {
      "n": 60,
-     "reply_rate": 0.133,
-     "hire_rate": 0.05
+     "reply_rate": 0.033,
+     "hire_rate": 0.0
     }
    }
   },
   "shipped_per_requirement": {
    "overall": {
     "n": 180,
-    "reply_rate": 0.761,
-    "hire_rate": 0.278
+    "reply_rate": 0.739,
+    "hire_rate": 0.306
    },
    "by_persona": {
     "ml": {
      "n": 60,
-     "reply_rate": 0.7,
-     "hire_rate": 0.217
+     "reply_rate": 0.683,
+     "hire_rate": 0.333
     },
     "web": {
      "n": 60,
-     "reply_rate": 0.767,
-     "hire_rate": 0.283
+     "reply_rate": 0.717,
+     "hire_rate": 0.233
     },
     "data": {
      "n": 60,
      "reply_rate": 0.817,
-     "hire_rate": 0.333
+     "hire_rate": 0.35
     }
    }
   },

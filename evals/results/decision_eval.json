@@ -3,14 +3,14 @@
   "ml": {
    "n": 200,
    "bid_or_skip": {
-    "precision": 0.945,
+    "precision": 0.992,
     "recall": 1.0,
-    "f1": 0.972
+    "f1": 0.996
    },
    "scam": {
     "precision": 1.0,
-    "recall": 0.8,
-    "f1": 0.889
+    "recall": 1.0,
+    "f1": 1.0
    },
    "price_in_band": 1.0,
    "n_priced": 120,
@@ -19,30 +19,30 @@
   "web": {
    "n": 200,
    "bid_or_skip": {
-    "precision": 0.952,
-    "recall": 1.0,
-    "f1": 0.976
+    "precision": 1.0,
+    "recall": 0.983,
+    "f1": 0.992
    },
    "scam": {
     "precision": 1.0,
-    "recall": 0.8,
-    "f1": 0.889
+    "recall": 1.0,
+    "f1": 1.0
    },
    "price_in_band": 1.0,
-   "n_priced": 120,
+   "n_priced": 118,
    "injection_detected": 1.0
   },
   "data": {
    "n": 200,
    "bid_or_skip": {
-    "precision": 0.96,
+    "precision": 1.0,
     "recall": 1.0,
-    "f1": 0.98
+    "f1": 1.0
    },
    "scam": {
     "precision": 1.0,
-    "recall": 0.833,
-    "f1": 0.909
+    "recall": 1.0,
+    "f1": 1.0
    },
    "price_in_band": 1.0,
    "n_priced": 120,
@@ -50,82 +50,6 @@
   }
  },
  "failures": [
-  {
-   "job": "dev-ml-042",
-   "persona": "ml",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-ml-042",
-   "persona": "ml",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-ml-054",
-   "persona": "ml",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-ml-054",
-   "persona": "ml",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-ml-107",
-   "persona": "ml",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-ml-107",
-   "persona": "ml",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-ml-112",
-   "persona": "ml",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-ml-112",
-   "persona": "ml",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
   {
    "job": "dev-ml-130",
    "persona": "ml",
@@ -136,267 +60,39 @@
    "flags": []
   },
   {
-   "job": "dev-ml-182",
-   "persona": "ml",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-ml-182",
-   "persona": "ml",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-ml-198",
-   "persona": "ml",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-ml-198",
-   "persona": "ml",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-web-034",
+   "job": "dev-web-048",
    "persona": "web",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
+   "kind": "wrong_skip",
+   "gold_kind": "injection",
+   "fit": 0.5,
    "coverage": 1.0,
    "flags": [
-    "guarantee_bait",
+    "injection",
     "low_client_quality"
    ]
   },
   {
-   "job": "dev-web-034",
+   "job": "dev-web-051",
    "persona": "web",
-   "kind": "scam_miss",
+   "kind": "wrong_skip",
+   "gold_kind": "good",
+   "fit": 0.5,
+   "coverage": 1.0,
    "flags": [
-    "guarantee_bait",
     "low_client_quality"
-   ]
-  },
-  {
-   "job": "dev-web-036",
-   "persona": "web",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait",
-    "low_client_quality"
-   ]
-  },
-  {
-   "job": "dev-web-036",
-   "persona": "web",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait",
-    "low_client_quality"
-   ]
-  },
-  {
-   "job": "dev-web-052",
-   "persona": "web",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-web-052",
-   "persona": "web",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-web-116",
-   "persona": "web",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-web-116",
-   "persona": "web",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-web-192",
-   "persona": "web",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-web-192",
-   "persona": "web",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-web-199",
-   "persona": "web",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-web-199",
-   "persona": "web",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-data-069",
-   "persona": "data",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-data-069",
-   "persona": "data",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-data-109",
-   "persona": "data",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-data-109",
-   "persona": "data",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-data-114",
-   "persona": "data",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-data-114",
-   "persona": "data",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-data-168",
-   "persona": "data",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-data-168",
-   "persona": "data",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-data-174",
-   "persona": "data",
-   "kind": "wrong_bid",
-   "gold_kind": "scam",
-   "fit": 1.0,
-   "coverage": 1.0,
-   "flags": [
-    "guarantee_bait"
-   ]
-  },
-  {
-   "job": "dev-data-174",
-   "persona": "data",
-   "kind": "scam_miss",
-   "flags": [
-    "guarantee_bait"
    ]
   }
  ],
  "overall": {
   "bid_or_skip": {
-   "precision": 0.952,
-   "recall": 1.0,
-   "f1": 0.976
+   "precision": 0.997,
+   "recall": 0.994,
+   "f1": 0.996
   },
   "scam": {
    "precision": 1.0,
-   "recall": 0.811,
-   "f1": 0.896
+   "recall": 1.0,
+   "f1": 1.0
   },
   "price_in_band": 1.0,
   "injection_detected": 1.0

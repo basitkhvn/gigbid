@@ -2,12 +2,12 @@
  "strategy_A": "evidence-grounded, per-requirement retrieval (as shipped), cited projects",
  "strategy_B": "generic skills list",
  "n_jobs": 180,
- "reply_A": 0.761,
+ "reply_A": 0.739,
  "reply_B": 0.422,
- "fisher_exact_p": 7.71607711231841e-11,
- "mcnemar_exact_p_paired": 1.617953173424923e-09,
- "only_A": 83,
- "only_B": 22,
- "both": 54,
+ "fisher_exact_p": 1.572162649273904e-09,
+ "mcnemar_exact_p_paired": 2.0779877274240742e-08,
+ "only_A": 81,
+ "only_B": 24,
+ "both": 52,
  "caveat": "simulated clients reward skill mentions and penalise generic phrasing by construction (see DATA_CARD)"
 }

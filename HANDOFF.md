@@ -14,7 +14,9 @@ MCP servers (marketplace/portfolio/workspace) + ToolHub; RAG variants V0-V8 + v_
 ## Results so far (evals/results/*.json; older-config runs exist, final re-runs were in progress)
 Retrieval Recall@5: V0 0.528 -> v_best 0.905 (shipped, rank without cross-encoder: 0.947). Plain hybrid V2 0.418 (< V0). Decomposition is the key component (0.456 without). Cross-encoder ranking HURTS recall (negative result). Decision F1 ~0.98 (synthetic gold, optimistic); scam recall 0.81 before low-budget rule fix. Injection ASR 0% even without defences (hypothesis falsified; weak attacks). Flash vs v4-pro: v4-pro ~5x cost, p95 210s vs 31s. Single ReAct agent vs supervisor vs graph: graph best on decision accuracy/grounding; single agent competitive on reply rate. Tool design: rewritten descriptions best.
 
-## IN FLIGHT when stopped (may have died; results only write at end)
+## UPDATE: all final-config evals FINISHED and were committed (docs/RESULTS.md regenerated). Judge scores (step 1 first command) and traces still TODO.
+
+## (old note) IN FLIGHT when stopped (may have died; results only write at end)
 Final-config re-runs of: rag_eval, gigsim_outcomes, decision_eval, proposal_eval (open_flash, open_v4pro), agent_comparison, injection_eval. If `evals/results/*.json` are older than the last commit, re-run:
 ```
 set -a; . ./.env; set +a; export PYTHONPATH=.
