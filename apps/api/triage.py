@@ -14,7 +14,7 @@ from apps.api.db import db, get_settings, now, one
 
 
 def _init():
-    db().execute("CREATE TABLE IF NOT EXISTS triage(user_id TEXT, job_id TEXT, data TEXT, ts REAL, PRIMARY KEY(user_id,job_id))")
+    db()  # triage table is created by migration 2
 
 
 async def triage_job(user: dict, job: dict, force: bool = False) -> dict:

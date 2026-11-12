@@ -8,6 +8,7 @@ import time
 from pathlib import Path
 
 from agent.config import ROOT
+from apps.api.migrations import migrate
 
 _conn: sqlite3.Connection | None = None
 
@@ -18,17 +19,7 @@ def db() -> sqlite3.Connection:
         d = Path(os.environ.get("GIGBID_STATE_DIR", ROOT / "data/processed")); d.mkdir(parents=True, exist_ok=True)
         _conn = sqlite3.connect(d / "app.sqlite", check_same_thread=False, isolation_level=None)
         _conn.row_factory = sqlite3.Row
-        _conn.executescript("""
-        CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY, email TEXT UNIQUE, pw TEXT, persona TEXT, created REAL);
-        CREATE TABLE IF NOT EXISTS settings(user_id TEXT PRIMARY KEY, data TEXT);
-        CREATE TABLE IF NOT EXISTS runs(id TEXT PRIMARY KEY, user_id TEXT, kind TEXT, job_id TEXT, proposal_id TEXT, trace_id TEXT,
-            status TEXT, category TEXT, title TEXT, created REAL, updated REAL, summary TEXT);
-        CREATE TABLE IF NOT EXISTS run_events(id INTEGER PRIMARY KEY AUTOINCREMENT, run_id TEXT, ts REAL, node TEXT, data TEXT);
-        CREATE TABLE IF NOT EXISTS saved_searches(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT, q TEXT, category TEXT,
-            skill TEXT, interval_min INTEGER DEFAULT 240, last_run REAL DEFAULT 0);
-        CREATE TABLE IF NOT EXISTS tokens(user_id TEXT, provider TEXT, blob BLOB, PRIMARY KEY(user_id, provider));
-        CREATE INDEX IF NOT EXISTS ev_run ON run_events(run_id, id);
-        """)
+        migrate(_conn)  # versioned schema, see apps/api/migrations.py
     return _conn
 
 

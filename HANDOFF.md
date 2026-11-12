@@ -44,3 +44,4 @@ Run them ONE OR TWO AT A TIME (7 at once pushed load average to 148 and stalled 
 
 ## Known honest gaps
 Live Upwork adapter/OAuth never run; Google Calendar/Gmail = local mock; GitHub MCP wired not run; docker compose, Postgres, Redis/Arq paths untested; no public deployment; no human pairwise panel; judge uncalibrated until step 3; tracing is self-hosted JSONL (no Langfuse/LangSmith); UI mobile layout not verified on a device; USD prices in `agent/config.yaml` are placeholders.
+- [x] Migrations: versioned runner added for app DB (apps/api/migrations.py); marketplace store still IF NOT EXISTS.

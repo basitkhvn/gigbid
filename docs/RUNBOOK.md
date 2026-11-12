@@ -25,3 +25,10 @@ Each saved search has an interval (60-1440 min, default 240). The worker ticks e
 
 ## Secrets
 Only from environment. `.env.example` lists every variable. Reviewer credentials go in the Google Classroom private comment, not the repo.
+
+## Schema migrations
+App DB (SQLite) schema is versioned in `apps/api/migrations.py` and applied automatically at startup
+(`schema_migrations` table). To change schema: append a new `(version, name, sql)` entry; never edit an applied one.
+Migration 1 is an idempotent baseline so pre-existing DBs are adopted without data loss (tested in `tests/test_migrations.py`).
+The LangGraph checkpointer/store manage their own schema via `setup()`. The marketplace MCP store
+(idempotency/drafts/audit) still uses `CREATE TABLE IF NOT EXISTS` since it is a separate service with its own DB file.
