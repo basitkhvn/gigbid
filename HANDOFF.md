@@ -45,3 +45,10 @@ Run them ONE OR TWO AT A TIME (7 at once pushed load average to 148 and stalled 
 ## Known honest gaps
 Live Upwork adapter/OAuth never run; Google Calendar/Gmail = local mock; GitHub MCP wired not run; docker compose, Postgres, Redis/Arq paths untested; no public deployment; no human pairwise panel; judge uncalibrated until step 3; tracing is self-hosted JSONL (no Langfuse/LangSmith); UI mobile layout not verified on a device; USD prices in `agent/config.yaml` are placeholders.
 - [x] Migrations: versioned runner added for app DB (apps/api/migrations.py); marketplace store still IF NOT EXISTS.
+
+## UPDATE (13 Nov, deadline extended)
+- DONE: R&D report written: docs/report/report.html -> docs/report/GigBid_RD_Report.pdf (5 pages). Render: node script with apps/web playwright (page.pdf). Judge numbers NOT included (uncalibrated).
+- DONE: docs/WRITEUP_DRAFT.md (1395 words). YOU must publish it (LinkedIn/Medium) and add the link to README.
+- BLOCKED: DeepSeek API returns 402 Payment Required (balance empty). Needed for: judge score-file (profile must be MODEL_PROFILE=open, else it silently returns None), make_traces.py, any re-run. Top up, then run those.
+- Known open failure F3: claim verification can delete the whole letter -> below 200-char minimum -> blocked (10/48 drafted runs). Proposed fix: rewrite unsupported sentences from evidence instead of deleting.
+- Still yours: label 30 proposals, deploy, demo video, make repo public, reviewer login in GCR private comment.
