@@ -69,18 +69,18 @@ def is_offline(node: str) -> bool:
 def _call(spec: dict, system: str, user: str, json_mode: bool) -> LLMResult:
     cfg = load_config()["models"]
     prov = cfg["providers"][spec["provider"]]
-    key = os.environ.get(prov["key_env"], "")
-    if not key:
+    key = os.environ.get(prov["key_env"], "") if prov.get("key_env") else ""
+    if not key and not prov.get("keyless"):
         raise RuntimeError(f"{prov['key_env']} not set")
     base = os.environ.get(prov["base_url_env"], prov["default_base"])
     body = {"model": spec["model"], "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
             "max_tokens": spec.get("max_tokens", 600), "temperature": spec.get("temperature", 0.0)}
-    if os.environ.get("DEEPSEEK_THINKING") == "disabled":  # multi-agent baselines can't replay reasoning_content; set for ALL systems in a comparison
+    if spec["provider"] == "deepseek" and os.environ.get("DEEPSEEK_THINKING") == "disabled":  # multi-agent baselines can't replay reasoning_content; set for ALL systems in a comparison
         body["thinking"] = {"type": "disabled"}
     if json_mode:
         body["response_format"] = {"type": "json_object"}
     t0 = time.time()
-    fut = _POOL.submit(httpx.post, f"{base}/chat/completions", json=body, headers={"Authorization": f"Bearer {key}"},
+    fut = _POOL.submit(httpx.post, f"{base}/chat/completions", json=body, headers={"Authorization": f"Bearer {key or 'none'}"},
                        timeout=httpx.Timeout(60, connect=10))
     try:
         r = fut.result(timeout=HARD_DEADLINE_S)
@@ -91,7 +91,8 @@ def _call(spec: dict, system: str, user: str, json_mode: bool) -> LLMResult:
     u = d.get("usage", {})
     price = cfg["prices"].get(spec["model"], {"in": 0, "out": 0})
     ti, to = u.get("prompt_tokens", 0), u.get("completion_tokens", 0)
-    return LLMResult(d["choices"][0]["message"]["content"] or "", ti, to, (ti * price["in"] + to * price["out"]) / 1e6,
+    text = re.sub(r"<think>.*?</think>", "", d["choices"][0]["message"]["content"] or "", flags=re.S).strip()  # qwen3 etc. emit reasoning inline
+    return LLMResult(text, ti, to, (ti * price["in"] + to * price["out"]) / 1e6,
                      time.time() - t0, spec["model"])
 
 

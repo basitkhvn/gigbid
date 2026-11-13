@@ -11,6 +11,7 @@ models:
   profile: open
   providers:
     deepseek: {base_url_env: DEEPSEEK_BASE_URL, key_env: DEEPSEEK_API_KEY, default_base: "https://api.deepseek.com"}
+    ollama: {base_url_env: OLLAMA_BASE_URL, default_base: "http://localhost:11434/v1", keyless: true}   # local, OpenAI-compatible
     offline: {}
   # price per 1M tokens (USD) for cost accounting. PLACEHOLDERS: verify against provider pricing page before citing cost numbers
   prices: {deepseek-flash: {in: 0.27, out: 1.10}, deepseek-v4-pro: {in: 0.55, out: 2.19}, offline: {in: 0, out: 0}}
@@ -30,6 +31,16 @@ models:
       nodes:
         writer: {provider: deepseek, model: deepseek-v4-pro, max_tokens: 2000}
         critic: {provider: deepseek, model: deepseek-v4-pro, max_tokens: 2000}
+      fallback: {provider: offline, model: offline}
+    local_qwen:                # fully local open-weight models via Ollama (GPU machine). Change model tags to what fits the GPU.
+      default: {provider: ollama, model: "qwen3:14b"}
+      nodes:
+        scout: {provider: offline, model: offline}
+        risk_assessor: {provider: ollama, model: "qwen3:14b", max_tokens: 400}
+        analyst: {provider: ollama, model: "qwen3:14b", max_tokens: 600}
+        writer: {provider: ollama, model: "qwen3:14b", max_tokens: 900, temperature: 0.4}
+        critic: {provider: ollama, model: "qwen3:14b", max_tokens: 400}
+        client_liaison: {provider: ollama, model: "qwen3:14b", max_tokens: 500}
       fallback: {provider: offline, model: offline}
     offline:                   # no API; rule-based nodes. Used for CI and degraded mode.
       default: {provider: offline, model: offline}
