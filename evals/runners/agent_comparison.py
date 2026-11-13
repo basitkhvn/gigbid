@@ -33,11 +33,17 @@ from evals.common import PERSONAS, dev, mean, pct, write  # noqa: E402
 from gigsim_local.app import register_jobs  # noqa: E402
 from rag.requirements import vocab  # noqa: E402
 
+TS = 4 if os.environ.get("MODEL_PROFILE", "").startswith("local") else 1  # local 8B on a laptop GPU is ~4x slower: scale per-job timeouts, report latency honestly
 PROF = {"ml": {"rate": 55, "floor": 35}, "web": {"rate": 48, "floor": 30}, "data": {"rate": 40, "floor": 25}}
 READ_TOOLS = ["get_job", "get_client_history", "get_price_stats", "get_connects_balance", "search_evidence", "get_case_study", "list_skills", "get_platform_policy"]
 
 
 def llm():
+    if os.environ.get("MODEL_PROFILE", "").startswith("local"):  # same local model as the graph (config.yaml local_qwen default), so the comparison stays fair
+        from agent.config import load_config
+        m = load_config()["models"]["profiles"][os.environ["MODEL_PROFILE"]]["default"]["model"]
+        return ChatOpenAI(model=m, base_url=os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1"), api_key="ollama", temperature=0, timeout=180,
+                          max_retries=1, max_tokens=900, extra_body={"reasoning_effort": "none"})
     return ChatOpenAI(model="deepseek-flash", base_url=os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
                       api_key=os.environ["DEEPSEEK_API_KEY"], temperature=0, timeout=90, max_retries=2,
                       extra_body={"thinking": {"type": "disabled"}})
@@ -167,11 +173,11 @@ async def main(a):
                     t0 = time.time()
                     try:
                         if name == "single_react":
-                            d, text, tok, usd = await asyncio.wait_for(run_react(p, j, user), 240)
+                            d, text, tok, usd = await asyncio.wait_for(run_react(p, j, user), 240 * TS)
                         elif name == "supervisor":
-                            d, text, tok, usd = await asyncio.wait_for(run_supervisor(p, j, user), 300)
+                            d, text, tok, usd = await asyncio.wait_for(run_supervisor(p, j, user), 300 * TS)
                         else:
-                            d, text, tok, usd = await asyncio.wait_for(run_graph(p, j, user, g), 240)
+                            d, text, tok, usd = await asyncio.wait_for(run_graph(p, j, user, g), 240 * TS)
                     except Exception as e:  # noqa: BLE001
                         return {"job": j["job_id"], "error": repr(e)[:200], "latency_s": time.time() - t0}
                     pred_bid = d == "bid" and bool(text)
@@ -196,9 +202,10 @@ async def main(a):
                 "by_kind_acc": {k: round(sum(r["pred_bid"] == r["gold_bid"] for r in ok if r["kind"] == k) / max(1, sum(1 for r in ok if r["kind"] == k)), 3) for k in ("good", "weak", "scam", "injection")},
                 "error_samples": [r["error"] for r in rows if "error" in r][:3]}
             print(name, {k: v for k, v in out["systems"][name].items() if k != "error_samples"}, flush=True)
-            write("agent_comparison.json", out)
+            write(f"agent_comparison{('_' + a.tag) if a.tag else ''}.json", out)
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--n", type=int, default=50); ap.add_argument("--conc", type=int, default=6)
+    ap.add_argument("--tag", default="", help="suffix for the results file, e.g. local_qwen (keeps the DeepSeek file intact)")
     asyncio.run(main(ap.parse_args()))

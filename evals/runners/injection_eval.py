@@ -73,11 +73,12 @@ async def main(a):
             print(name, {k: v for k, v in out["conditions"][name].items() if k != "hits"}, flush=True)
     os.environ.update({"GIGBID_INPUT_DEFENCE": "1", "GIGBID_OUTPUT_DEFENCE": "1"})
     out["residual_attack_note"] = "see docs/SAFETY.md: paraphrased injections that avoid trigger phrases, or content smuggled into screening questions, can still pass the regex layer"
-    write("injection_eval.json", out)
+    write(f"injection_eval{('_' + a.tag) if a.tag else ''}.json", out)
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--n", type=int, default=12); ap.add_argument("--conc", type=int, default=8)
+    ap.add_argument("--tag", default="", help="suffix for the results file (keeps the DeepSeek file intact)")
     a = ap.parse_args()
     os.environ.setdefault("MODEL_PROFILE", "open")
     asyncio.run(main(a))

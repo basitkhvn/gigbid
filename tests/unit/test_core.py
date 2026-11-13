@@ -47,6 +47,17 @@ def test_claim_verification_removes_unsupported():
     assert bad == 0
 
 
+def test_f3_rewrite_keeps_letter_instead_of_emptying_it():
+    ev = [{"id": "e1", "text": "Built a data pipeline with Airflow for a retail client.", "skills": ["Airflow"]}]
+    draft = "I led a Kubernetes migration for 10 years [E1]. I also ran Terraform at scale for 8 years."  # every sentence unsupported
+    res = verify(draft, ev)
+    assert repair(draft, res) == ""  # old behaviour: the whole letter is deleted
+    fixed = repair(draft, res, ev)
+    assert "Airflow" in fixed and "Kubernetes" not in fixed and "Terraform" not in fixed
+    bad, n = unsupported_rate(verify(fixed, ev))
+    assert n >= 1 and bad == 0  # rewritten text is grounded by construction
+
+
 def test_metrics():
     assert recall_at(["a", "b", "c"], ["a", "z"], 2) == 0.5
     assert ndcg_at(["a"], ["a"]) == 1.0

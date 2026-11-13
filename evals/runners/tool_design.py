@@ -149,7 +149,7 @@ def args_ok(got: dict, exp: dict, intent: str, design: str) -> bool:
 
 def run_one(design, tools, task, key, base, model):
     nl, intent, exp = task
-    body = {"model": model, "temperature": 0, "tools": tools, "tool_choice": "auto", "max_tokens": 200,
+    body = {"model": model, "temperature": 0, "tools": tools, "tool_choice": "auto", "max_tokens": 200, **({"reasoning_effort": "none"} if "11434" in base else {}),
             "messages": [{"role": "system", "content": "You are GigBid's tool-using agent. Call exactly one tool that answers the user's request."},
                          {"role": "user", "content": nl}]}
     r = httpx.post(f"{base}/chat/completions", json=body, headers={"Authorization": f"Bearer {key}"}, timeout=90)
@@ -172,21 +172,26 @@ def run_one(design, tools, task, key, base, model):
 
 def main():
     cfg = load_config()["models"]
-    key = os.environ["DEEPSEEK_API_KEY"]
-    base = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
-    model = cfg["profiles"]["open"]["default"]["model"]
+    local = os.environ.get("MODEL_PROFILE", "").startswith("local")  # local Ollama model: separate result file, DeepSeek file stays intact
+    if local:
+        key, base = "ollama", os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+        model = cfg["profiles"][os.environ["MODEL_PROFILE"]]["default"]["model"]
+    else:
+        key = os.environ["DEEPSEEK_API_KEY"]
+        base = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
+        model = cfg["profiles"]["open"]["default"]["model"]
     sets = {"fine": FINE_TOOLS, "coarse": COARSE_TOOLS, "best_terse": real_tools(True), "best_rewritten": real_tools(False)}
     out = {"model": model, "n_tasks": len(TASKS), "designs": {}}
     for name, tools in sets.items():
         d = "fine" if name == "fine" else "coarse" if name == "coarse" else "best"
-        with ThreadPoolExecutor(8) as ex:
+        with ThreadPoolExecutor(1 if local else 8) as ex:
             res = list(ex.map(lambda t: run_one(d, tools, t, key, base, model), TASKS))
         out["designs"][name] = {"n_tools": len(tools), "tool_selection_acc": round(sum(r["sel"] for r in res) / len(res), 3),
                                 "argument_acc": round(sum(r["args"] for r in res) / len(res), 3),
                                 "tokens_per_task": round(sum(r["tokens"] for r in res) / len(res), 1),
                                 "failures": [{"task": t[0], "called": r["called"]} for t, r in zip(TASKS, res) if not r["args"]][:12]}
         print(name, {k: v for k, v in out["designs"][name].items() if k != "failures"}, flush=True)
-    write("tool_design.json", out)
+    write("tool_design_local_qwen.json" if local else "tool_design.json", out)
 
 
 if __name__ == "__main__":

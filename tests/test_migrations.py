@@ -1,5 +1,6 @@
 import sqlite3
-from apps.api.migrations import MIGRATIONS, migrate, current_version
+
+from apps.api.migrations import MIGRATIONS, current_version, migrate
 
 
 def test_fresh_and_idempotent():

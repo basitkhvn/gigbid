@@ -13,6 +13,11 @@ def merge_dict(a: dict, b: dict) -> dict:
     return {**(a or {}), **(b or {})}
 
 
+def last_value(a: str | None, b: str | None) -> str | None:
+    """Reducer for `status`: when parallel branches (risk/analyst) both fail in the same step, take the later value instead of crashing."""
+    return b if b is not None else a
+
+
 class BidState(TypedDict, total=False):
     # inputs
     user_id: str
@@ -41,7 +46,7 @@ class BidState(TypedDict, total=False):
     submission: dict[str, Any]
     outcome: dict[str, Any]
     # control
-    status: str
+    status: Annotated[str, last_value]
     steps: Annotated[int, operator.add]
     log: Annotated[list[dict[str, Any]], operator.add]
     errors: Annotated[list[str], operator.add]

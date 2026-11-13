@@ -33,14 +33,14 @@ models:
         critic: {provider: deepseek, model: deepseek-v4-pro, max_tokens: 2000}
       fallback: {provider: offline, model: offline}
     local_qwen:                # fully local open-weight models via Ollama (GPU machine). Change model tags to what fits the GPU.
-      default: {provider: ollama, model: "qwen3:14b"}
+      default: {provider: ollama, model: "qwen3.5:4b"}
       nodes:
         scout: {provider: offline, model: offline}
-        risk_assessor: {provider: ollama, model: "qwen3:14b", max_tokens: 400}
-        analyst: {provider: ollama, model: "qwen3:14b", max_tokens: 600}
-        writer: {provider: ollama, model: "qwen3:14b", max_tokens: 900, temperature: 0.4}
-        critic: {provider: ollama, model: "qwen3:14b", max_tokens: 400}
-        client_liaison: {provider: ollama, model: "qwen3:14b", max_tokens: 500}
+        risk_assessor: {provider: ollama, model: "qwen3.5:4b", max_tokens: 400}
+        analyst: {provider: ollama, model: "qwen3.5:4b", max_tokens: 600}
+        writer: {provider: ollama, model: "qwen3.5:4b", max_tokens: 900, temperature: 0.4}
+        critic: {provider: ollama, model: "qwen3.5:4b", max_tokens: 400}
+        client_liaison: {provider: ollama, model: "qwen3.5:4b", max_tokens: 500}
       fallback: {provider: offline, model: offline}
     offline:                   # no API; rule-based nodes. Used for CI and degraded mode.
       default: {provider: offline, model: offline}

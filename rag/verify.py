@@ -91,11 +91,37 @@ def llm_recheck(results: list[dict], evidence: list[dict]) -> list[dict]:
     return results
 
 
-def repair(draft: str, results: list[dict]) -> str:
-    """Remove unsupported (and unrecoverable partial) claims so the Critic never sees them."""
-    bad = {r["claim"] for r in results if r["verdict"] in ("unsupported", "partial")}
-    kept = [s for s in split_claims(draft) if s not in bad]
-    return " ".join(kept)
+def _evidence_sentence(ev: dict, n: int, max_len: int = 220) -> str:
+    """Deterministic rewrite: the first sentence of the evidence item itself, cited as [E<n>] (so it is grounded by construction)."""
+    first = split_claims(ev["text"])[0] if split_claims(ev["text"]) else ev["text"]
+    first = first.rstrip(".!? ")
+    if len(first) > max_len:
+        first = first[:max_len].rsplit(" ", 1)[0]
+    return f"{first} [E{n}]."
+
+
+def repair(draft: str, results: list[dict], evidence: list[dict] | None = None) -> str:
+    """F3 fix: rewrite unsupported (and unrecoverable partial) claims from the evidence they cite (or, if uncited, the next unused
+    evidence item) instead of deleting them, so verification no longer empties the letter. Without evidence, falls back to removal.
+    The caller re-verifies the repaired text."""
+    bad = {r["claim"]: r for r in results if r["verdict"] in ("unsupported", "partial")}
+    index = {e["id"]: i + 1 for i, e in enumerate(evidence or [])}
+    used: set[int] = set()
+    out: list[str] = []
+    for s in split_claims(draft):
+        r = bad.get(s)
+        if r is None:
+            out.append(s)
+            continue
+        if not evidence:
+            continue  # no evidence to rewrite from: remove (old behaviour)
+        cand = [index[i] for i in r["cited"] if i in index] + [i + 1 for i in range(len(evidence))]
+        n = next((c for c in cand if c not in used), None)
+        if n is None:
+            continue
+        used.add(n)
+        out.append(_evidence_sentence(evidence[n - 1], n))
+    return " ".join(out)
 
 
 def unsupported_rate(results: list[dict]) -> tuple[int, int]:

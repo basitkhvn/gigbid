@@ -77,6 +77,8 @@ def _call(spec: dict, system: str, user: str, json_mode: bool) -> LLMResult:
             "max_tokens": spec.get("max_tokens", 600), "temperature": spec.get("temperature", 0.0)}
     if spec["provider"] == "deepseek" and os.environ.get("DEEPSEEK_THINKING") == "disabled":  # multi-agent baselines can't replay reasoning_content; set for ALL systems in a comparison
         body["thinking"] = {"type": "disabled"}
+    if spec["provider"] == "ollama":
+        body["reasoning_effort"] = "none"  # Ollama: disable Qwen's thinking phase (keeps latency/token budgets sane and JSON mode valid)
     if json_mode:
         body["response_format"] = {"type": "json_object"}
     t0 = time.time()
@@ -91,7 +93,8 @@ def _call(spec: dict, system: str, user: str, json_mode: bool) -> LLMResult:
     u = d.get("usage", {})
     price = cfg["prices"].get(spec["model"], {"in": 0, "out": 0})
     ti, to = u.get("prompt_tokens", 0), u.get("completion_tokens", 0)
-    text = re.sub(r"<think>.*?</think>", "", d["choices"][0]["message"]["content"] or "", flags=re.S).strip()  # qwen3 etc. emit reasoning inline
+    text = re.sub(r"<think>.*?</think>", "", d["choices"][0]["message"]["content"] or "", flags=re.S)  # qwen3 etc. emit reasoning inline
+    text = re.sub(r"</?think>", "", text).strip()  # stray/unclosed tags
     return LLMResult(text, ti, to, (ti * price["in"] + to * price["out"]) / 1e6,
                      time.time() - t0, spec["model"])
 

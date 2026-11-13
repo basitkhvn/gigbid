@@ -21,3 +21,4 @@ apps/web/tsconfig.tsbuildinfo
 mcp_servers/**/__pycache__/
 apps/web/test-results/
 apps/web/playwright-report/
+*.egg-info/
