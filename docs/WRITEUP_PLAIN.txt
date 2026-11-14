@@ -1,4 +1,4 @@
-Better retrieval made my proposal agent worse (and other things my ablations told me)
+﻿The retriever with the best score wrote the worst proposals (and other things my ablations told me)
 
 I built GigBid, a multi-agent copilot that reads freelance job posts, checks them against a portfolio, drafts a proposal with cited evidence, and stops for a human to approve. I expected the hard part to be the agents. The surprise came from the retrieval layer, where three standard upgrades each failed in a different way. Everything below comes from files in the repo's evals/results/ folder. The data is synthetic (more on that at the end), so read these as findings about mechanisms, not about the real market.
 
