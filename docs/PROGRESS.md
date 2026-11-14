@@ -50,3 +50,6 @@ Every number must trace to a file in `evals/results/`; never fabricate labels or
 
 ## Machine notes (Windows)
 Ollama: `OLLAMA_MODELS=D:\ollama\models`, models qwen3:8b, qwen3.5:4b; server must be started with that env var. RAM is tight (16 GB): close browsers, run ONE heavy job at a time. Use `.venv\Scripts\python.exe` with `PYTHONPATH=.`; load keys with `set -a; . ./.env; set +a` in bash. gh CLI: `C:\Program Files\GitHub CLI\gh.exe` (logged in as basitkhvn). Git author is already configured locally.
+
+## UPDATE ~13:30: F3 measured
+`proposals_local_qwen_f3.json` done. F3 rewrite did NOT help on Qwen3.5-4B (unsupported after 0.50 vs 0.29; reply 0.50 vs 0.71; baseline emptied 0/24 letters so F3 did not occur). Default stays `delete`. Report section 11 + limits updated and PDF regenerated. DO NOT flip the default to rewrite. Remaining work is only the OWNER tasks and README links (see list above).
