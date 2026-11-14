@@ -135,8 +135,9 @@ async def executor(state: BidState):
     """Runs only after a human approved. Idempotency keys are deterministic per (user, job): a crash/retry after the
     submit call returns the first result and never spends Connects twice."""
     hub, draft, q = get_hub(), state["draft"], state["price_quote"]
+    bid = (state.get("approval") or {}).get("bid") or q["bid"]   # human may override the AI's price at approval
     d = await hub.call("executor", "create_proposal_draft", {"inp": {
-        "user_id": state["user_id"], "job_id": state["job_id"], "cover_letter": draft["cover_letter"], "bid": q["bid"],
+        "user_id": state["user_id"], "job_id": state["job_id"], "cover_letter": draft["cover_letter"], "bid": bid,
         "screening_answers": draft.get("screening_answers", []), "idempotency_key": idem_key(state, "draft"), "dry_run": False}})
     res = await hub.call("executor", "submit_proposal", {"inp": {
         "user_id": state["user_id"], "draft_id": d["draft_id"], "idempotency_key": idem_key(state, "submit")}})

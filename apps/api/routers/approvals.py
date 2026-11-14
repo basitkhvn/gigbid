@@ -14,6 +14,7 @@ class Decision(BaseModel):
     action: Literal["approve", "edit", "reject"]
     text: str = Field(default="", max_length=6000, description="edited text (action=edit)")
     reason: str = Field(default="", max_length=500, description="required when rejecting")
+    bid: float | None = Field(default=None, gt=0, le=100000, description="optional price override (approve/edit)")
 
 
 async def pending_payload(run: dict) -> dict | None:
@@ -46,5 +47,5 @@ async def decide(run_id: str, d: Decision, user: dict = Depends(current_user)):
         raise HTTPException(422, "a reason is required when rejecting")
     if d.action == "edit" and not d.text.strip():
         raise HTTPException(422, "edited text is required")
-    runs.resume(run_id, run["kind"], d.model_dump())
+    runs.resume(run_id, run["kind"], d.model_dump(exclude_none=True))
     return {"ok": True, "run_id": run_id}

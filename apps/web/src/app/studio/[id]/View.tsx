@@ -52,7 +52,7 @@ export default function Studio() {
             <ul className="space-y-1 text-xs">{(data.draft?.claims ?? []).filter((c: any) => c.verdict !== "not_a_claim").map((c: any, i: number) => (
               <li key={i}><Badge tone={c.verdict === "supported" ? "green" : "red"}>{c.verdict}</Badge> {c.text}</li>))}</ul>
           </Card>
-          {data.pending && <Card title="Decision"><ApprovalPanel runId={id} original={orig} text={text} onDone={() => { setTimeout(reload, 800); }} /></Card>}
+          {data.pending && <Card title="Decision"><ApprovalPanel runId={id} original={orig} text={text} bid={data.price_quote?.bid} onDone={() => { setTimeout(reload, 800); }} /></Card>}
         </div>
         <div className="space-y-4">
           <Card title="Critic">{critique ? <><p className="text-sm">{critique.ok ? "No serious issues." : critique.issues.join("; ")}</p><p className="text-xs text-zinc-500">score {critique.score} · {(data.critiques ?? []).length} pass(es)</p></> : <p className="text-sm text-zinc-500">—</p>}</Card>
