@@ -56,7 +56,7 @@ async def draft(job_id: str, user: dict = Depends(current_user)):
         job = await get_hub().call("ui", "get_job", {"user_id": user["id"], "job_id": job_id})
     except ToolUnavailable as e:
         raise HTTPException(503, f"marketplace unavailable: {e}")
-    return {"run_id": runs.start_bid(user, job)}
+    return {"run_id": await runs.enqueue_bid(user, job)}
 
 
 @router.post("/{job_id}/skip")

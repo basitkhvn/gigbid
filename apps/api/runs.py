@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import uuid
 
 from langgraph.types import Command
@@ -81,10 +82,11 @@ def _final_summary(v: dict) -> dict:
             "submission": v.get("submission")}
 
 
-def start_bid(user: dict, job: dict) -> str:
+def start_bid(user: dict, job: dict, from_queue: bool = False) -> str:
     rid = run_id_for("bid", user["id"], job["job_id"])
     existing = one("SELECT status FROM runs WHERE id=? AND user_id=?", rid, user["id"])
-    if existing and existing["status"] not in ("queued_unavailable", "dead_letter", "needs_attention"):
+    restartable = ("queued_unavailable", "dead_letter", "needs_attention") + (("queued",) if from_queue else ())
+    if existing and existing["status"] not in restartable:
         return rid  # idempotent: one thread per job
     tid = new_trace_id()
     db().execute("INSERT OR REPLACE INTO runs VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -95,6 +97,30 @@ def start_bid(user: dict, job: dict) -> str:
     payload = {"user_id": user["id"], "persona": user["persona"], "job_id": job["job_id"], "profile": st, "trace_id": tid}
     TASKS[rid] = asyncio.create_task(_drive(rid, "bid", payload, cfg))
     return rid
+
+
+async def enqueue_bid(user: dict, job: dict) -> str:
+    """E1: with REDIS_URL set the run goes to the Arq worker (arq _job_id = run id, so a double click or a worker
+    restart never starts the same job twice). Without Redis, or if Redis is unreachable, it runs in-process."""
+    url = os.environ.get("REDIS_URL", "")
+    if not url:
+        return start_bid(user, job)
+    rid = run_id_for("bid", user["id"], job["job_id"])
+    if one("SELECT status FROM runs WHERE id=? AND user_id=?", rid, user["id"]):
+        return start_bid(user, job)  # already known: idempotent / restart of a failed run
+    try:
+        from arq import create_pool
+        from arq.connections import RedisSettings
+        pool = await create_pool(RedisSettings.from_dsn(url), default_queue_name="arq:queue")
+        db().execute("INSERT OR REPLACE INTO runs VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+                     (rid, user["id"], "bid", job["job_id"], "", new_trace_id(), "queued", job.get("category", ""), job["title"], now(), now(),
+                      json.dumps({"thread": rid})))
+        await pool.enqueue_job("run_bid_job", {k: user[k] for k in ("id", "email", "persona") if k in user}, job, _job_id=rid)
+        await pool.aclose()
+        return rid
+    except Exception:  # noqa: BLE001 - Redis down: degrade to in-process rather than failing the click
+        db().execute("DELETE FROM runs WHERE id=? AND status='queued'", (rid,))
+        return start_bid(user, job)
 
 
 def thread_of(run_id: str) -> str:

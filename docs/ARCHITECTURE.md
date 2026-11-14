@@ -49,5 +49,5 @@ Tool failures raise `ToolUnavailable`; the node wrapper turns that into status `
 * Live Upwork adapter and OAuth are implemented against the documented surface but **never exercised against a real account**.
 * Workspace server is a local mock (JSON files), not Google Calendar/Gmail.
 * GitHub third-party MCP ingestion is wired in the loader/allowlist but not run (no GitHub MCP server configured in this repo).
-* App tables use SQLite; LangGraph checkpoints use Postgres in compose (SQLite locally). Docker compose was written but **not brought up end-to-end** in this environment.
+* App tables use SQLite; LangGraph checkpoints use Postgres in compose (SQLite locally). The Postgres checkpointer and the Redis/Arq worker were verified end-to-end without Docker (`docs/RUNBOOK.md`, `evals/results/pg_redis_e2e.json`); Docker compose itself was written but **not brought up** (no Docker on the dev laptop).
 * Tracing is self-hosted JSONL, not LangSmith/Langfuse/Phoenix.

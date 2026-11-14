@@ -12,6 +12,9 @@ make eval                         # LLM-free evals; make eval-llm needs DEEPSEEK
 ```
 No key? `MODEL_PROFILE=offline` runs every node on its rule-based path (used by CI).
 
+## Postgres + Redis + Arq worker (no Docker; verified)
+Services run in WSL2 Ubuntu (`apt install postgresql redis-server`; `create user gigbid password 'gigbid' superuser; createdb -O gigbid gigbid`). Then `powershell -File scripts/run_pg_redis.ps1` starts the API on :8002 (`apps/api/serve.py`, a selector event loop because psycopg async cannot use Windows' default Proactor loop) and the Arq worker (`worker/run.py`). With `REDIS_URL` set, `POST /jobs/{id}/draft` enqueues `run_bid_job` with `_job_id` = run id (a double click or worker restart never starts a second run) and the run shows `queued` until the worker takes it; if Redis is unreachable the API falls back to an in-process task. With `DATABASE_URL` set the LangGraph checkpointer is Postgres. Verified by `scripts/pg_redis_e2e.py` and `scripts/pg_redis_crash.py` (results in `evals/results/pg_redis_e2e.json`). The public ngrok URL still runs the SQLite + in-process stack (`scripts/serve_public.ps1`), because the fixed domain points at one port.
+
 ## Docker
 `docker compose -f infra/docker-compose.yml up --build` (web :3000, api :8000). Status: written, **not verified end-to-end here**.
 

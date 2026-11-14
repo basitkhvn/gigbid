@@ -28,3 +28,4 @@ apps/web/playwright-report/
 apps/web/out/
 apps/web/.next/
 .vercel/
+.state_pg/

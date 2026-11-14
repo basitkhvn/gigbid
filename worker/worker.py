@@ -28,7 +28,7 @@ async def scout_tick(ctx):
 
 async def run_bid_job(ctx, user: dict, job: dict):
     """Idempotent: arq _job_id = run id, so a retry/restart never starts the same job twice; the graph thread resumes from its checkpoint."""
-    return runs.start_bid(user, job)
+    return runs.start_bid(user, job, from_queue=True)
 
 
 class WorkerSettings:

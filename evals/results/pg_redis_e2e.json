@@ -1,0 +1,11 @@
+{
+  "what": "End-to-end run of the bid graph on the production-style stack (PostgreSQL checkpointer + Redis/Arq worker), no Docker",
+  "stack": {"postgres": "18.6 (Ubuntu, WSL2)", "redis": "8.0.5 (Ubuntu, WSL2)", "api": "uvicorn on :8002 via apps/api/serve.py", "worker": "arq worker.run (Redis queue arq:queue)", "launcher": "scripts/run_pg_redis.ps1"},
+  "queued_run": {"job": "job-ml-0006", "transitions": ["queued (API, t=0s)", "running (Arq worker, t=2s)", "awaiting_approval (t=24s)", "approved -> submitted"], "script": "scripts/pg_redis_e2e.py"},
+  "crash_and_resume_on_postgres": {"job": "job-ml-0007", "double_enqueue_same_run_id": true, "killed_api_while_awaiting_approval": true, "status_after_restart": "awaiting_approval", "approve_after_restart": "submitted", "script": "scripts/pg_redis_crash.py"},
+  "postgres_tables": ["checkpoint_migrations", "checkpoints", "checkpoint_blobs", "checkpoint_writes"],
+  "postgres_checkpoint_rows": 46, "distinct_threads": 3,
+  "redis_arq_results": ["arq:result:bid:...:job-ml-0006", "arq:result:bid:...:job-ml-0007", "arq:result:bid:...:job-ml-0008"],
+  "unit_tests": "27 passed",
+  "notes": "The public live URL still runs on SQLite + in-process tasks (scripts/serve_public.ps1); this stack was verified separately on :8002. A fixed ngrok domain can only point at one port."
+}
