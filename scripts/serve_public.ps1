@@ -11,6 +11,7 @@ Set-Location $root
 $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')
 Get-Content .env | ForEach-Object { if ($_ -match '^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$') { Set-Item -Path "env:$($Matches[1])" -Value $Matches[2].Trim('"') } }
 $env:PYTHONPATH = '.'; $env:MODEL_PROFILE = 'groq'; $env:GIGSIM_INPROCESS = '1'
+$env:MARKETPLACE_RATE_PER_MIN = '600'; $env:GIGSIM_RATE_LIMIT = '600'; $env:GIGSIM_CONNECTS = '100000'   # demo: many clicks/pollers must not trip the simulator's request limits
 $env:WEB_DIST = "$root\apps\web\out"; $env:GIGBID_STATE_DIR = "$root\.state"
 if (-not $env:CORS_ORIGINS) { $env:CORS_ORIGINS = '*' }          # bearer-token auth (no cookies)
 if (-not $env:APP_SECRET_KEY) { $env:APP_SECRET_KEY = [guid]::NewGuid().ToString('N') + [guid]::NewGuid().ToString('N') }

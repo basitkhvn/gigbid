@@ -88,6 +88,14 @@ async def chaos(server: str, state: str, user: dict = Depends(current_user)):
     """Demo/viva helper: simulate killing an MCP server (state=down|up). Authenticated users only."""
     hub = get_hub()
     (hub.disabled.add if state == "down" else hub.disabled.discard)(server)
+    if state == "down":
+        # safety net for the live demo: a simulated outage is server-wide, so it heals itself after 60 s (a stray click must not break the app for everyone)
+        import asyncio
+
+        def _heal(srv=server):
+            hub.disabled.discard(srv)
+            hub._mark(srv, True)
+        asyncio.get_running_loop().call_later(60, _heal)
     if state != "down":
         hub._mark(server, True)  # clear the stale "unavailable" mark so the banner disappears immediately on restore
     return hub.status()
