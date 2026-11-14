@@ -4,15 +4,15 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/lib/client";
 import { useApi, useAuthGuard } from "@/lib/hooks";
-import { actionTone, Badge, btnGhost, btnPrimary, Card, Empty, ErrorState, input, Loading, Page } from "@/components/ui";
+import { actionTone, Badge, FitBar, btnGhost, btnPrimary, Card, Empty, ErrorState, input, Loading, Page } from "@/components/ui";
 
 export default function Inbox() {
   const ready = useAuthGuard(); const router = useRouter();
-  const [action, setAction] = useState(""); const [minFit, setMinFit] = useState(0);
-  const { data, error, loading, reload } = useApi<any>(ready ? `/jobs?limit=6&action=${action}&min_fit=${minFit}` : null);
+  const [action, setAction] = useState(""); const [minFit, setMinFit] = useState(0); const [limit, setLimit] = useState(12); const [msg, setMsg] = useState("");
+  const { data, error, loading, reload } = useApi<any>(ready ? `/jobs?limit=${limit}&action=${action}&min_fit=${minFit}` : null);
   const [busy, setBusy] = useState("");
   if (!ready) return null;
-  const draft = async (id: string) => { setBusy(id); try { const r = await api(`/jobs/${id}/draft`, { body: {} }); router.push(`/runs/${encodeURIComponent(r.run_id)}`); } catch (e: any) { alert(e.message); } finally { setBusy(""); } };
+  const draft = async (id: string) => { setBusy(id); try { const r = await api(`/jobs/${id}/draft`, { body: {} }); router.push(`/runs/${encodeURIComponent(r.run_id)}`); } catch (e: any) { setMsg(`Could not draft ${id}: ${e.message}`); } finally { setBusy(""); } };
   const skip = async (id: string) => { await api(`/jobs/${id}/skip`, { body: {} }); reload(); };
   return (
     <Page title="Job inbox" actions={
@@ -20,6 +20,7 @@ export default function Inbox() {
         <label className="text-sm">Action <select aria-label="Filter by action" className={input} value={action} onChange={(e) => setAction(e.target.value)}><option value="">all</option><option value="bid">bid</option><option value="watch">watch</option><option value="skip">skip</option></select></label>
         <label className="text-sm">Min fit {minFit.toFixed(1)} <input aria-label="Minimum fit" type="range" min={0} max={1} step={0.1} value={minFit} onChange={(e) => setMinFit(+e.target.value)} /></label>
       </div>}>
+      {msg && <p role="alert" className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200">{msg}</p>}
       {loading && !data && <Loading label="Triaging jobs…" />}
       {error && <ErrorState error={error} retry={reload} />}
       {data && data.jobs.length === 0 && <Empty>No jobs match these filters.</Empty>}
@@ -34,7 +35,7 @@ export default function Inbox() {
                 </div>
                 <div className="flex flex-wrap items-center gap-1">
                   <Badge tone={actionTone(j.action)}>{j.action}</Badge>
-                  <Badge tone="indigo">fit {j.fit.toFixed(2)}</Badge>
+                  <Badge tone="indigo">fit {j.fit.toFixed(2)}</Badge><FitBar value={j.fit} />
                   {j.flags.map((f: string) => <Badge key={f} tone="red">{f}</Badge>)}
                   {j.run && <Badge>{j.run.status}</Badge>}
                 </div>
@@ -53,6 +54,7 @@ export default function Inbox() {
           </li>
         ))}
       </ul>
+      {data && data.total > data.jobs.length && <div className="text-center"><button className={btnGhost} onClick={() => setLimit(limit + 12)}>Show more ({data.jobs.length} of {data.total})</button></div>}
     </Page>
   );
 }

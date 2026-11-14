@@ -27,20 +27,20 @@ export default function Shell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:bg-white focus:p-2 focus:text-black">Skip to content</a>
-      <header className="border-b border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
+      <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/80">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2">
-          <Link href="/" className="font-bold text-indigo-600">GigBid</Link>
+          <Link href="/" className="flex items-center gap-2 font-bold tracking-tight text-indigo-600 dark:text-indigo-400"><span className="grid h-7 w-7 place-items-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-sm text-white shadow-sm" aria-hidden="true">G</span>GigBid</Link>
           {authed && (
             <>
               <button className="ml-auto md:hidden rounded border px-2 py-1 text-sm" aria-expanded={open} aria-controls="nav" onClick={() => setOpen(!open)}>Menu</button>
               <nav id="nav" aria-label="Main" className={`${open ? "flex" : "hidden"} absolute left-0 right-0 top-12 z-10 flex-col gap-1 border-b bg-white p-3 dark:bg-zinc-900 md:static md:ml-2 md:flex md:flex-1 md:flex-row md:items-center md:border-0 md:p-0`}>
                 {NAV.map(([h, l]) => (
                   <Link key={h} href={h} onClick={() => setOpen(false)} aria-current={path === h ? "page" : undefined}
-                    className={`rounded px-2 py-1 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${path === h ? "bg-indigo-100 font-semibold text-indigo-800 dark:bg-indigo-950 dark:text-indigo-200" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}>{l}</Link>
+                    className={`rounded-lg px-3 py-1.5 text-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${path === h ? "bg-indigo-100 font-semibold text-indigo-800 dark:bg-indigo-950 dark:text-indigo-200" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}>{l}</Link>
                 ))}
                 <span className="flex-1" />
                 <button className={btnGhost} onClick={toggle} data-testid="chaos-toggle">{down ? "Restore marketplace" : "Simulate marketplace outage"}</button>
-                <span className="text-xs text-zinc-500">{getUser()?.email}</span>
+                <span className="hidden text-xs text-zinc-500 lg:inline">{getUser()?.email}</span>
                 <button className={btnGhost} onClick={logout}>Sign out</button>
               </nav>
             </>

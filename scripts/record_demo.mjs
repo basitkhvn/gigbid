@@ -228,6 +228,12 @@ async function main() {
     await page.getByLabel("Filter by action").selectOption("skip");
     await sleep(3000);
     const card = page.locator("li").filter({ hasText: "job-ml-0021" }).first();
+    for (let i = 0; i < 8 && !(await card.count()); i++) {  // the inbox pages in 12s: reveal more rows until the scam job is listed
+      const more = page.getByRole("button", { name: /Show more/ });
+      if (!(await more.count())) break;
+      await more.click();
+      await sleep(4000);
+    }
     await card.waitFor({ timeout: 60000 });
     await card.scrollIntoViewIfNeeded();
     await card.getByText("off_platform_contact").waitFor({ timeout: 15000 });
@@ -272,7 +278,7 @@ async function main() {
     await sleep(5500);
     try {
       await suggested.getByRole("button", { name: "Approve & send" }).click();
-      await page.getByText(/freelancer:/).first().waitFor({ timeout: 60000 });
+      await page.getByText(/freelancer/i).first().waitFor({ timeout: 60000 });
       await sleep(3500);
     } catch (err) {
       console.log(`scene e: reply was drafted but sending it on camera failed: ${err.message}`);

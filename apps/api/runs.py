@@ -47,7 +47,7 @@ async def _drive(run_id: str, kind: str, payload, cfg):
         status = st.values.get("status", "done")
         if st.next:  # paused at an interrupt
             status = "awaiting_approval"
-        _set(run_id, status=status, summary=json.dumps(_final_summary(st.values), default=str))
+        _set(run_id, status=status, summary=json.dumps({**_final_summary(st.values), "thread": cfg["configurable"]["thread_id"]}, default=str))  # keep the thread id: re-runs use a suffixed thread, and approvals are looked up through it
         _event(run_id, "__end__", {"status": status})
     except Exception as e:  # noqa: BLE001
         _set(run_id, status="needs_attention")
