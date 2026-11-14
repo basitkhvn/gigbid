@@ -29,3 +29,24 @@ Memory is tight: run ONE eval at a time, close browsers/Spotify first. `qwen3:8b
 
 ## Rules that still apply
 Every number must trace to a file in `evals/results/`; never fabricate labels or results; keep negative results; human approval before anything is sent.
+
+## UPDATE 2026-11-14 ~13:15 (latest; supersedes anything above that conflicts)
+**DEADLINE IS TODAY (2026-11-14). Prioritise submission items over polish.**
+- Repo is PUBLIC (https://github.com/basitkhvn/gigbid), history scanned: no secrets. `.env` is gitignored and holds `GROQ_API_KEY` (never print/commit it).
+- New hosted open-weight profile `groq` (Qwen `qwen/qwen3.8-27b` on Groq free tier) in `agent/config.yaml`; `render.yaml` now deploys with `MODEL_PROFILE=groq` + secret `GROQ_API_KEY`. Provider option `reasoning_off: true` sends `reasoning_effort: none`.
+- Groq eval `evals/results/proposals_groq_qwen.json` (30 jobs, 24 drafted): unsupported 0.67 -> 0.00, reply 0.50, hire 0.208, p50/p95 17.9/22.7 s (within the 60 s budget). tokens/job 274 looks too low vs local 4766: unverified, flagged in the report (do not use for token claims).
+- Report `docs/report/report.html` has section 11 (local Qwen + Groq replication); PDF regenerated with headless Edge (6 pages, A4): `msedge --headless=new --no-pdf-header-footer --print-to-pdf=docs/report/GigBid_RD_Report.pdf file:///.../report.html`. Re-run this after any report edit and `git add` the PDF.
+- Last pushed commit: 5db8491.
+
+### Still running when this was written
+- F3 measurement (local, `GIGBID_REPAIR_MODE=rewrite`, tag `local_qwen_f3`) -> `evals/results/proposals_local_qwen_f3.json`. When it exists: compare to `proposals_local_qwen.json` (n_drafted, unsupported after, emptied letters). Add 1 paragraph + the result to report section 11 / failure table class F3, replace the "Fix F3" bullet in "Limits and next steps", regenerate the PDF, commit, push. If not worse, flip the default in `agent/nodes/verifier.py` to `rewrite`. If the file never appears (process killed), skip it and say in the report that F3 is implemented and unit-tested but not re-measured.
+
+### Remaining TODO (owner = the human; agent = you)
+1. OWNER: deploy on Render (New > Blueprint > this repo). Secrets: `GROQ_API_KEY`, `REVIEWER_PASSWORD`. Agent helps only if the build log shows an error (ask the owner to paste it). Note `plan: starter` in render.yaml costs money; embeddings need >512 MB RAM. If the owner can't pay, make a lighter config (smaller embedding model or `GIGSIM_INPROCESS=1` single service) and say so honestly.
+2. OWNER: record 3-min demo video (inbox -> approved proposal; scam caught; injection ignored; client reply). Publish write-up from `docs/WRITEUP_DRAFT.md` (1200-1800 words) on LinkedIn/Medium. Portfolio MCP "publication": cite `mcp_servers/portfolio` in the public repo (PyPI optional).
+3. AGENT: when the owner gives the URLs, fill the TODO rows at the top of `README.md` (live app, demo video, write-up, Portfolio MCP), commit, push.
+4. OWNER: submit on Google Classroom: deployed URL, reviewer login (PRIVATE comment only, never in repo), repo link, report PDF, video link, MCP + write-up links.
+5. OPTIONAL (skip if short on time): `make_tables`, `scripts/make_traces.py`, judge calibration labels (owner-only, never fabricate).
+
+## Machine notes (Windows)
+Ollama: `OLLAMA_MODELS=D:\ollama\models`, models qwen3:8b, qwen3.5:4b; server must be started with that env var. RAM is tight (16 GB): close browsers, run ONE heavy job at a time. Use `.venv\Scripts\python.exe` with `PYTHONPATH=.`; load keys with `set -a; . ./.env; set +a` in bash. gh CLI: `C:\Program Files\GitHub CLI\gh.exe` (logged in as basitkhvn). Git author is already configured locally.
