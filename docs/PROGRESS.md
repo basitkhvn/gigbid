@@ -9,14 +9,17 @@
 - Evals (all in `evals/results/`): local Qwen3.5-4B (`*_local_qwen*.json`), Qwen3-8B (`proposals_local_qwen3_8b.json`), Groq Qwen3.8-27B (`proposals_groq_qwen.json`), F3 rewrite test (`proposals_local_qwen_f3.json`: no benefit, kept OFF; default stays `GIGBID_REPAIR_MODE=delete`). DeepSeek result files are untouched.
 - Models/profiles in `agent/config.yaml`: `open` (DeepSeek, needs a key we do not have), `groq` (hosted open-weight Qwen on Groq free tier, used for deployment), `local_qwen` (Ollama, qwen3.5:4b), `offline`.
 
-### Deployment (the part still in flight)
-1. **Render free web service** `gigbid` (Blueprint from `render.yaml`, Free plan 512 MB / 0.1 CPU): https://gigbid-99lo.onrender.com . First deploy crash-looped (silent OOM from the startup warm-up). Fix is commit `d8e0372` (GIGBID_WARM=0 + models/embedding cache baked at Docker build time). The owner must press **Manual Deploy > Deploy latest commit** in Render (public-URL blueprints do not auto-deploy). A watcher was polling /health. STATUS UNKNOWN until verified: test `/health`, `POST /auth/login` (reviewer@gigbid.demo + REVIEWER_PASSWORD from .env), `POST /jobs/job-ml-0006/draft`, then `GET /runs/bid:<user_id>:job-ml-0006` until `awaiting_approval`. Free instances sleep after 15 min (first load 1-2 min, tell the reviewer in the Classroom comment). State is ephemeral.
-2. **Fallback / backup: laptop + Cloudflare quick tunnel.** Run `powershell -ExecutionPolicy Bypass -File scripts\serve_public.ps1` (API on port 8001, `MODEL_PROFILE=groq`, serves `apps/web/out`). Tunnel URL when written: https://programmer-skating-highlights-music.trycloudflare.com ; it CHANGES whenever cloudflared restarts and the laptop must stay on/online. UI must be built first: `cd apps/web; $env:STATIC_EXPORT=1; $env:NEXT_PUBLIC_API_URL=""; npx next build` (the npm script fails on Windows). Tested OK: health, UI, login, one job reached `awaiting_approval` on Groq.
-3. Not usable without a card/payment: Hugging Face Docker Spaces (needs PRO; `scripts/deploy_hf_space.py` kept but dead), Koyeb, Fly.io, Oracle/GCP. Vercel: optional, only a UI front for the tunnel; needs the owner's `vercel login`/token; low value. Another uvicorn (port 8000, started 13:50 by something other than the main session, probably OpenCode's demo-recording run) exists; do not kill it blindly.
-4. Deploy-breaking bug already fixed: `pyproject.toml` runtime deps were incomplete.
+### Deployment (DECISION: backend stays on the owner's laptop; Render/HF/Vercel abandoned)
+- The owner chose to keep the backend on this laptop behind a public tunnel (no card needed anywhere). A Render free service (https://gigbid-99lo.onrender.com) was tried and kept hitting the 512 MB memory limit (a full job peaks ~430 MB on the laptop copy); it is NOT the submitted link and can be deleted/suspended in the Render dashboard. Do not spend more time on it.
+- Start/keep alive: `powershell -NoProfile -ExecutionPolicy Bypass -File "<repo>\scripts\serve_public.ps1"` (quote the path, it contains a space). It starts the API on port 8001 (`MODEL_PROFILE=groq`, serves `apps/web/out`), opens the tunnel, and then SUPERVISES both (checks every 20 s, restarts whatever died; log `.logs\supervisor.log`; current URL in `.logs\public_url.txt`). Sleep/hibernate on AC are disabled by the script.
+- Tunnel: Cloudflare quick tunnel by default (random URL, CHANGES whenever cloudflared restarts; current: https://artist-vista-restrict-chamber.trycloudflare.com). For a FIXED URL: free ngrok account (no card) -> add `NGROK_AUTHTOKEN=...` and `NGROK_DOMAIN=<your-free-static-domain>.ngrok-free.app` to `.env`, then restart the script; it then uses ngrok with that fixed domain (ngrok is installed).
+- The laptop must stay on, plugged in and online until grades are released. A login-time auto-start task was NOT registered (blocked by the sandbox); owner can run once: `schtasks /create /f /tn GigBidServe /sc onlogon /tr "powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"<repo>\scripts\serve_public.ps1\""`.
+- UI build (needed once, already built): `cd apps/web; $env:STATIC_EXPORT=1; $env:NEXT_PUBLIC_API_URL=""; npx next build` (the npm script fails on Windows). Tested through the tunnel: /health, UI, `POST /auth/login`, one job to `awaiting_approval` on Groq.
+- Another uvicorn on port 8000 (started 13:50 by something other than the main session, probably OpenCode's demo run) exists; do not kill it blindly. Hosts that need a card/PRO: HF Docker Spaces (`scripts/deploy_hf_space.py` kept but dead), Koyeb, Fly.io, Oracle/GCP.
+- Fixed deploy-breaking bug earlier: `pyproject.toml` runtime deps were incomplete.
 
 ### What the OWNER still has to do (an agent cannot)
-1. Click **Manual Deploy** on Render (see above) and confirm the site loads; send the final live URL.
+1. Make sure the laptop stays on and run `serve_public.ps1`; optionally set up the fixed ngrok domain; use the URL in `.logs\public_url.txt` as the submitted live URL (re-check it right before submitting).
 2. Record the 3-minute demo video (inbox -> approved proposal; scam caught; injection ignored; client reply). OpenCode may automate a Playwright screen recording + write `docs/DEMO_SCRIPT.md`; the owner records voice-over (Clipchamp) and uploads to YouTube as Unlisted.
 3. Publish the write-up from `docs/WRITEUP_DRAFT.md` (1200-1800 words) on LinkedIn/Medium.
 4. Portfolio MCP "publication": cite `mcp_servers/portfolio` in the public repo (PyPI optional, not done).
@@ -24,7 +27,7 @@
 6. Optional: judge calibration labels (`evals/datasets/judge_calibration_sheet.csv`, owner-only, never fabricate), a fixed ngrok address for the tunnel.
 
 ### What an AGENT should do next
-- Verify the Render deploy as above; if it fails read the Render Logs (ask the owner to paste the last 20 lines) and trim memory (e.g. disable the reranker in config) or recommend the tunnel.
+- Verify the laptop deployment (read `.logs\public_url.txt`, test `/health` and the reviewer login through that URL).
 - When the owner supplies URLs, fill the TODO rows at the top of `README.md` (live app, demo video, write-up, Portfolio MCP), commit, push. Keep the README caveats honest.
 - Do NOT flip the F3 default to rewrite; do not report numbers that are not in `evals/results/`; never commit secrets; commit small with a Co-Authored-By line.
 
