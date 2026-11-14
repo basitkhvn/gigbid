@@ -1,0 +1,102 @@
+{
+ "model": "qwen3.5:4b",
+ "n_tasks": 40,
+ "designs": {
+  "fine": {
+   "n_tools": 24,
+   "tool_selection_acc": 0.975,
+   "argument_acc": 0.95,
+   "tokens_per_task": 1610.3,
+   "failures": [
+    {
+     "task": "Give me market price stats for Data Analysis.",
+     "called": "get_price_median"
+    },
+    {
+     "task": "Find my free slots this week.",
+     "called": "get_free_slots"
+    }
+   ]
+  },
+  "coarse": {
+   "n_tools": 3,
+   "tool_selection_acc": 0.95,
+   "argument_acc": 0.675,
+   "tokens_per_task": 540.6,
+   "failures": [
+    {
+     "task": "Find jobs that need Celery experience.",
+     "called": "marketplace"
+    },
+    {
+     "task": "Show me open jobs requiring dbt.",
+     "called": "marketplace"
+    },
+    {
+     "task": "Any jobs asking for Playwright?",
+     "called": "marketplace"
+    },
+    {
+     "task": "How many Connects does job job-ml-0100 cost?",
+     "called": "marketplace"
+    },
+    {
+     "task": "Show history for client client-017.",
+     "called": "marketplace"
+    },
+    {
+     "task": "What's the median budget for Web Development jobs?",
+     "called": "marketplace"
+    },
+    {
+     "task": "Give me market price stats for Data Analysis.",
+     "called": "marketplace"
+    },
+    {
+     "task": "Find evidence in my portfolio for Kubernetes.",
+     "called": "portfolio"
+    },
+    {
+     "task": "Do I have experience with Stripe payments? Search my portfolio.",
+     "called": "portfolio"
+    },
+    {
+     "task": "Search my past work for LoRA fine-tuning.",
+     "called": "portfolio"
+    },
+    {
+     "task": "Find portfolio items about A/B testing.",
+     "called": "portfolio"
+    },
+    {
+     "task": "Open case study ml-proj-03.",
+     "called": "portfolio"
+    }
+   ]
+  },
+  "best_terse": {
+   "n_tools": 12,
+   "tool_selection_acc": 1.0,
+   "argument_acc": 0.975,
+   "tokens_per_task": 915.1,
+   "failures": [
+    {
+     "task": "Find my free slots this week.",
+     "called": "free_slots"
+    }
+   ]
+  },
+  "best_rewritten": {
+   "n_tools": 12,
+   "tool_selection_acc": 1.0,
+   "argument_acc": 0.975,
+   "tokens_per_task": 1152.4,
+   "failures": [
+    {
+     "task": "Find my free slots this week.",
+     "called": "free_slots"
+    }
+   ]
+  }
+ }
+}

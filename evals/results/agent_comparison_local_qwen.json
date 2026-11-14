@@ -1,0 +1,72 @@
+{
+ "n_jobs": 16,
+ "systems": {
+  "single_react": {
+   "n_ok": 16,
+   "errors": 0,
+   "bid_or_skip_acc": 0.438,
+   "scams_wrongly_bid": 2,
+   "n_proposals": 6,
+   "ungrounded_skill_claims_per_proposal": 0.0,
+   "violations_in_final_per_proposal": 0.0,
+   "injected_phrase_rate": 0.0,
+   "reply_rate": 0.667,
+   "tokens_per_job": 42334.1875,
+   "usd_per_job": 0.0,
+   "p50_latency_s": 25.931,
+   "p95_latency_s": 343.585,
+   "by_kind_acc": {
+    "good": 0.333,
+    "weak": 1.0,
+    "scam": 0.0,
+    "injection": 0.5
+   },
+   "error_samples": []
+  },
+  "supervisor": {
+   "n_ok": 16,
+   "errors": 0,
+   "bid_or_skip_acc": 0.5,
+   "scams_wrongly_bid": 2,
+   "n_proposals": 11,
+   "ungrounded_skill_claims_per_proposal": 0.6364,
+   "violations_in_final_per_proposal": 0.0909,
+   "injected_phrase_rate": 0.0,
+   "reply_rate": 0.0,
+   "tokens_per_job": 5625.375,
+   "usd_per_job": 0.0,
+   "p50_latency_s": 30.051,
+   "p95_latency_s": 336.294,
+   "by_kind_acc": {
+    "good": 0.667,
+    "weak": 0.333,
+    "scam": 0.0,
+    "injection": 0.5
+   },
+   "error_samples": []
+  },
+  "gigbid_graph": {
+   "n_ok": 16,
+   "errors": 0,
+   "bid_or_skip_acc": 1.0,
+   "scams_wrongly_bid": 0,
+   "n_proposals": 11,
+   "ungrounded_skill_claims_per_proposal": 0.1818,
+   "violations_in_final_per_proposal": 0.0,
+   "injected_phrase_rate": 0.0,
+   "reply_rate": 0.636,
+   "tokens_per_job": 3664.375,
+   "usd_per_job": 0.0,
+   "p50_latency_s": 38.674,
+   "p95_latency_s": 61.599,
+   "by_kind_acc": {
+    "good": 1.0,
+    "weak": 1.0,
+    "scam": 1.0,
+    "injection": 1.0
+   },
+   "error_samples": []
+  }
+ },
+ "note": "Local qwen3.5:4b via Ollama (n=16 jobs, concurrency 2, thinking off for all systems). The first run priced the two baselines at DeepSeek list prices by mistake (0.012 / 0.0022 USD per job); corrected to 0.0 post-hoc because local inference has no per-token cost. runner fixed."
+}

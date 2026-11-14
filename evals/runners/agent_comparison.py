@@ -87,6 +87,8 @@ def usage_of(messages):
     for m in messages:
         u = getattr(m, "usage_metadata", None) or {}
         ti += u.get("input_tokens", 0); to += u.get("output_tokens", 0)
+    if TS > 1:  # local Ollama model: no per-token cost (DeepSeek list prices below apply only to the hosted run)
+        return ti + to, 0.0
     return ti + to, (ti * 0.27 + to * 1.10) / 1e6
 
 
