@@ -13,6 +13,15 @@ export default function Shell({ children }: { children: React.ReactNode }) {
   const [down, setDown] = useState(false);
   const [authed, setAuthed] = useState(false);
   const [open, setOpen] = useState(false);
+  // The outage switch is server-wide, so it is hidden unless demo mode is on (open any page with ?demo=1; ?demo=0 turns it off). It is always shown while an outage is active, so it can be restored.
+  const [demo, setDemo] = useState(false);
+  useEffect(() => {
+    try {
+      const q = new URLSearchParams(window.location.search).get("demo");
+      if (q === "1") localStorage.setItem("gigbid_demo", "1"); else if (q === "0") localStorage.removeItem("gigbid_demo");
+      setDemo(localStorage.getItem("gigbid_demo") === "1");
+    } catch { /* storage unavailable */ }
+  }, [path]);
   useEffect(() => { setAuthed(!!getToken()); }, [path]);
   const toggledAt = useRef(0);
   const check = async () => {
@@ -39,7 +48,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
                     className={`rounded-lg px-3 py-1.5 text-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${path === h ? "bg-indigo-100 font-semibold text-indigo-800 dark:bg-indigo-950 dark:text-indigo-200" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}>{l}</Link>
                 ))}
                 <span className="flex-1" />
-                <button className={btnGhost} onClick={toggle} data-testid="chaos-toggle">{down ? "Restore marketplace" : "Simulate marketplace outage"}</button>
+                {(demo || down) && <button className={btnGhost} onClick={toggle} data-testid="chaos-toggle">{down ? "Restore marketplace" : "Simulate marketplace outage"}</button>}
                 <span className="hidden text-xs text-zinc-500 lg:inline">{getUser()?.email}</span>
                 <button className={btnGhost} onClick={logout}>Sign out</button>
               </nav>

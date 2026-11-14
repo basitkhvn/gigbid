@@ -11,6 +11,7 @@ test.afterEach(async ({ page }) => {
 
 test("degraded mode: banner appears when the marketplace is down and clears on recovery", async ({ page }) => {
   await register(page); await finishOnboarding(page);
+  await page.evaluate(() => localStorage.setItem("gigbid_demo", "1")); await page.reload();   // the outage switch is hidden unless demo mode is on
   await expect(page.getByTestId("degraded-banner")).toHaveCount(0);
   const menu = page.getByRole("button", { name: "Menu" });
   if (await menu.isVisible()) await menu.click();   // phone layout only
