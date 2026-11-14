@@ -30,12 +30,17 @@ export async function api<T = any>(path: string, opts: { method?: string; body?:
   const tok = getToken();
   const r = await fetch(API + path, {
     method: opts.method ?? (opts.body !== undefined ? "POST" : "GET"),
-    headers: { "Content-Type": "application/json", ...(tok ? { Authorization: `Bearer ${tok}` } : {}) },
+    headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "1", ...(tok ? { Authorization: `Bearer ${tok}` } : {}) },
     body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
   });
   if (!r.ok) {
     let msg = r.statusText;
     try { const j = await r.json(); msg = typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail ?? j); } catch { /* */ }
+    // Stale/invalid session (e.g. server restarted with a new secret): drop it and go to login instead of showing errors.
+    if (r.status === 401 && tok && typeof window !== "undefined" && !path.startsWith("/auth/")) {
+      setSession(null);
+      if (!window.location.pathname.startsWith("/login")) window.location.replace("/login/");
+    }
     throw new ApiError(r.status, msg);
   }
   return r.json();
@@ -44,7 +49,7 @@ export async function api<T = any>(path: string, opts: { method?: string; body?:
 /** SSE over fetch() so the Authorization header can be sent (EventSource cannot). */
 export async function streamRun(runId: string, onEvent: (e: any) => void, signal: AbortSignal) {
   const tok = getToken();
-  const r = await fetch(`${API}/runs/${encodeURIComponent(runId)}/stream`, { headers: tok ? { Authorization: `Bearer ${tok}` } : {}, signal });
+  const r = await fetch(`${API}/runs/${encodeURIComponent(runId)}/stream`, { headers: { "ngrok-skip-browser-warning": "1", ...(tok ? { Authorization: `Bearer ${tok}` } : {}) }, signal });
   if (!r.ok || !r.body) throw new ApiError(r.status, "stream failed");
   const reader = r.body.getReader(); const dec = new TextDecoder(); let buf = "";
   for (;;) {
