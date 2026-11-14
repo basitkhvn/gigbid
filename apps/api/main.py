@@ -29,7 +29,8 @@ async def lifespan(app: FastAPI):
             await asyncio.to_thread(lambda p=p: get_corpus(p).plain)
 
     import asyncio
-    warm_task = asyncio.create_task(warm())
+    # GIGBID_WARM=0 skips the startup pre-indexing (free hosts with 512 MB RAM: indexes are built from the image's baked embedding cache on first use)
+    warm_task = asyncio.create_task(warm()) if os.environ.get("GIGBID_WARM", "1") != "0" else asyncio.create_task(asyncio.sleep(0))
     async with make_checkpointer() as cp:
         runs.graphs(cp)
         yield

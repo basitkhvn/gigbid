@@ -14,6 +14,9 @@ COPY pyproject.toml ./
 RUN pip install --no-cache-dir -e . || pip install --no-cache-dir .
 COPY . .
 COPY --from=web /web/out /app/web_out
+ENV FASTEMBED_CACHE_PATH=/app/.fastembed GIGBID_WARM=0
 RUN python -c "from fastembed import TextEmbedding; TextEmbedding('BAAI/bge-small-en-v1.5'); from fastembed.rerank.cross_encoder import TextCrossEncoder; TextCrossEncoder('Xenova/ms-marco-MiniLM-L-6-v2')"
+# bake the embedding cache + download models at BUILD time (build machine has the RAM; the 512 MB runtime instance then only reads the cache)
+RUN python -c "from rag.corpus import get_corpus; [get_corpus(p).plain for p in ('ml','web','data')]"
 EXPOSE 8000
 CMD ["sh", "-c", "uvicorn apps.api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

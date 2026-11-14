@@ -68,3 +68,8 @@ Ollama: `OLLAMA_MODELS=D:\ollama\models`, models qwen3:8b, qwen3.5:4b; server mu
 - WARNING: the quick-tunnel URL changes every time cloudflared restarts, and the laptop must stay on and online until grades are released. A fixed address needs an ngrok free account (static domain) or a Cloudflare named tunnel.
 - Another uvicorn (started 13:50, not by this session, likely OpenCode's demo-recording run) occupies port 8000; do not kill it blindly.
 - Vercel front-end (optional, requested by owner): build the UI with `NEXT_PUBLIC_API_URL=<tunnel URL>` and deploy `apps/web/out` with the Vercel CLI; needs the owner's Vercel login/token. The tunnel URL alone already serves the full app.
+
+## UPDATE ~14:50: Render free deploy (https://gigbid-99lo.onrender.com)
+- Render service exists (Blueprint from this repo, Free plan, 512 MB / 0.1 CPU, secrets GROQ_API_KEY + REVIEWER_PASSWORD set by the owner). First deploy crash-looped (silent restarts = OOM): the startup warm-up embedded all 3 persona corpora.
+- Fix pushed: `GIGBID_WARM=0` skips the warm-up (apps/api/main.py); `infra/docker/single.Dockerfile` bakes the models (`FASTEMBED_CACHE_PATH=/app/.fastembed`) and the embedding cache at BUILD time. The owner must click Manual Deploy > Deploy latest commit on Render (public-URL blueprints do not auto-deploy).
+- After the redeploy: test `/health`, `POST /auth/login` (reviewer@gigbid.demo + REVIEWER_PASSWORD), `POST /jobs/job-ml-0006/draft`, then `GET /runs/bid:<user>:job-ml-0006` until `awaiting_approval`. If it still dies: read Render Logs (look for killed/OOM), consider lowering memory further (disable the reranker via config) or fall back to the laptop tunnel (`scripts/serve_public.ps1`).
