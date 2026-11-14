@@ -45,6 +45,19 @@ app.add_middleware(CORSMiddleware, allow_origins=os.environ.get("CORS_ORIGINS", 
                    allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 
+_SPA_ROOTS = {"jobs", "runs", "studio", "messages", "analytics", "settings", "pipeline", "login", "onboarding"}
+
+
+@app.middleware("http")
+async def spa_navigation(request: Request, call_next):
+    """A browser NAVIGATING (Accept: text/html) to /jobs/<id>, /runs/<id>, /messages ... must get the web page, not the same-named JSON API route:
+    Next links have no trailing slash, so a hard navigation used to land on the API ('detail: not authenticated'). fetch()/curl API calls are unaffected."""
+    p = request.scope["path"]
+    if request.method == "GET" and p.strip("/").split("/")[0] in _SPA_ROOTS and not p.endswith("/") and "text/html" in request.headers.get("accept", ""):
+        request.scope["path"] = p + "/"
+    return await call_next(request)
+
+
 @app.middleware("http")
 async def trace_id_mw(request: Request, call_next):
     """One trace id flows UI request -> API -> graph -> MCP servers -> audit log (x-trace-id header)."""
@@ -75,6 +88,8 @@ async def chaos(server: str, state: str, user: dict = Depends(current_user)):
     """Demo/viva helper: simulate killing an MCP server (state=down|up). Authenticated users only."""
     hub = get_hub()
     (hub.disabled.add if state == "down" else hub.disabled.discard)(server)
+    if state != "down":
+        hub._mark(server, True)  # clear the stale "unavailable" mark so the banner disappears immediately on restore
     return hub.status()
 
 

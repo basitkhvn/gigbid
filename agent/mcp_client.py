@@ -152,8 +152,9 @@ class ToolHub:
         self.health[server] = {"ok": ok, "ts": time.time(), "error": err}
 
     def status(self) -> dict:
-        return {s: {"ok": s not in self.disabled and self.health.get(s, {"ok": True})["ok"],
-                    **self.health.get(s, {})} for s in ("marketplace", "portfolio", "workspace")}
+        # NB: spread the stored health FIRST so the computed "ok" (which honours a simulated outage) is not overwritten by a stale value
+        return {s: {**self.health.get(s, {}),
+                    "ok": s not in self.disabled and self.health.get(s, {"ok": True})["ok"]} for s in ("marketplace", "portfolio", "workspace")}
 
 
 _hub: ToolHub | None = None

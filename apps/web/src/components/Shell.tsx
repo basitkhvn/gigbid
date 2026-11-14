@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { api, getToken, getUser, setSession } from "@/lib/client";
 import { usePoll } from "@/lib/hooks";
 import { btnGhost } from "./ui";
@@ -14,13 +14,15 @@ export default function Shell({ children }: { children: React.ReactNode }) {
   const [authed, setAuthed] = useState(false);
   const [open, setOpen] = useState(false);
   useEffect(() => { setAuthed(!!getToken()); }, [path]);
+  const toggledAt = useRef(0);
   const check = async () => {
     if (!getToken()) return;
-    try { const h = await api("/health/tools"); setDown(h.marketplace?.ok === false); } catch { /* api unreachable */ }
+    const started = Date.now();
+    try { const h = await api("/health/tools"); if (started >= toggledAt.current) setDown(h.marketplace?.ok === false); } catch { /* api unreachable */ }  // ignore a poll that began before the last toggle (stale response)
   };
   useEffect(() => { check(); }, [path]);
   usePoll(check, 5000);
-  const toggle = async () => { const h = await api(`/admin/chaos/marketplace/${down ? "up" : "down"}`, { method: "POST", body: {} }); setDown(h.marketplace?.ok === false); };
+  const toggle = async () => { toggledAt.current = Date.now(); const h = await api(`/admin/chaos/marketplace/${down ? "up" : "down"}`, { method: "POST", body: {} }); setDown(h.marketplace?.ok === false); };
   const logout = () => { setSession(null); router.replace("/login"); };
   return (
     <>

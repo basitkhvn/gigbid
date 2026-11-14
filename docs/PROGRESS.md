@@ -23,6 +23,9 @@
 - Fresh loads/refresh of /jobs/<id>/, /studio/<id>/, /runs/<id>/ used the static-export placeholder id `_` (job not found / run not found); fixed with `useRouteId()` (reads the id from the URL). The UI must be REBUILT after UI changes: `cd apps/web; $env:STATIC_EXPORT=1; $env:NEXT_PUBLIC_API_URL=""; npx next build` (the live API serves `apps/web/out` from disk, no restart needed).
 - Someone had left the marketplace chaos toggle on ("Simulate marketplace outage" amber banner): restore with the nav button or `POST /admin/chaos/marketplace/up`. After the demo make sure it says "Simulate marketplace outage" (= up).
 
+- Clicking a job / Draft proposal showed raw JSON `{"detail":"not authenticated"}`: Next `<Link>` hrefs have no trailing slash and `/jobs/<id>`, `/runs/<id>` etc. are ALSO API routes. Fixed with the `spa_navigation` middleware in `apps/api/main.py` (GET + `Accept: text/html` on SPA roots gets the page; fetch/curl unchanged). Always test by CLICKING through the app (Playwright scripts that `goto` typed URLs missed this).
+- "Simulate marketplace outage" button was unreliable: `ToolHub.status()` let a stale stored `ok` overwrite the computed one (fixed in `agent/mcp_client.py`), restore now clears the stale failure mark (`apps/api/main.py`), and `Shell.tsx` ignores health polls that started before the last toggle.
+
 ### What the OWNER still has to do (an agent cannot)
 1. Make sure the laptop stays on and run `serve_public.ps1`; optionally set up the fixed ngrok domain; use the URL in `.logs\public_url.txt` as the submitted live URL (re-check it right before submitting).
 2. Record the 3-minute demo video (inbox -> approved proposal; scam caught; injection ignored; client reply). OpenCode may automate a Playwright screen recording + write `docs/DEMO_SCRIPT.md`; the owner records voice-over (Clipchamp) and uploads to YouTube as Unlisted.
