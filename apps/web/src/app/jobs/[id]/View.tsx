@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/lib/client";
-import { useApi, useAuthGuard } from "@/lib/hooks";
+import { useApi, useAuthGuard, useRouteId } from "@/lib/hooks";
 import { actionTone, Badge, btnPrimary, Card, ErrorState, Loading, Page } from "@/components/ui";
 
 export default function JobDetail() {
-  const ready = useAuthGuard(); const { id } = useParams<{ id: string }>(); const router = useRouter();
+  const ready = useAuthGuard(); const id = useRouteId(); const router = useRouter();
   const { data, error, loading, reload } = useApi<any>(ready ? `/jobs/${id}` : null);
   const [busy, setBusy] = useState(false);
   if (!ready) return null;

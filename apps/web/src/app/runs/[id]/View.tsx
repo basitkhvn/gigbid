@@ -1,14 +1,13 @@
 "use client";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api, streamRun } from "@/lib/client";
-import { useApi, useAuthGuard } from "@/lib/hooks";
+import { useApi, useAuthGuard, useRouteId } from "@/lib/hooks";
 import RunTimeline from "@/components/RunTimeline";
 import { Badge, btnGhost, btnPrimary, Card, ErrorState, Loading, Page } from "@/components/ui";
 
 export default function RunView() {
-  const ready = useAuthGuard(); const { id: raw } = useParams<{ id: string }>(); const id = decodeURIComponent(raw);
+  const ready = useAuthGuard(); const id = useRouteId();
   const [events, setEvents] = useState<any[]>([]); const [status, setStatus] = useState("running");
   const run = useApi<any>(ready ? `/runs/${encodeURIComponent(id)}` : null);
   const trace = useApi<any>(ready ? `/runs/${encodeURIComponent(id)}/trace` : null, [status]);

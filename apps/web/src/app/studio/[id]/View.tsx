@@ -1,15 +1,14 @@
 "use client";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/client";
-import { useApi, useAuthGuard, usePoll } from "@/lib/hooks";
+import { useApi, useAuthGuard, usePoll, useRouteId } from "@/lib/hooks";
 import ApprovalPanel from "@/components/ApprovalPanel";
 import EvidenceHover from "@/components/EvidenceHover";
 import { Badge, btnGhost, Card, ErrorState, input, Loading, Page } from "@/components/ui";
 
 export default function Studio() {
-  const ready = useAuthGuard(); const { id: raw } = useParams<{ id: string }>(); const id = decodeURIComponent(raw);
+  const ready = useAuthGuard(); const id = useRouteId();
   const { data, error, loading, reload } = useApi<any>(ready ? `/proposals/${encodeURIComponent(id)}` : null);
   const [text, setText] = useState(""); const [orig, setOrig] = useState("");
   // keep the editor in sync with the server draft (e.g. after an approved edit was sanitised), but never clobber unsaved typing while pending

@@ -18,6 +18,11 @@
 - Another uvicorn on port 8000 (started 13:50 by something other than the main session, probably OpenCode's demo run) exists; do not kill it blindly. Hosts that need a card/PRO: HF Docker Spaces (`scripts/deploy_hf_space.py` kept but dead), Koyeb, Fly.io, Oracle/GCP.
 - Fixed deploy-breaking bug earlier: `pyproject.toml` runtime deps were incomplete.
 
+### UI bugs fixed ~15:00 (found while preparing the demo)
+- Analytics crashed ("client-side exception"): `useApi` reported loading=false with data=null on the first render after auth; fixed in `apps/web/src/lib/hooks.tsx`.
+- Fresh loads/refresh of /jobs/<id>/, /studio/<id>/, /runs/<id>/ used the static-export placeholder id `_` (job not found / run not found); fixed with `useRouteId()` (reads the id from the URL). The UI must be REBUILT after UI changes: `cd apps/web; $env:STATIC_EXPORT=1; $env:NEXT_PUBLIC_API_URL=""; npx next build` (the live API serves `apps/web/out` from disk, no restart needed).
+- Someone had left the marketplace chaos toggle on ("Simulate marketplace outage" amber banner): restore with the nav button or `POST /admin/chaos/marketplace/up`. After the demo make sure it says "Simulate marketplace outage" (= up).
+
 ### What the OWNER still has to do (an agent cannot)
 1. Make sure the laptop stays on and run `serve_public.ps1`; optionally set up the fixed ngrok domain; use the URL in `.logs\public_url.txt` as the submitted live URL (re-check it right before submitting).
 2. Record the 3-minute demo video (inbox -> approved proposal; scam caught; injection ignored; client reply). OpenCode may automate a Playwright screen recording + write `docs/DEMO_SCRIPT.md`; the owner records voice-over (Clipchamp) and uploads to YouTube as Unlisted.
