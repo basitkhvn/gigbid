@@ -1,5 +1,7 @@
 # GigBid: a multi-agent freelancer copilot
 
+**Abdul Basit · Roll No. 23i-0820 · Section Agentic C** · AI-4016 Assignment II
+
 > AI-4016 Assignment II (FAST-NUCES). A team of LangGraph agents finds freelance jobs, judges whether they are worth bidding on, writes proposals **in which every claim is checked against portfolio evidence**, and manages client conversations. A human approves every proposal and message before anything leaves the system.
 
 ![GigBid demo: inbox, draft with evidence, approval, scam skipped, injection ignored, client reply](docs/images/demo.gif)
