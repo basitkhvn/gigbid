@@ -1,0 +1,29 @@
+{
+ "exhibit": "critic_loop",
+ "trace_id": "b06938655ea44dc4",
+ "spans": 29,
+ "tokens_in": 407,
+ "tokens_out": 498,
+ "usd": 0.0,
+ "latency_s": 26.298,
+ "job": "dev-ml-003",
+ "revisions": 1,
+ "critiques": [
+  {
+   "ok": false,
+   "score": 1.0,
+   "issues": [
+    "Severe lack of grounding: The draft claims experience with LangChain and Airflow but cites unrelated projects ('Energy voice-intent classifier' and 'Education voice-intent classifier') that do not demonstrate logistics-specific application or even clear relevance to the required tools in a logistics context.",
+    "Failure to address specific prompt: The job post explicitly asks to 'explain how you have done similar work for a logistics client.' The draft completely ignores this, offering no details about logistics clients, supply chain data, or domain-specific challenges.",
+    "Generic and vague: The phrase 'close match' is unsubstantiated. The connection between voice-intent classifiers and a logistics recommendation engine is not explained, making the proposal appear copy-pasted or hallucinated."
+   ],
+   "revision_instructions": "Rewrite the proposal to directly address the logistics requirement. If you have actual logistics experience, describe a specific project involving supply chain data, inventory optimization, or route planning where you used LangChain (e.g., for document retrieval or agent-based decision support) and Airflow (for ETL pipelines or model retraining). If you lack direct logistics experience, pivot to transferable skills: explain how your previous data pipeline work (Airflow) and LLM integration (LangChain) can be applied to logistics recommendation engines, citing specific technical implementations (e.g., vector DB integration, DAG scheduling) rather than unrelated voice-intent projects. Ensure every claim is grounded in specific, relevant examples."
+  },
+  {
+   "ok": true,
+   "score": 1.0,
+   "issues": [],
+   "revision_instructions": ""
+  }
+ ]
+}

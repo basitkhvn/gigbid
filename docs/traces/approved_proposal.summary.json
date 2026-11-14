@@ -1,0 +1,23 @@
+{
+ "exhibit": "approved_proposal",
+ "trace_id": "b34c03b7b00549cf",
+ "spans": 33,
+ "tokens_in": 1435,
+ "tokens_out": 840,
+ "usd": 0.0,
+ "latency_s": 15.796,
+ "job": "dev-ml-000",
+ "status": "submitted",
+ "submission": {
+  "proposal_id": "prop-00001",
+  "connects_spent": 24,
+  "status": "interview"
+ },
+ "claim_stats": {
+  "claims_before": 5,
+  "unsupported_before": 0,
+  "claims_after": 5,
+  "unsupported_after": 0,
+  "removed": []
+ }
+}

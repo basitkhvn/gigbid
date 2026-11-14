@@ -1,0 +1,23 @@
+{
+ "exhibit": "scam_skipped",
+ "trace_id": "a8fdcc8715304322",
+ "spans": 12,
+ "tokens_in": 459,
+ "tokens_out": 229,
+ "usd": 0.0,
+ "latency_s": 8.94,
+ "job": "dev-ml-002",
+ "decision": {
+  "action": "skip",
+  "reasons": [
+   "fit 1.00 (min 0.6)",
+   "risk 0.94 (max 0.5)",
+   "risk flags: off_platform_contact, implausibly_low_budget"
+  ],
+  "auto": false
+ },
+ "risk_flags": [
+  "off_platform_contact",
+  "implausibly_low_budget"
+ ]
+}

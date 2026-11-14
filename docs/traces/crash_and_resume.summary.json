@@ -1,0 +1,15 @@
+{
+ "exhibit": "crash_and_resume",
+ "trace_id": "7ddba5eb37084426",
+ "spans": 28,
+ "tokens_in": 758,
+ "tokens_out": 362,
+ "usd": 0.0,
+ "latency_s": 17.224,
+ "job": "dev-ml-019",
+ "pending_after_restart": [
+  "approval"
+ ],
+ "status": "submitted",
+ "submission": "prop-00001"
+}

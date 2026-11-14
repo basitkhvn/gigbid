@@ -2,6 +2,10 @@
 
 > AI-4016 Assignment II (FAST-NUCES). A team of LangGraph agents finds freelance jobs, judges whether they are worth bidding on, writes proposals **in which every claim is checked against portfolio evidence**, and manages client conversations. A human approves every proposal and message before anything leaves the system.
 
+![GigBid demo: inbox, draft with evidence, approval, scam skipped, injection ignored, client reply](docs/images/demo.gif)
+
+*(30-second walkthrough; full 3-minute video linked in the table below.)*
+
 | | |
 |---|---|
 | Live app | https://chicly-unhesitative-jamila.ngrok-free.dev (served from my laptop through an ngrok tunnel; open it, click through ngrok's one-time "Visit Site" notice; reviewer login is in the Google Classroom private comment) |
@@ -149,7 +153,7 @@ See `docs/WRITEUP_DRAFT.md` and the report. Short version: requirement decomposi
 | 10 RAG variants, claim verification, ablation, per-persona results | **Judge calibration: needs your 30 human labels** (tooling ready); no blind human pairwise panel |
 | Bid + conversation graphs, interrupts, SQLite/Postgres checkpointer, crash-resume exactly-once test, style + outcome memory with promotion rules | Postgres checkpointer and Redis/Arq worker paths not exercised (no services run here); docker compose not brought up |
 | Next.js UI, all screens, generated TS client, 5 Playwright specs pass | Mobile layout not manually verified on a device |
-| CI workflows, repo-rules checker | Hidden-test results: not available; public deployment: **not done** (needs your host account) |
+| CI workflows, repo-rules checker | Hidden-test results: not available; public deployment: **live** on the author's laptop through a fixed ngrok URL (no card needed; must stay powered on), see the table at the top |
 | Signature extension X2 (A/B with significance tests) | X6 (live profile) not attempted; LangSmith/Langfuse not integrated (self-hosted JSONL traces) |
 
 Repository layout follows the assignment (`apps/`, `agent/`, `rag/`, `mcp_servers/`, `worker/`, `evals/`, `tests/`, `infra/`, `docs/`). `gigsim/` is reserved for the official simulator (not provided in my starter kit); my stand-in is `gigsim_local/`.
