@@ -139,7 +139,7 @@ A = evidence-grounded, per-requirement retrieval (as shipped), cited projects; B
 Reply rate A 0.739 vs B 0.422; Fisher exact p=1.57e-09; paired exact McNemar p=2.08e-08. simulated clients reward skill mentions and penalise generic phrasing by construction (see DATA_CARD)
 
 #### Judge calibration
-**PENDING: the 30 human labels have not been entered** (evals/datasets/judge_calibration_sheet.csv). Judge-based numbers above are uncalibrated until `judge_calibration kappa` is run.
+Cohen's kappa (binary good>=4): 0.791; quadratic-weighted: 0.859; n=30.
 <!-- RESULTS:END -->
 
 ### What I would ship, and what surprised me
@@ -150,7 +150,7 @@ See `docs/WRITEUP_DRAFT.md` and the report. Short version: requirement decomposi
 |---|---|
 | 3 MCP servers with schemas, annotations, idempotency, dry_run, audit log, tests, schema snapshot | Live Upwork adapter/OAuth: written, **never run against a real account** |
 | One marketplace port + GigSim stand-in adapter | Google Calendar/Gmail backends (local mock only); GitHub MCP ingestion (wired, not run) |
-| 10 RAG variants, claim verification, ablation, per-persona results | **Judge calibration: needs your 30 human labels** (tooling ready); no blind human pairwise panel |
+| 10 RAG variants, claim verification, ablation, per-persona results | Judge calibration done (n=30, see Results); no blind human pairwise panel |
 | Bid + conversation graphs, interrupts, SQLite/Postgres checkpointer, crash-resume exactly-once test, style + outcome memory with promotion rules | Postgres checkpointer and Redis/Arq worker paths not exercised (no services run here); docker compose not brought up |
 | Next.js UI, all screens, generated TS client, 5 Playwright specs pass | Mobile layout not manually verified on a device |
 | CI workflows, repo-rules checker | Hidden-test results: not available; public deployment: **live** on the author's laptop through a fixed ngrok URL (no card needed; must stay powered on), see the table at the top |

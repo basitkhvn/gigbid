@@ -1,0 +1,32 @@
+{
+ "n": 30,
+ "kappa_binary_good_ge4": 0.791,
+ "kappa_quadratic_1to5": 0.859,
+ "exact_agreement": 0.667,
+ "largest_disagreements": [
+  {
+   "item": "P13",
+   "human": 2,
+   "judge": 4,
+   "text": "For an energy team building a voice-intent classifier, the closest match in my work is a voice-intent classifier repo built in an energy context: parameter-efficient adapters on a 7B model, alongside time series forecasting for weekly demand predictions with seasonality and holidays [E3]. That combi"
+  },
+  {
+   "item": "P23",
+   "human": 2,
+   "judge": 4,
+   "text": "That order shapes how I've approached comparable work. On orchestration, I built a dependency-aware nightly pipeline with Airflow and a versioned, tested transformation layer over the warehouse, using window functions and CTEs across multi-million-row tables [E1]. A separate KPI reporting suite was "
+  },
+  {
+   "item": "P00",
+   "human": 5,
+   "judge": 4,
+   "text": "The closest match is a real estate client portal delivered in 2024: event-loop based JavaScript backend services pushing live updates over WebSockets, a strictly typed front and back end sharing interfaces, and a component-driven single-page front end [E3]. Stripe payments sat in that same product, "
+  },
+  {
+   "item": "P01",
+   "human": 3,
+   "judge": 2,
+   "text": "I have built Django backends for an education admin dashboard and a retail order-tracking app, including server-rendered pages and typed interfaces [E1][E2]. For Tailwind, I have styled a real estate client portal and a logistics inventory tracker with utility-class design and responsive breakpoints"
+  }
+ ]
+}

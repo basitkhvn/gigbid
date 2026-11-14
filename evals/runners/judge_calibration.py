@@ -57,7 +57,14 @@ def read_sheet():
 
 def judge_sheet():
     rows = read_sheet()
-    scores = {r["item_id"]: judge_one(r["job_title"], r["requirements"], r["proposal"]) for r in rows}
+    import time
+    scores = {}
+    for r in rows:
+        for attempt in range(4):  # free-tier rate limits return no score: retry with a pause
+            scores[r["item_id"]] = judge_one(r["job_title"], r["requirements"], r["proposal"])
+            if scores[r["item_id"]]:
+                break
+            time.sleep(15)
     write("judge_scores.json", scores)
     print(scores)
 

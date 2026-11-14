@@ -96,4 +96,4 @@ A = evidence-grounded, per-requirement retrieval (as shipped), cited projects; B
 Reply rate A 0.739 vs B 0.422; Fisher exact p=1.57e-09; paired exact McNemar p=2.08e-08. simulated clients reward skill mentions and penalise generic phrasing by construction (see DATA_CARD)
 
 ## Judge calibration
-**PENDING: the 30 human labels have not been entered** (evals/datasets/judge_calibration_sheet.csv). Judge-based numbers above are uncalibrated until `judge_calibration kappa` is run.
+Cohen's kappa (binary good>=4): 0.791; quadratic-weighted: 0.859; n=30.
