@@ -77,8 +77,8 @@ def _call(spec: dict, system: str, user: str, json_mode: bool) -> LLMResult:
             "max_tokens": spec.get("max_tokens", 600), "temperature": spec.get("temperature", 0.0)}
     if spec["provider"] == "deepseek" and os.environ.get("DEEPSEEK_THINKING") == "disabled":  # multi-agent baselines can't replay reasoning_content; set for ALL systems in a comparison
         body["thinking"] = {"type": "disabled"}
-    if spec["provider"] == "ollama":
-        body["reasoning_effort"] = "none"  # Ollama: disable Qwen's thinking phase (keeps latency/token budgets sane and JSON mode valid)
+    if prov.get("reasoning_off"):
+        body["reasoning_effort"] = "none"  # Ollama/Groq Qwen: disable the thinking phase (keeps latency/token budgets sane and JSON mode valid)
     if json_mode:
         body["response_format"] = {"type": "json_object"}
     t0 = time.time()
