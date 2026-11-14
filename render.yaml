@@ -6,10 +6,10 @@ services:
     runtime: docker
     dockerfilePath: infra/docker/single.Dockerfile
     healthCheckPath: /health
-    plan: starter            # embeddings + reranker need > 512 MB RAM
-    disk: {name: state, mountPath: /state, sizeGB: 1}
+    plan: free               # 512 MB RAM: measured ~300 MB peak for retrieval alone; sleeps after 15 min idle (first request is slow)
     envVars:
       - {key: MODEL_PROFILE, value: groq}
+      - {key: GIGBID_STATE_DIR, value: /tmp/state}   # free plan has no persistent disk: state resets on restart
       - {key: GIGSIM_INPROCESS, value: "1"}
       - {key: GROQ_API_KEY, sync: false}
       - {key: APP_SECRET_KEY, generateValue: true}

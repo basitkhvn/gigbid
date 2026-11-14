@@ -18,8 +18,8 @@ from dotenv import dotenv_values
 from huggingface_hub import HfApi
 
 ROOT = Path(__file__).resolve().parents[1]
-env = {**dotenv_values(ROOT / ".env"), **{k: v for k, v in os.environ.items() if k in ("HF_TOKEN", "GROQ_API_KEY", "REVIEWER_PASSWORD")}}
-token, groq = env.get("HF_TOKEN"), env.get("GROQ_API_KEY")
+env = {**dotenv_values(ROOT / ".env"), **{k: v for k, v in os.environ.items() if k in ("HF_TOKEN", "HF_ACCESS_TOKEN", "GROQ_API_KEY", "REVIEWER_PASSWORD")}}
+token, groq = env.get("HF_TOKEN") or env.get("HF_ACCESS_TOKEN"), env.get("GROQ_API_KEY")
 if not token or not groq:
     sys.exit("Need HF_TOKEN and GROQ_API_KEY in .env (HF_TOKEN = a Hugging Face *write* token from huggingface.co/settings/tokens).")
 pw = env.get("REVIEWER_PASSWORD")
