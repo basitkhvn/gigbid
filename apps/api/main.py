@@ -38,6 +38,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="GigBid API", version="0.1.0", lifespan=lifespan)
+# Browser URLs use trailing slashes (Next `trailingSlash`); API URLs do not. Without this, Starlette redirects
+# `/runs/<id>/` to the JSON API route and the static UI page never loads.
+app.router.redirect_slashes = False
 app.add_middleware(CORSMiddleware, allow_origins=os.environ.get("CORS_ORIGINS", "http://localhost:3000").split(","),
                    allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
@@ -79,13 +82,12 @@ class SPAStatic(StaticFiles):
     """Static export serving with a fallback for dynamic routes (/jobs/<id>, /studio/<id>, /runs/<id>) -> the prerendered `_` page."""
 
     async def get_response(self, path, scope):
-        try:
-            return await super().get_response(path, scope)
-        except Exception:  # noqa: BLE001
-            parts = path.strip("/").split("/")
-            if len(parts) >= 2 and parts[0] in ("jobs", "studio", "runs"):
-                return await super().get_response(f"{parts[0]}/_/index.html", scope)
-            raise
+        parts = path.replace("\\", "/").strip("/").split("/")
+        if len(parts) >= 2 and parts[0] in ("jobs", "studio", "runs") and parts[1] != "_":
+            # Serve the prerendered `_` page before static lookup: real ids can contain ':' (runs) which is
+            # not a legal Windows filename, and a failed lookup would otherwise raise inside the thread pool.
+            return await super().get_response(f"{parts[0]}/_/index.html", scope)
+        return await super().get_response(path, scope)
 
 
 _web = os.environ.get("WEB_DIST", "apps/web/out")
