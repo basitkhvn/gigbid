@@ -53,3 +53,10 @@ Ollama: `OLLAMA_MODELS=D:\ollama\models`, models qwen3:8b, qwen3.5:4b; server mu
 
 ## UPDATE ~13:30: F3 measured
 `proposals_local_qwen_f3.json` done. F3 rewrite did NOT help on Qwen3.5-4B (unsupported after 0.50 vs 0.29; reply 0.50 vs 0.71; baseline emptied 0/24 letters so F3 did not occur). Default stays `delete`. Report section 11 + limits updated and PDF regenerated. DO NOT flip the default to rewrite. Remaining work is only the OWNER tasks and README links (see list above).
+
+## UPDATE ~13:45: DEPLOY PLAN CHANGED -> Hugging Face Space (free, 16 GB RAM), not Render
+- Render starter costs money and Vercel cannot host this Python+embedding backend. Use `scripts/deploy_hf_space.py`.
+- Fixed a deploy-breaking bug: `pyproject.toml` was missing runtime deps (numpy, fastembed, qdrant-client, ...) that the Dockerfile installs from; now listed.
+- Owner steps: create a free account at huggingface.co, create a WRITE token (settings/tokens), add the line `HF_TOKEN=...` to `.env` (never commit/print it). Then run: `.venv/Scripts/python.exe scripts/deploy_hf_space.py gigbid`.
+  The script stages only git-tracked files, adds a Space Dockerfile (port 7860, MODEL_PROFILE=groq) + README front matter, uploads, and sets Space secrets (GROQ_API_KEY from .env, REVIEWER_PASSWORD from .env or generated and saved to .env, APP_SECRET_KEY random). Reviewer email: reviewer@gigbid.demo. Build takes ~10-15 min; live URL is printed (https://<hfuser>-gigbid.hf.space).
+- After deploy: open the URL, log in as the reviewer, run one job end to end. Space filesystem is ephemeral (`/tmp/state`), state resets on restart: fine for a demo, mention it. Put the URL in README (top table) and the Classroom submission; reviewer login only in the private Classroom comment.
