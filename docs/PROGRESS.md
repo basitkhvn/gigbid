@@ -1,4 +1,37 @@
-# PROGRESS (read this first when resuming; newer than HANDOVER.md section 5)
+# PROGRESS (read this first when resuming)
+
+## >>> CURRENT STATE (updated 2026-11-14 14:10; the dated "UPDATE" sections further down are history; this block wins on any conflict) <<<
+**Deadline: 2026-11-14 (today when written). Prioritise submission items over polish.**
+
+### Where everything is
+- Repo (public): https://github.com/basitkhvn/gigbid, branch `main`, history scanned: no secrets. `.env` is gitignored and holds `GROQ_API_KEY`, `REVIEWER_PASSWORD`, `HF_ACCESS_TOKEN` (never print/commit them).
+- Report: `docs/report/report.html` -> `docs/report/GigBid_RD_Report.pdf` (6 pages, A4, includes section 11 with local-Qwen, Groq and F3 results). Regenerate PDF after edits with headless Edge: `msedge --headless=new --no-pdf-header-footer --print-to-pdf=docs/report/GigBid_RD_Report.pdf file:///.../report.html`, then commit the PDF.
+- Evals (all in `evals/results/`): local Qwen3.5-4B (`*_local_qwen*.json`), Qwen3-8B (`proposals_local_qwen3_8b.json`), Groq Qwen3.8-27B (`proposals_groq_qwen.json`), F3 rewrite test (`proposals_local_qwen_f3.json`: no benefit, kept OFF; default stays `GIGBID_REPAIR_MODE=delete`). DeepSeek result files are untouched.
+- Models/profiles in `agent/config.yaml`: `open` (DeepSeek, needs a key we do not have), `groq` (hosted open-weight Qwen on Groq free tier, used for deployment), `local_qwen` (Ollama, qwen3.5:4b), `offline`.
+
+### Deployment (the part still in flight)
+1. **Render free web service** `gigbid` (Blueprint from `render.yaml`, Free plan 512 MB / 0.1 CPU): https://gigbid-99lo.onrender.com . First deploy crash-looped (silent OOM from the startup warm-up). Fix is commit `d8e0372` (GIGBID_WARM=0 + models/embedding cache baked at Docker build time). The owner must press **Manual Deploy > Deploy latest commit** in Render (public-URL blueprints do not auto-deploy). A watcher was polling /health. STATUS UNKNOWN until verified: test `/health`, `POST /auth/login` (reviewer@gigbid.demo + REVIEWER_PASSWORD from .env), `POST /jobs/job-ml-0006/draft`, then `GET /runs/bid:<user_id>:job-ml-0006` until `awaiting_approval`. Free instances sleep after 15 min (first load 1-2 min, tell the reviewer in the Classroom comment). State is ephemeral.
+2. **Fallback / backup: laptop + Cloudflare quick tunnel.** Run `powershell -ExecutionPolicy Bypass -File scripts\serve_public.ps1` (API on port 8001, `MODEL_PROFILE=groq`, serves `apps/web/out`). Tunnel URL when written: https://programmer-skating-highlights-music.trycloudflare.com ; it CHANGES whenever cloudflared restarts and the laptop must stay on/online. UI must be built first: `cd apps/web; $env:STATIC_EXPORT=1; $env:NEXT_PUBLIC_API_URL=""; npx next build` (the npm script fails on Windows). Tested OK: health, UI, login, one job reached `awaiting_approval` on Groq.
+3. Not usable without a card/payment: Hugging Face Docker Spaces (needs PRO; `scripts/deploy_hf_space.py` kept but dead), Koyeb, Fly.io, Oracle/GCP. Vercel: optional, only a UI front for the tunnel; needs the owner's `vercel login`/token; low value. Another uvicorn (port 8000, started 13:50 by something other than the main session, probably OpenCode's demo-recording run) exists; do not kill it blindly.
+4. Deploy-breaking bug already fixed: `pyproject.toml` runtime deps were incomplete.
+
+### What the OWNER still has to do (an agent cannot)
+1. Click **Manual Deploy** on Render (see above) and confirm the site loads; send the final live URL.
+2. Record the 3-minute demo video (inbox -> approved proposal; scam caught; injection ignored; client reply). OpenCode may automate a Playwright screen recording + write `docs/DEMO_SCRIPT.md`; the owner records voice-over (Clipchamp) and uploads to YouTube as Unlisted.
+3. Publish the write-up from `docs/WRITEUP_DRAFT.md` (1200-1800 words) on LinkedIn/Medium.
+4. Portfolio MCP "publication": cite `mcp_servers/portfolio` in the public repo (PyPI optional, not done).
+5. Submit on Google Classroom: deployed URL, reviewer login in a PRIVATE comment only (reviewer@gigbid.demo + the REVIEWER_PASSWORD in `.env`), repo link, report PDF, video link, MCP + write-up links. Confirm the new deadline.
+6. Optional: judge calibration labels (`evals/datasets/judge_calibration_sheet.csv`, owner-only, never fabricate), a fixed ngrok address for the tunnel.
+
+### What an AGENT should do next
+- Verify the Render deploy as above; if it fails read the Render Logs (ask the owner to paste the last 20 lines) and trim memory (e.g. disable the reranker in config) or recommend the tunnel.
+- When the owner supplies URLs, fill the TODO rows at the top of `README.md` (live app, demo video, write-up, Portfolio MCP), commit, push. Keep the README caveats honest.
+- Do NOT flip the F3 default to rewrite; do not report numbers that are not in `evals/results/`; never commit secrets; commit small with a Co-Authored-By line.
+
+### Machine notes (Windows)
+Ollama models in `D:\ollama\models` (start the server with `OLLAMA_MODELS=D:\ollama\models`, `OLLAMA_CONTEXT_LENGTH=8192`); currently stopped. 16 GB RAM is tight: close browsers, one heavy job at a time. Python: `.venv\Scripts\python.exe` with `PYTHONPATH=.`; load keys in bash with `set -a; . ./.env; set +a`. gh CLI: `C:\Program Files\GitHub CLI\gh.exe` (logged in as basitkhvn). opencode is installed (`opencode -m opencode/deepseek-v4.1-flash-free` in the repo folder).
+
+---
 
 Machine: Windows, RTX 3070 Laptop 8 GB, 16 GB RAM. Models live in `D:\ollama\models` (qwen3:8b, qwen3.5:4b). Ollama must be started with
 `OLLAMA_MODELS=D:\ollama\models` and `OLLAMA_CONTEXT_LENGTH=8192`. Python env: `.venv` (uv, Python 3.11). Always `PYTHONPATH=.`.
