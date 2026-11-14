@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| Live app | _TODO: add deployed URL here_ (reviewer login is in the Google Classroom private comment) |
+| Live app | https://chicly-unhesitative-jamila.ngrok-free.dev (served from my laptop through an ngrok tunnel; open it, click through ngrok's one-time "Visit Site" notice; reviewer login is in the Google Classroom private comment) |
 | Demo video (3 min) | _TODO: add link_ |
 | Portfolio MCP server | [`mcp_servers/portfolio`](mcp_servers/portfolio/README.md) (run with `uv run python -m mcp_servers.portfolio.server`; PyPI publishing not done) |
 | Technical write-up | _TODO: add link_ (draft: [`docs/WRITEUP_DRAFT.md`](docs/WRITEUP_DRAFT.md)) |

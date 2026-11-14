@@ -35,7 +35,7 @@ function Start-Tunnel {
   Get-Process -Name cloudflared, ngrok -ErrorAction SilentlyContinue | Stop-Process -Force
   Remove-Item "$root\.logs\tunnel.err", "$root\.logs\tunnel.out" -ErrorAction SilentlyContinue
   if ($fixed) {
-    Start-Process -FilePath ngrok -ArgumentList 'http',"$port","--url=https://$($env:NGROK_DOMAIN)" -WindowStyle Hidden -RedirectStandardOutput "$root\.logs\tunnel.out" -RedirectStandardError "$root\.logs\tunnel.err"
+    Start-Process -FilePath ngrok -ArgumentList 'http',"$port","--domain=$($env:NGROK_DOMAIN)" -WindowStyle Hidden -RedirectStandardOutput "$root\.logs\tunnel.out" -RedirectStandardError "$root\.logs\tunnel.err"
     Set-Content "$root\.logs\public_url.txt" "https://$($env:NGROK_DOMAIN)"; Log "ngrok fixed url https://$($env:NGROK_DOMAIN)"
   } else {
     Start-Process -FilePath cloudflared -ArgumentList 'tunnel','--url',"http://127.0.0.1:$port",'--no-autoupdate' -WindowStyle Hidden -RedirectStandardError "$root\.logs\tunnel.err" -RedirectStandardOutput "$root\.logs\tunnel.out"
