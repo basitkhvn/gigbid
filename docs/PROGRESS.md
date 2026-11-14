@@ -21,7 +21,7 @@
 ### What the OWNER still has to do (an agent cannot)
 1. Make sure the laptop stays on and run `serve_public.ps1`; optionally set up the fixed ngrok domain; use the URL in `.logs\public_url.txt` as the submitted live URL (re-check it right before submitting).
 2. Record the 3-minute demo video (inbox -> approved proposal; scam caught; injection ignored; client reply). OpenCode may automate a Playwright screen recording + write `docs/DEMO_SCRIPT.md`; the owner records voice-over (Clipchamp) and uploads to YouTube as Unlisted.
-3. Publish the write-up from `docs/WRITEUP_DRAFT.md` (1200-1800 words) on LinkedIn/Medium.
+3. DONE: write-up published on dev.to: https://dev.to/abdul_basit_863d2936a69df/the-retriever-with-the-best-score-wrote-the-worst-proposals-and-other-things-my-ablations-told-me-20ne (README row filled; plain-text copy in `docs/WRITEUP_PLAIN.txt`).
 4. Portfolio MCP "publication": cite `mcp_servers/portfolio` in the public repo (PyPI optional, not done).
 5. Submit on Google Classroom: deployed URL, reviewer login in a PRIVATE comment only (reviewer@gigbid.demo + the REVIEWER_PASSWORD in `.env`), repo link, report PDF, video link, MCP + write-up links. Confirm the new deadline.
 6. Optional: judge calibration labels (`evals/datasets/judge_calibration_sheet.csv`, owner-only, never fabricate), a fixed ngrok address for the tunnel.

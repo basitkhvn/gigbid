@@ -7,7 +7,7 @@
 | Live app | https://chicly-unhesitative-jamila.ngrok-free.dev (served from my laptop through an ngrok tunnel; open it, click through ngrok's one-time "Visit Site" notice; reviewer login is in the Google Classroom private comment) |
 | Demo video (3 min) | _TODO: add link_ |
 | Portfolio MCP server | [`mcp_servers/portfolio`](mcp_servers/portfolio/README.md) (run with `uv run python -m mcp_servers.portfolio.server`; PyPI publishing not done) |
-| Technical write-up | _TODO: add link_ (draft: [`docs/WRITEUP_DRAFT.md`](docs/WRITEUP_DRAFT.md)) |
+| Technical write-up | [https://dev.to/abdul_basit_863d2936a69df/the-retriever-with-the-best-score-wrote-the-worst-proposals-and-other-things-my-ablations-told-me-20ne](https://dev.to/abdul_basit_863d2936a69df/the-retriever-with-the-best-score-wrote-the-worst-proposals-and-other-things-my-ablations-told-me-20ne) (source text: [`docs/WRITEUP_DRAFT.md`](docs/WRITEUP_DRAFT.md)) |
 | Traces | [`docs/TRACES.md`](docs/TRACES.md) (how to open a scam skip, an approved proposal, a critic loop, a crash-and-resume) |
 
 ## What it does (60 seconds)
