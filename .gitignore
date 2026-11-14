@@ -22,3 +22,9 @@ mcp_servers/**/__pycache__/
 apps/web/test-results/
 apps/web/playwright-report/
 *.egg-info/
+
+.state/
+.logs/
+apps/web/out/
+apps/web/.next/
+.vercel/
